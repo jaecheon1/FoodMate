@@ -45,7 +45,7 @@ nav ul li a {
 
 /* Hero Section Styles */
 .hero {
-    background-color: #f0f0f0;
+    background-color: #f8f9fa;
     padding: 100px 0;
     text-align: center;
 }
@@ -85,8 +85,8 @@ nav ul li a {
 
 /* Footer Styles */
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #f8f9fa;
+    color: #333;
     padding: 20px 0;
     text-align: center;
 }
