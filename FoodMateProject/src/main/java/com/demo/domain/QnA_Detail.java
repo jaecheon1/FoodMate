@@ -28,7 +28,7 @@ public class QnA_Detail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
+    @OneToOne(targetEntity = QnADTO.class)
     @JoinColumn(name = "qseq", nullable = false)
     private QnADTO qna; // 해당 질문(QnA)에 대한 정보
     private String questionDetail; // 질문의 상세 내용
