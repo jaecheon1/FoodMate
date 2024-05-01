@@ -20,6 +20,7 @@ body {
 header {
     background-color: #f8f9fa;
     padding: 20px 0;
+    text-align: center;
 }
 
 header h1 {
@@ -29,6 +30,7 @@ header h1 {
 
 nav ul {
     list-style-type: none;
+    display: inline-block;
 }
 
 nav ul li {
