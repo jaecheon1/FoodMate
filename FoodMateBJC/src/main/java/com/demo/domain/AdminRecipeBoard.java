@@ -29,24 +29,24 @@ import lombok.ToString;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class AdminBoard {
+public class AdminRecipeBoard {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boardnum_generator")
-    @SequenceGenerator(name="boardnum_generator", sequenceName = "BOARDNUM_SEQ", allocationSize = 1)
-    private int boardnum;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipenum_generator")
+    @SequenceGenerator(name="recipenum_generator", sequenceName = "RECIPENUM_SEQ", allocationSize = 1)
+    private int recipe_boardnum;
     private String userid;
-    private String usercode;
-    private int boardcode;
     private String nickname;
     private String title;
     private String content;
-    private String image;
+    private String images;
     private String tag;
-   
 	@Column(columnDefinition = "NUMBER default 0")
-    private int boardcount;
+    private int count;
     @Temporal(value=TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "DATE default sysdate")
     private Date regdate;
+    @Column(columnDefinition = "DATE default sysdate")
+    private Date editdate;
 	
 	
 	

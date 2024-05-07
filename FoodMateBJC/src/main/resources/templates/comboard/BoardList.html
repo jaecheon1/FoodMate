@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/board.css">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script type="text/javascript">
+function go_view(seq) {
+	  var theForm = document.createElement('form');
+      theForm.method = "post";
+      theForm.action = "/com_board_detail";
+      
+      var hiddenSeq = document.createElement('input');
+      hiddenSeq.type = "hidden";
+      hiddenSeq.name = "seq";
+      hiddenSeq.value = seq;
+      
+      theForm.appendChild(hiddenSeq);
+      document.body.appendChild(theForm);
+      theForm.submit();
+	}
+  
+</script>
+</head>
+<body>
+<article>
+<h1>유저 레시피 공유 페이지</h1>  
+<form id="searchForm" th:action="@{/board_search}" method="get">
+    <select name="searchType">
+        <option value="title">제목</option>
+        <option value="id">ID</option>
+    </select>
+    <input type="text" name="searchKeyword">
+    <button type="submit">검색</button>  
+</form>
+<br>
+<h3>분류별로 보기</h3>
+<a href="#" th:onclick="'/category?category=' + ${'반찬'}" th:text="'반찬'">반찬</a>
+<a href="#" th:onclick="'/category?category=' + ${'국&찌개'}" th:text="'국&찌개'">국&찌개</a>
+<a href="#" th:onclick="'/category?category=' + ${'후식'}" th:text="'후식'">후식</a>
+<a href="#" th:onclick="'/category?category=' + ${'일품'}" th:text="'일품'">일품</a>
+
+<form id="writeForm" method="get" action="/board_write">
+    <button type="submit" class="btn">글쓰기</button>
+</form>
+  <hr>        
+<form name="frm" method="get">
+<table id="BoardList">
+  <tr>
+    <th></th> <th>제목</th> <th>작성자</th> <th>조회수</th>   
+  </tr>
+  <th:block th:each="com_boardVO : ${boardList}">
+      <tr>
+      <td>
+       <img th:src="${com_boardVO.com_recipe.att_file_no_mk}" style="width: 200px; height: 180px;" />
+      </td>
+      <td>
+      <a href="javascript:void(0);" th:onclick="'go_view(' + ${com_boardVO.seq} + ');'">[[${com_boardVO.com_recipe.rcp_nm}]]</a>
+      </td>
+      <td>[[${com_boardVO.member_data.id}]] </td>
+      <td>[[${com_boardVO.cnt}]]</td>
+      </tr>
+    </th:block>
+    </table>
+     [[${paging}]]
+    </form>
+    <th:block th:insert="~{./page_area}"></th:block>    
+  </article>
+</body>
+</html>

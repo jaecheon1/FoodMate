@@ -1,0 +1,47 @@
+/* calculate.css */
+
+/* 전체 폼 스타일링 */
+form {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* 헤더 스타일링 */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+/* 체크박스 스타일링 */
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* 제출 버튼 스타일링 */
+button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 제출 버튼 호버 효과 */
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 푸터 스타일링 */
+footer {
+    margin-top: 50px;
+    text-align: center;
+}

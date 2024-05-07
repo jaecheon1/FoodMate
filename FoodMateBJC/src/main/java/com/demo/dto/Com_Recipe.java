@@ -4,9 +4,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,12 +18,15 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @DynamicInsert 
 @DynamicUpdate
 public class Com_Recipe {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "com_recipeseq")
+    @SequenceGenerator(name = "com_recipeseq", sequenceName = "com_recipeseq", allocationSize = 1)
 	int idx;
 	String rcp_nm; // 이름
 	String att_file_no_mk; //타이틀이미지

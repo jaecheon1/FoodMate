@@ -8,36 +8,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>가장 많이 조회된 레시피 Top 10</h1>
-    <div style="width: 50%;">
-        <canvas id="myChart" width="400" height="400"></canvas>
+    <header th:insert="~{includes/header}"></header>
+
+    <h1 style="text-align: center;">가장 많이 조회된 레시피 Top 10</h1>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="myChart" width="400" height="350"></canvas>
     </div>
     
+    <footer th:insert="~{includes/footer}"></footer>
+
+    <!-- createBarChart 함수 호출 -->
+    <script src="js/Chart.js"></script>
     <script>
-        // 캔버스 요소 선택
-        const ctx = document.getElementById('myChart').getContext('2d');
-        
-        // 차트 생성
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['레시피1', '레시피2', '레시피3', '레시피4', '레시피5'],
-                datasets: [{
-                    label: '조회수 Top 5',
-                    data: [100, 95, 90, 85, 80],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        createBarChart();
     </script>
 </body>
 </html>

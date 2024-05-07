@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>이메일 중복 체크</title>
+<script type="text/javascript" th:inline="javascript">
+function emailOk(){
+  var email = [[${email}]];
+  opener.formm.email.value=email; 
+  opener.formm.reemail.value=email;
+  self.close();
+}
+</script>
+</head>
+<body>
+<div id="wrap">
+  <h1>이메일 중복확인</h1>
+  <form method=get name=formm id="theform" style="margin-right:0 "
+  		action="email_check_form" >
+    Email <input type="email" name="email" th:value="${email}"> 
+            <input type="submit" value="검색" class="submit"><br>     
+    <div style="margin-top: 20px">   
+      <th:block th:if="${message == 1}">
+        <script type="text/javascript">
+          opener.document.formm.email.value="";
+        </script>
+        [[${email}]]은(는) 이미 사용중인 이메일입니다.
+      </th:block>
+      <th:block th:if="${message==-1}">
+        [[${email}]]은(는) 사용 가능한 이메일입니다.
+        <input type="button" value="사용" class="cancel" onclick="emailOk()">
+      </th:block>
+    </div>
+  </form>
+</div>  
+</body>
+</html>

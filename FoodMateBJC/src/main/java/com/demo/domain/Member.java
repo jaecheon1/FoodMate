@@ -24,6 +24,7 @@ import lombok.ToString;
 public class Member {
     @Id
     private String id;
+    private int usercode;
     private String pwd;
     private String name;
     private String email;
