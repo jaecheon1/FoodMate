@@ -7,7 +7,7 @@
 <script type="text/javascript">
 function go_view(seq) {
 	  var theForm = document.createElement('form');
-      theForm.method = "post";
+      theForm.method = "get";
       theForm.action = "/com_board_detail";
       
       var hiddenSeq = document.createElement('input');
@@ -19,6 +19,19 @@ function go_view(seq) {
       document.body.appendChild(theForm);
       theForm.submit();
 	}
+	
+function keyClick(event) {
+    var category = event.target.getAttribute('data-category');
+    var url = '/category';
+    if (category === 'cnt_sort' || category === 'goodpoint_sort'|| category === 'date_sort') {
+        url = '/sorted_board_list';
+        url += '?sort=' + category;
+    } else {
+        url += '?category=' + encodeURIComponent(category);
+    }
+    window.location.href = url;
+}	
+
   
 </script>
 </head>
@@ -34,12 +47,15 @@ function go_view(seq) {
     <button type="submit">검색</button>  
 </form>
 <br>
-<h3>분류별로 보기</h3>
-<a href="#" th:onclick="'/category?category=' + ${'반찬'}" th:text="'반찬'">반찬</a>
-<a href="#" th:onclick="'/category?category=' + ${'국&찌개'}" th:text="'국&찌개'">국&찌개</a>
-<a href="#" th:onclick="'/category?category=' + ${'후식'}" th:text="'후식'">후식</a>
-<a href="#" th:onclick="'/category?category=' + ${'일품'}" th:text="'일품'">일품</a>
-
+<h3>카테고리로 보기</h3>
+<a href="#" data-category="반찬" onclick="keyClick(event)" th:text="'반찬'"></a>
+<a href="#" data-category="국&찌개" onclick="keyClick(event)" th:text="'국&찌개'"></a>
+<a href="#" data-category="후식" onclick="keyClick(event)" th:text="'후식'"></a>
+<a href="#" data-category="일품" onclick="keyClick(event)" th:text="'일품'"></a> <br>
+<h3>인기순 보기</h3>
+<a href="#" data-category="cnt_sort" onclick="keyClick(event)" th:text="'조회수순'"></a>
+<a href="#" data-category="goodpoint_sort" onclick="keyClick(event)" th:text="'추천수순'"></a>
+<a href="#" data-category="date_sort" onclick="keyClick(event)" th:text="'최신순'"></a>
 <form id="writeForm" method="get" action="/board_write">
     <button type="submit" class="btn">글쓰기</button>
 </form>
@@ -47,7 +63,7 @@ function go_view(seq) {
 <form name="frm" method="get">
 <table id="BoardList">
   <tr>
-    <th></th> <th>제목</th> <th>작성자</th> <th>조회수</th>   
+    <th></th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>추천수</th>   
   </tr>
   <th:block th:each="com_boardVO : ${boardList}">
       <tr>
@@ -59,6 +75,7 @@ function go_view(seq) {
       </td>
       <td>[[${com_boardVO.member_data.id}]] </td>
       <td>[[${com_boardVO.cnt}]]</td>
+      <td>[[${com_boardVO.goodpoint}]]</td>
       </tr>
     </th:block>
     </table>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Info Update</title>
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<script th:src="@{js/mypage.js}" defer></script>
+</head>
+<th:block th:insert="~{/includes/header}"></th:block>
+<th:block th:insert="~{mypage/menu}"></th:block>
+<body>
+    <article>
+        <h3>개인정보 수정하기</h3>
+        <form action="update_info" id="update_info" method="post" name="formm">
+            <fieldset>
+            	<label>아이디</label>
+            	<input type="text" name="id" id="id" th:value="${loginUser.id}" readonly><br>
+                <label>비밀번호</label>
+                <input type="password" name="pwd" id="pwd"><br>
+                <label>비밀번호 확인</label>
+                <input type="password" name="pwdcheck" id="pwdcheck"><br>
+                <label>이름</label>
+                <input type="text" name="name" id="name" th:value="${loginUser.name}"><br>
+                <label>이메일</label>
+                <input type="text" name="email" id="email" th:value="${loginUser.email}"><br>
+                <label>키</label>
+				<input type="text" name="height" id="height"><br>
+				<label>몸무게</label>
+				<input type="text" name="weight" id="weight"><br>
+				<label>BMI</label>
+				<input type="text" name="bmi" id="bmi" >
+				<input type="button" value="계산하기" onclick="my_bmi()"><br>
+				<label>나이</label>
+				<input type="text" name="age" id="age"><br>
+				<label>목표</label>
+				<select name="goal" id="goal">
+					<option value="maintenance" selected>유지</option>
+					<option value="diet">다이어트</option>
+					<option value="health" >헬스</option>
+				</select>
+            </fieldset>
+            <div>
+                <input type="button" value="수정하기" onclick="info_save()">
+                <input type="button" value="취소" onclick="location.href='/t_mypage';">
+            </div>
+        </form>
+    </article>
+<th:block th:insert="~{/includes/footer}"></th:block>
+</body>
+</html>

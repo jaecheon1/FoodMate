@@ -78,5 +78,19 @@ public class Com_Board_DetailServiceImpl implements Com_Board_DetailService {
 		Pageable pageable = PageRequest.of(page - 1, size, Direction.ASC, "seq");
 		return BoardDetailRepo.findCom_Board_DetailByKindContaining(kind, seq, pageable);
 	}
+	
+	//조회순
+	@Override
+	public Page<Com_Board_Detail> getCom_Board_DetailByCnt(int seq, int page, int size) {
+		Pageable pageable = PageRequest.of(page - 1, size, Direction.ASC, "seq");
+		return BoardDetailRepo.findAllByOrderByCntDesc(seq, pageable);
+	}
+	
+	//추천순
+	@Override
+	public Page<Com_Board_Detail> getCom_Board_DetailByGoodpoint(int seq, int page, int size) {
+		Pageable pageable = PageRequest.of(page - 1, size, Direction.ASC, "seq");
+		return BoardDetailRepo.findAllByOrderByGoodpointDesc(seq, pageable);
+	}
 
 }

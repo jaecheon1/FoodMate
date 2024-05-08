@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="css/board.css">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script type="text/javascript">
+function go_list()
+{
+	   var theForm = document.frm;
+	   theForm.method = "get";
+	   theForm.action="board_list";
+	   theForm.submit();
+}
+</script>
 <title>카테고리별 요리 분류</title>
 </head>
 <body>
   <article>
     <h2>요리 목록</h2>
+    <button type="button" onclick="go_list()" >메뉴로 돌아가기</button>
+    <form name="frm" method="get">
+    <table>
+    	<tr>
+ 		<th></th><th>요리명</th><th>아이디</th><th>조회수</th>
+ 		</tr>	
  <th:block th:each="com_boardVO : ${boardKindList}">
       <tr>
       <td>
@@ -19,9 +35,11 @@
       <td>[[${com_boardVO.member_data.id}]] </td>
       <td>[[${com_boardVO.cnt}]]</td>
       </tr>
+      <br>
     </th:block> 
+    </table>
      [[${paging}]]
-    <div class="clear"></div>
+     </form>
      <th:block th:insert="~{./page_area}"></th:block>   
   </article>
 </body>

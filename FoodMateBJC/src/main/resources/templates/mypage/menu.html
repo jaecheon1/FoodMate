@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<nav id="sub_menu">
+	<ul class="sidebar">
+		<li><a th:href="@{infoView}">내 정보</a></li>
+		<li><a th:href="@{infoUpdate}">내 정보 수정</a></li>
+		<!-- <li><a th:href="@{preferences}">나의 호불호음식 및 알레르기</a></li> -->
+		<li><a th:href="@{myRecipeList}">나의 레시피</a></li>
+		<li><a th:href="@{foodRecommend}">추천받은 음식 history</a></li>
+	</ul>
+</nav>

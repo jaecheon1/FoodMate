@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의 양식</title>
+</head>
+<body>
+    <h2>문의하기</h2>
+    <form action="/inquiry/inquiryList" method="post">
+        <div>
+            <label for="name">이름:</label><br>
+            <input type="text" id="name" name="name" required><br>
+        </div>
+        <div>
+            <label for="email">이메일:</label><br>
+            <input type="email" id="email" name="email" required><br>
+        </div>
+        <div>
+            <label for="subject">제목:</label><br>
+            <input type="text" id="subject" name="subject" required><br>
+        </div>
+        <div>
+            <label for="message">내용:</label><br>
+            <textarea id="message" name="message" rows="4" required></textarea><br>
+        </div>
+        <div>
+            <button type="submit">제출</button>
+        </div>
+    </form>
+</body>
+</html>

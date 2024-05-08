@@ -1,0 +1,42 @@
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#result-section {
+    margin-bottom: 20px;
+}
+
+#result-section h2 {
+    margin-bottom: 10px;
+}
+
+#recommendation-section {
+    margin-bottom: 20px;
+}
+
+#recommendation-section h2 {
+    margin-bottom: 10px;
+}
+
+#food-recommendations {
+    list-style-type: none;
+    padding: 0;
+}
+
+#food-recommendations li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
