@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Getter
 @Setter
 @ToString
@@ -28,5 +29,5 @@ public class Member {
     private String pwd;
     private String name;
     private String email;
-    private String nickname; 
-}
+    private String nickname;
+	} 

@@ -52,7 +52,9 @@ public class Com_Board_Detail {
 		    @ColumnDefault("sysdate")
 		    private Date d_regdate; //작성일자 
 		    
-		    private int cnt;
+		    private int cnt; //조회수
+		    
+		    private int goodpoint; // 추천수
 
 
 
