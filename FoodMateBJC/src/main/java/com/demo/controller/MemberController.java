@@ -24,7 +24,7 @@ public class MemberController {
     }
 
     // 회원가입 화면 표시 (GET 요청)
-    @GetMapping("/join_form")
+    @PostMapping("/join_form")
     public String joinView() {
         return "member/join";
     }
@@ -50,7 +50,7 @@ public class MemberController {
     }
     
     // 초기 로그인화면
-    @GetMapping("/login1")
+    @GetMapping("/login")
     public String loginPage() {
         return "member/login";
     }

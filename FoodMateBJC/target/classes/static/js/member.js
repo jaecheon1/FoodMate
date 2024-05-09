@@ -2,13 +2,18 @@
 /*
 ** 약관 동의 여부 확인
 */
-function go_next() {
-	if ($(".agree")[0].checked == true) {  // 동의함이 체크됨
-		$("#join").attr("action", "join_form").submit();  // 서버로 URL 전송
-	} else if($(".agree")[1].checked == true) {
-		alert("약관에 동의하셔야 가입할 수 있습니다.")
-	}
-}
+$(document).ready(function(){
+    $("#nextButton").click(function() {
+        if ($(".agree").prop("checked")) {  // 동의함이 체크됨
+            $("#join").attr("action", "/join_form"); // action 속성 설정
+            $("#join").submit(); // 폼 제출
+        } else if($(".disagree").prop("checked")) {
+            alert("약관에 동의하셔야 가입할 수 있습니다."); 
+        }
+    });
+});
+
+
 
 /*
  * 회원 가입시, 필수 입력 항목 확인
@@ -44,16 +49,17 @@ function go_save() {
 		$("#join").attr("action", "join").submit();
 	}
 }
-    function validateLoginForm() {
-        var id = document.getElementById("id").value.trim();
-        var password = document.getElementById("password").value.trim();
-        
-        if (id === '' || password === '') {
-            alert("아이디와 비밀번호를 입력해주세요.");
-            return false;
-        }
-        return true;
+
+function validateLoginForm() {
+    var id = document.getElementById("id").value.trim();
+    var password = document.getElementById("password").value.trim();
+    
+    if (id === '' || password === '') {
+        alert("아이디와 비밀번호를 입력해주세요.");
+        return false;
     }
+    return true;
+}
 
 /*
 ** id 중복확인 화면 출력요청
@@ -71,10 +77,14 @@ function idcheck() {
 			"resizable=yes, width=350, height=200");
 }
 
+// 사용자명 입력 확인
+$(document).ready(function() {
     if ($('.username_input').val() == '') {
-      alert('이메일을 입력해주세요.')
-      return;
+        alert('이메일을 입력해주세요.');
     }
+});
+
+
 
 /*
 ** 아이디, 비밀번호 찾기 화면 요청

@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입 약관</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <body>
 <th:block th:insert="~{includes/header}"></th:block>
-<th:block th:insert="~{product/sub_img}"></th:block>
-<th:block th:insert="~{product/sub_menu}"></th:block>
+<!--<th:block th:insert="~{product/sub_img}"></th:block>
+<th:block th:insert="~{product/sub_menu}"></th:block>-->
   <article>
     <h2>Join Us</h2>
-    <form id="join" action="join_form" method="post" name="formm">
+    <form id="join" action="/join_form" method="post" name="formm">
        FoodMate의 회원가입 페이지 입니다. <br>
         회원님의 개인신상에 관한 정보는 <br>
        ‘정보통신망이용촉진 및 정보보호등에관한법률’에 의해 회원님의 동의없이<br>
@@ -73,13 +75,15 @@ FoodMate 및 FoodMate 관련 제반 서비스(모바일 웹/앱 포함)의 회�
 이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있습니다. 회원가입 시 수집하는 최소한의 개인정보, 즉, 필수 항목에 대한 수집 및 이용 동의를 거부하실 경우, 회원가입이 어려울 수 있습니다.
       </textarea>
       <br><br>
-      <div style="text-align: center;">
-<input type="checkbox" name="okon1" class="agree" checked> 동의함 &nbsp; &nbsp; &nbsp;
-<input type="checkbox" name="okon1" class="agree"> 동의안함
-      </div>
-      <input type="button" value="Next" class="submit"  onclick="go_next()" style="float: right;"> 
+     <div style="text-align: center;">
+    <input type="checkbox" name="okon" class="agree" checked> 동의함 &nbsp; &nbsp; &nbsp;
+    <input type="checkbox" name="okon" class="disagree"> 동의안함
+</div>
+<input type="button" value="Next" class="submit" id="nextButton" style="float: right;"> 
+
     </form>
   </article>
 <th:block th:insert="~{includes/footer}"></th:block>
+<script src="js/member.js"></script>
 </body>
 </html> 

@@ -65,40 +65,58 @@
 </style>
 </head>
 <body>
- <th:block th:replace="includes/header"></th:block>
-<form action="login.html">
-    <table>
-    
-    <tr>
-        <td><h2>회원가입</h2></td>
-    </tr>
-    <tr><td>아이디</td></tr>
-    <tr><td>
-    <input type="text" class="text id_input" name="name" check_result="fail" required />
-    <button type="button" class="id_overlap_button" onclick="id_overlap_check()">중복검사</button>
-    <img id="id_check_sucess" style="display: none;">
-</td></tr>
- 
-    <tr><td><input type="text" class="text"></td></tr>
-    <tr><td>비밀번호</td></tr>
-    <tr><td><input type="password" class="text"></td></tr>
-    <tr><td>비밀번호 확인</td></tr>
-    <tr><td><input type="password" class="text"></td></tr>
-    <tr><td>이름</td></tr>
-    <tr><td><input type="text" class="text"></td></tr>
-    <tr><td>이메일</td></tr>
-    <tr>
-        <td><input type="text" class="email"> @ 
-            <select>
-                <option>naver.com</option>
-                <option>gmail.com</option>
-                <option>daum.net</option>
-                <option>nate.com</option>
-            </select>
-        </td>
-    </tr>
-    <tr><td><input type="submit" value="가입하기" class="btn" onclick="alert('가입 성공!')"></td></tr>
-    </table>
-</form>
-<th:block th:insert="~{includes/footer}"></th:block>
+    <th:block th:replace="includes/header"></th:block>
+    <form>
+        <table>
+            <tr>
+                <td><h2>회원가입</h2></td>
+            </tr>
+            <tr>
+                <td>아이디</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" class="text id_input" name="id" check_result="fail" required />
+                    <button type="button" class="id_overlap_button" onclick="id_overlap_check()">중복검사</button>
+                    <img id="id_check_sucess" style="display: none;">
+                </td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+            </tr>
+            <tr>
+                <td><input type="password" class="text" name="password"></td>
+            </tr>
+            <tr>
+                <td>비밀번호 확인</td>
+            </tr>
+            <tr>
+                <td><input type="password" class="text" name="password_confirm"></td>
+            </tr>
+            <tr>
+                <td>이름</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="name"></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" class="text email_input" name="email"> @ 
+                    <select>
+                        <option>naver.com</option>
+                        <option>gmail.com</option>
+                        <option>daum.net</option>
+                        <option>nate.com</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><button type="button" class="btn" onclick="register()">가입하기</button></td>
+            </tr>
+        </table>
+    </form>
+    <th:block th:insert="~{includes/footer}"></th:block>
 </body>
