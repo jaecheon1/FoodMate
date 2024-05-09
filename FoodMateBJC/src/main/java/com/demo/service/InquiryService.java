@@ -25,7 +25,7 @@ public class InquiryService {
         inquiry.setEmail(inquiryForm.getEmail());
         inquiry.setSubject(inquiryForm.getSubject());
         inquiry.setMessage(inquiryForm.getMessage());
-        inquiry.setCreated_at(new Date());
+        inquiry.setRegdate(new Date());
         inquiryRepository.save(inquiry);
     }
 

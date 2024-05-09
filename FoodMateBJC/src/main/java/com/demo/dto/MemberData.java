@@ -20,6 +20,7 @@ import lombok.ToString;
 @DynamicInsert 
 @DynamicUpdate
 public class MemberData {
+    @Id
     private String id;
     private String password;
     private int age;
@@ -28,6 +29,4 @@ public class MemberData {
     private String name;
     private String gender;
     private String email;
-    @Id
-    private int no_data;
 }

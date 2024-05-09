@@ -26,7 +26,7 @@ public class InquiryProcessController {
         inquiry.setEmail(inquiryForm.getEmail());
         inquiry.setSubject(inquiryForm.getSubject());
         inquiry.setMessage(inquiryForm.getMessage());
-        inquiry.setCreated_at(new Date()); // 현재 시간으로 설정
+        inquiry.setRegdate(new Date()); // 현재 시간으로 설정
         inquiryService.saveInquiry(inquiry);
         return "redirect:/inquiry/inquiryList";
     }

@@ -117,13 +117,13 @@
 					<th></th>
 					<td><button type="button" onclick="copyboard()">공유하기</button></td>
 					<th:block
-						th:if="${session.goodPointStatusMap[Com_Board_DetailVO.seq] == 'on'}">
+						th:if="${session.goodPointStatusMap != null and session.goodPointStatusMap[Com_Board_DetailVO.seq] == 'on'}">
 						<td><button type="button"
 								th:attr="data-seq=${Com_Board_DetailVO.seq}"
 								onclick="goodpoint_plus(this)">추천하셨습니다</button></td>
 					</th:block>
 					<th:block
-						th:if="${session.goodPointStatusMap[Com_Board_DetailVO.seq] != 'on'}">
+						th:if="${session.goodPointStatusMap == null or session.goodPointStatusMap[Com_Board_DetailVO.seq] != 'on'}">
 						<td><button type="button"
 								th:attr="data-seq=${Com_Board_DetailVO.seq}"
 								onclick="goodpoint_plus(this)">추천하기</button></td>

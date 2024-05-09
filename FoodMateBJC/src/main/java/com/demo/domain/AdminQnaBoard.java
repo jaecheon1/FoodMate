@@ -33,7 +33,7 @@ public class AdminQnaBoard {
 	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "qnanum_generator")
     @SequenceGenerator(name="qnanum_generator", sequenceName = "QNANUM_SEQ", allocationSize = 1)
-    private int qna_boardnum;
+    private long qna_boardnum;
 	private String question;
 	private String answer;
 	@Temporal(value=TemporalType.TIMESTAMP)

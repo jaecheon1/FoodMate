@@ -1,4 +1,4 @@
-package com.demo.service;
+package com.demo.dto;
 
 public class CalculationResult {
     private double bmi;

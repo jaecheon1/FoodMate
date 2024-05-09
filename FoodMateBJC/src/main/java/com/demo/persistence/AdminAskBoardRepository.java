@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.demo.domain.Inquiry;
 
-public interface AdminAskBoardRepository extends JpaRepository<Inquiry, Integer> {
+public interface AdminAskBoardRepository extends JpaRepository<Inquiry, Long> {
 
 	@Query(value="SELECT * FROM inquiries ORDER BY regdate DESC", nativeQuery = true)
 	List<Inquiry> getAllAskListMain();

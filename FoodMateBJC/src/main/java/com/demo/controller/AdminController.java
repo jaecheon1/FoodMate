@@ -281,7 +281,7 @@ public class AdminController {
 	public void askUpdate(@ModelAttribute("loginUser") Member loginUser, @RequestParam("askNum") Long boardnum, 
 			Inquiry vo) {
 		Inquiry ask = adminService.getByAskBoardnum(boardnum);
-		vo.setCreated_at(ask.getCreated_at());
+		vo.setRegdate(ask.getRegdate());
 		vo.setInquiry_id(boardnum);
 		vo.setEmail(ask.getEmail());
 		vo.setName(ask.getName());

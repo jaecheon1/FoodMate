@@ -1,5 +1,6 @@
 package com.demo.domain;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -11,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 
 @Getter
 @Setter
@@ -25,9 +25,10 @@ import lombok.ToString;
 public class Member {
     @Id
     private String id;
+    @ColumnDefault("0")
     private int usercode;
     private String pwd;
     private String name;
     private String email;
     private String nickname;
-	} 
+}

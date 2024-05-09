@@ -2,6 +2,7 @@ package com.demo.service;
 
 import org.springframework.stereotype.Service;
 
+import com.demo.dto.CalculationResult;
 import com.demo.dto.MemberData;
 
 @Service

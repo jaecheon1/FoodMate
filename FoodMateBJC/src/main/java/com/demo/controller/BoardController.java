@@ -2,7 +2,10 @@ package com.demo.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.domain.Com_Board_Detail;
+import com.demo.domain.Reply;
 import com.demo.dto.Com_Recipe;
 import com.demo.service.Com_Board_DetailService;
 
@@ -26,9 +30,11 @@ public class BoardController {
 
 	@Autowired
 	Com_Board_DetailService Board_DetailService;
+	
 
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
+
 
 	// 게시글 목록 조회
 	@GetMapping("/board_list")
@@ -44,15 +50,24 @@ public class BoardController {
 	}
 
 	// 게시글 상세정보 조회
-	@PostMapping("/com_board_detail")
-	public String getCom_Board_DetailView(@RequestParam("seq") int seq, Com_Board_Detail vo, Model model) {
+	@GetMapping("/com_board_detail")
+	public String getCom_Board_DetailView(@RequestParam("seq") int seq, Model model, HttpSession session) {
 		Com_Board_Detail com_board = Board_DetailService.getCom_Board_Datail(seq);
+		Set<Integer> viewed = (Set<Integer>) session.getAttribute("viewed");
 		
 		
-	    if (com_board != null) {
-	        com_board.setCnt(com_board.getCnt() + 1);  // 조회수 1 증가
-	        Board_DetailService.updateBoard(com_board);  // DB에 업데이트
-	    }
+		 if (viewed == null) { // 처음클릭시
+		        viewed = new HashSet<>();
+		        session.setAttribute("viewed", viewed);
+		    }
+
+		    if (!viewed.contains(seq)) {
+		        if (com_board != null) {
+		            com_board.setCnt(com_board.getCnt() + 1);  // 조회수 1 증가
+		            Board_DetailService.updateBoard(com_board);  // DB에 업데이트
+		        }
+		        viewed.add(seq); //방문한 게시글번호 추가
+		    }
 	    
 		model.addAttribute("Com_Board_DetailVO", com_board);
 		model.addAttribute("seq", com_board.getSeq());
@@ -249,5 +264,125 @@ public class BoardController {
 		return "comboard/BoardKind";
 	}
 	
+	//추천수 관리
+	@GetMapping("/goodpoint")
+	public String goodPoint_Action(@RequestParam("seq") int seq, HttpSession session) {
+		Com_Board_Detail com_board = Board_DetailService.getCom_Board_Datail(seq);
+	    HashMap<Integer, String> goodPointStatusMap = (HashMap<Integer, String>) session.getAttribute("goodPointStatusMap");
+
+	    if (goodPointStatusMap == null) {
+	        goodPointStatusMap = new HashMap<>();
+	        session.setAttribute("goodPointStatusMap", goodPointStatusMap);
+	    }
+
+	    String goodPointStatus = goodPointStatusMap.get(seq);
+
+	    if (goodPointStatus == null || goodPointStatus.equals("off")) {
+	        if (com_board != null) {
+	            com_board.setGoodpoint(com_board.getGoodpoint() + 1);
+	            Board_DetailService.updateBoard(com_board);
+	            goodPointStatusMap.put(seq, "on");
+	        }
+	    } else if (goodPointStatus.equals("on")) {
+	        if (com_board != null) {
+	            com_board.setGoodpoint(com_board.getGoodpoint() - 1);
+	            Board_DetailService.updateBoard(com_board);
+	            goodPointStatusMap.put(seq, "off");
+	        }
+		    }
+		    
+		return "redirect:/com_board_detail?seq=" + seq;
+	}
+	
+	
+	//인기도순 정렬
+		@GetMapping("/sorted_board_list")
+		public String getSortedBoardList(@RequestParam(value = "seq", defaultValue = "1") int seq,
+				@RequestParam(value = "page", defaultValue = "1") int page,
+				@RequestParam(value = "size", defaultValue = "10") int size,
+				@RequestParam("sort") String sort, Model model) {
+		    
+		    Page<Com_Board_Detail> pageList = null;
+
+		    switch (sort) {
+		        case "cnt_sort":
+		            pageList = Board_DetailService.getCom_Board_DetailByCnt(seq, page, size);
+		            break;
+		        case "goodpoint_sort":
+		            pageList = Board_DetailService.getCom_Board_DetailByGoodpoint(seq, page, size);
+		            break;
+		        case "date_sort":
+		            pageList = Board_DetailService.getAllCom_Board(seq, page, size);
+		            break;
+		    }
+		    List<Com_Board_Detail> boardList = pageList.getContent();
+			model.addAttribute("boardList", boardList);
+		    model.addAttribute("pageInfo", pageList);
+		    
+		    return "comboard/BoardList";
+		}
+		
+		
+		
+		
+		//댓글 출력
+		@PostMapping("/reply_list")
+		public String getReply_list(@RequestParam("seq") int seq, Model model) {
+			List<Reply> ReplyList = Board_DetailService.getReplyBySeq(seq);
+			Com_Board_Detail comBoardDetailVO = Board_DetailService.getCom_Board_Datail(seq);
+			model.addAttribute("ReplyList", ReplyList);
+			model.addAttribute("Com_Board_DetailVO", comBoardDetailVO);
+			
+//			System.out.println("********************댓글 목록 = " + ReplyList);
+//			System.out.println("********************게시글상세 목록 = " + comBoardDetailVO);
+			return "comboard/BoardDetail";
+			}
+		
+		
+		//댓글 등록
+		@GetMapping("/reply_save")
+		public String insertReply(Reply vo, HttpSession session) {
+			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+			
+			if (loginUser == null) { 
+				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
+			}else {
+				Board_DetailService.insertReply(vo);			
+				return "redirect:com_board_detail";
+				}
+		}
+		
+		//댓글 수정
+		@GetMapping("/reply_update")
+		public String updateReply(Reply vo, HttpSession session) {
+			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+			
+			if (loginUser == null) { 
+				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
+			}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
+				return "본인이 작성한 댓글만 수정가능합니다.";
+			}else {
+				Board_DetailService.updateReply(vo);			
+				return "redirect:com_board_detail";
+		}
+		}
+		
+		//댓글 삭제 
+		@GetMapping("/reply_delete")
+		public String deleteReply(Reply vo, HttpSession session) {
+			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+			
+			if (loginUser == null) { 
+				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
+			}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
+				return "본인이 작성한 댓글만 삭제가능합니다.";
+			}else {
+				Board_DetailService.deleteReply(vo);			
+				return "redirect:com_board_detail";
+		}
+		}
+		
+
+		
 
 }

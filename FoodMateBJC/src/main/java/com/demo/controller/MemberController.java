@@ -36,7 +36,7 @@ public class MemberController {
     }
 
     // 사용자 인증(로그인)
-    @PostMapping("/login")
+    @PostMapping("/login1")
     public String loginAction(MemberData vo, Model model) {
         String url = "";
         
@@ -50,7 +50,7 @@ public class MemberController {
     }
     
     // 초기 로그인화면
-    @GetMapping("/login")
+    @GetMapping("/login1")
     public String loginPage() {
         return "member/login";
     }

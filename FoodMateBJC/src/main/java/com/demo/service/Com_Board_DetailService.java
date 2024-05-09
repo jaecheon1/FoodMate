@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.demo.domain.Com_Board_Detail;
+import com.demo.domain.Reply;
 
 public interface Com_Board_DetailService {
 	
@@ -30,7 +31,20 @@ public interface Com_Board_DetailService {
 	
 	public Page<Com_Board_Detail> getCom_Board_DetailByGoodpoint(int seq, int page, int size); // 추천순 정렬
 	
+	/**
+	 * 
+	 * 여기서부터 댓글
+	 */
 	
+	public void insertReply(Reply vo);
+	
+	public void updateReply(Reply vo);
+	
+	public void deleteReply(Reply vo);
+	
+	public List<Reply> getReplyBySeq(int seq);
+	
+	public Page<Reply> getReplyList_paging(int replynum , int page, int size);
 	
 
 }

@@ -10,13 +10,18 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.demo.domain.Com_Board_Detail;
+import com.demo.domain.Reply;
 import com.demo.persistence.Com_Board_DetailReposiotry;
+import com.demo.persistence.ReplyRepository;
 
 @Service
 public class Com_Board_DetailServiceImpl implements Com_Board_DetailService {
 
 	@Autowired
 	Com_Board_DetailReposiotry BoardDetailRepo;
+
+	@Autowired
+	ReplyRepository ReplyRepo;
 
 	// 게시글 목록
 	@Override
@@ -93,4 +98,44 @@ public class Com_Board_DetailServiceImpl implements Com_Board_DetailService {
 		return BoardDetailRepo.findAllByOrderByGoodpointDesc(seq, pageable);
 	}
 
+
+	/*
+	 * 댓글
+	 */
+	
+	@Override
+	public void insertReply(Reply vo) {
+		ReplyRepo.save(vo);
+
+	}
+
+	@Override
+	public void updateReply(Reply vo) {
+		Reply p = ReplyRepo.findById(vo.getReplynum()).get();
+		ReplyRepo.save(vo);
+
+	}
+
+	@Override
+	public void deleteReply(Reply vo) {
+		ReplyRepo.delete(vo);
+
+	}
+
+	@Override
+	public List<Reply> getReplyBySeq(int seq) {
+		return ReplyRepo.getReplyList(seq);
+	}
+	
+	/*
+	 * page번호는 0부터 시작하므로 -1을 해준다. (내가 가고싶은페이지가 1일경우 0이 될수있도록)
+	 */
+	
+	@Override
+	public Page<Reply> getReplyList_paging(int replynum, int page, int size) {
+		Pageable pageable = PageRequest.of(page-1, size, Direction.DESC, "replynum");
+		return ReplyRepo.findReplyByreplynumContainingOrderByReplynum(replynum, pageable);
+	}
+
+	
 }
