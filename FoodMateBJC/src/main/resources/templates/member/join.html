@@ -12,7 +12,7 @@
         
     }
     .email {
-        width: 127px;
+        width: 250px;
         height: 32px;
         font-size: 15px;
         border: 0;
@@ -64,59 +64,50 @@
     }
 </style>
 </head>
+<script type="text/javascript">
+function idcheck(){
+	const id = document.querySelector('.id_input').value.trim();
+	const url = `id_check_form?id=${id}`;
+	
+	window.open(url, '_blank', 'width=600,height=400');
+}
+
+function emailcheck() {
+	const email = document.querySelector('.email').value.trim();
+	const url = `email_check_form?email=${email}`;
+	
+	window.open(url, '_blank', 'width=600,height=400');
+}
+
+</script>
 <body>
-    <th:block th:replace="includes/header"></th:block>
-    <form>
-        <table>
-            <tr>
-                <td><h2>회원가입</h2></td>
-            </tr>
-            <tr>
-                <td>아이디</td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" class="text id_input" name="id" check_result="fail" required />
-                    <button type="button" class="id_overlap_button" onclick="id_overlap_check()">중복검사</button>
-                    <img id="id_check_sucess" style="display: none;">
-                </td>
-            </tr>
-            <tr>
-                <td>비밀번호</td>
-            </tr>
-            <tr>
-                <td><input type="password" class="text" name="password"></td>
-            </tr>
-            <tr>
-                <td>비밀번호 확인</td>
-            </tr>
-            <tr>
-                <td><input type="password" class="text" name="password_confirm"></td>
-            </tr>
-            <tr>
-                <td>이름</td>
-            </tr>
-            <tr>
-                <td><input type="text" class="text" name="name"></td>
-            </tr>
-            <tr>
-                <td>이메일</td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" class="text email_input" name="email"> @ 
-                    <select>
-                        <option>naver.com</option>
-                        <option>gmail.com</option>
-                        <option>daum.net</option>
-                        <option>nate.com</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><button type="button" class="btn" onclick="register()">가입하기</button></td>
-            </tr>
-        </table>
-    </form>
-    <th:block th:insert="~{includes/footer}"></th:block>
+<form method="post" action="join">
+    <table>
+    
+    <tr>
+        <td><h2>회원가입</h2></td>
+    </tr>
+    <tr><td>아이디</td></tr>
+    <tr><td>
+    <input type="text" class="text id_input" name="id" check_result="fail" required />
+    <button type="button" class="id_overlap_button" onclick="idcheck()">id 중복확인</button>
+    <img id="id_check_sucess" style="display: none;">
+</td></tr>
+    <tr><td>비밀번호</td></tr>
+    <tr><td><input type="password" class="text" placeholder="비밀번호를 입력하세요">
+    </td></tr>
+    <tr><td>비밀번호 확인</td></tr>
+    <tr><td><input type="password" name="password" class="text" ></td></tr>
+    <tr><td>이름</td></tr>
+    <tr><td><input type="text" class="text"></td></tr>
+    <tr><td>이메일</td></tr>
+    <tr>
+        <td>
+        	<input type="text" class="email" name="email"> 
+   			<input type="button" onclick="emailcheck()" value="중복확인">
+        </td>
+    </tr>
+    <tr><td><input type="submit" value="가입하기" class="btn" onclick="alert('가입 성공!')"></td></tr>
+    </table>
+</form>
 </body>

@@ -40,6 +40,10 @@ function submitFormAndCloseWindow() {
 
     return false; // 기본 폼 제출 동작 방지
 }
+
+function go_close(){
+	window.close()
+}
 </script>
 
 </head>
@@ -92,7 +96,7 @@ function submitFormAndCloseWindow() {
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Q&A 게시판(관리자페이지)</h1>
+					<h1 class="mt-4">1:1 답변</h1>
 					<div class='form-0'>
 
 						<form class='form-1' name="BoardForm" action="askUpdate.do"
@@ -108,10 +112,16 @@ function submitFormAndCloseWindow() {
 							<hr>
 							
 							<textarea class='write-2' name="comments" rows="20" cols="20"
-								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required></textarea>
-
-							<button type="submit" onclick="submitFormAndCloseWindow()">답변 등록</button>
-							<input type="reset" value="다시 입력">
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required th:if="${end_view != 'view'}"></textarea>
+							
+							<textarea class='write-2' name="comments" rows="20" cols="20"
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required th:if="${end_view == 'view'}">[[${ask.comments}]]</textarea>
+							
+							
+							<button type="submit" onclick="submitFormAndCloseWindow()" th:if="${end_view != 'view'}">답변 등록</button>
+							<input type="reset" value="다시 입력" th:if="${end_view != 'view'}">
+							
+							<button type="button" onclick="go_close()" th:if="${end_view == 'view'}">닫 기</button>
 							
 						</form>
 

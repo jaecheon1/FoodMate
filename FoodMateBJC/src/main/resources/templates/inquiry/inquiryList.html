@@ -32,19 +32,22 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Message</th>
+                <th>Subject</th>
+                <th>Status</th> <!-- 답변 상태 열 추가 -->
                 <th>Created At</th> <!-- 생성일자 열 추가 -->
             </tr>
         </thead>
         <tbody>
             <!-- Thymeleaf를 사용하여 inquiryList를 반복 -->
             <tr th:each="inquiry : ${inquiries}">
-                <!-- 각 문의의 이름, 이메일, 메시지 및 생성일자를 테이블 셀에 출력 -->
+                <!-- 각 문의의 이름, 이메일, 메시지, 답변 상태 및 생성일자를 테이블 셀에 출력 -->
                 <td th:text="${inquiry.name}"></td>
                 <td th:text="${inquiry.email}"></td>
-                <td th:text="${inquiry.message}"></td>
+                <td th:text="${inquiry.Subject}"></td>
+                <!-- 답변 상태를 표시하는데 inquiry.status를 사용 -->
+                <td th:text="${inquiry.status}"></td>
                 <!-- Date 형식에 맞게 출력 -->
-                <td th:text="${#dates.format(inquiry.created_at, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(inquiry.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             </tr>
         </tbody>
     </table>

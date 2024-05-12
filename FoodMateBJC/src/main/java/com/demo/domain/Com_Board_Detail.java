@@ -7,7 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.demo.dto.Com_Recipe;
-import com.demo.dto.MemberData;
+import com.demo.domain.MemberData;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -46,7 +46,7 @@ public class Com_Board_Detail {
 		    
 		    @OneToOne(cascade = CascadeType.ALL)
 		    @JoinColumn(name="no_data", nullable=false)
-		    private MemberData member_data; //회원번호
+		    private MemberData member_data; //회원아이디
 		    
 		    @Temporal(value=TemporalType.TIMESTAMP)
 		    @ColumnDefault("sysdate")

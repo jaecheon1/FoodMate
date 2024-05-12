@@ -34,6 +34,15 @@ function go_update(button) {
     }, 200); // 매 초마다 체크
 }
 
+function go_resultCheck() {
+    const url = 'admin_ask.do';
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    document.body.appendChild(form);
+    form.submit();
+}
+
 </script>
 
 </head>
@@ -91,6 +100,7 @@ function go_update(button) {
 					<div class="card mb-4">
 						<div class="card-header">
 							<i class="fas fa-table me-1"></i> 게시판 목록
+							<input type="button" onclick="go_resultCheck()" value="완료된 문의확인">
 						</div>
 						<div class="card-body">
 							<form method="post" id="edit_form">

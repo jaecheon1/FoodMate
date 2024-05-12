@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문의 양식</title>
+    <title>Inquiry Form</title>
 </head>
 <body>
-    <h2>문의하기</h2>
-    <form action="/inquiry/inquiryList" method="post">
+    <h2>Inquiry Form</h2>
+    <form action="/saveInquiry" method="post">
         <div>
-            <label for="name">이름:</label><br>
-            <input type="text" id="name" name="name" required><br>
+            <label for="name">Name:</label><br>
+            <!-- Thymeleaf를 사용하여 세션에 저장된 사용자 정보를 출력 -->
+            <input type="text" id="name" name="name" th:value="${session.loggedInUser != null ? session.loggedInUser.name : ''}" required><br>
         </div>
         <div>
-            <label for="email">이메일:</label><br>
-            <input type="email" id="email" name="email" required><br>
+            <label for="email">Email:</label><br>
+            <!-- Thymeleaf를 사용하여 세션에 저장된 사용자 정보를 출력 -->
+            <input type="email" id="email" name="email" th:value="${session.loggedInUser != null ? session.loggedInUser.email : ''}" required><br>
         </div>
         <div>
-            <label for="subject">제목:</label><br>
+            <label for="subject">Subject:</label><br>
             <input type="text" id="subject" name="subject" required><br>
         </div>
         <div>
-            <label for="message">내용:</label><br>
+            <label for="message">Message:</label><br>
             <textarea id="message" name="message" rows="4" required></textarea><br>
         </div>
         <div>
-            <button type="submit">제출</button>
+            <button type="submit">Submit</button>
         </div>
     </form>
 </body>

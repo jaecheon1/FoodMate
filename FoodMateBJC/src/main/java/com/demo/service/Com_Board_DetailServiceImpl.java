@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.demo.domain.Com_Board_Detail;
 import com.demo.domain.Reply;
-import com.demo.persistence.Com_Board_DetailReposiotry;
+import com.demo.persistence.Com_Board_DetailRepository;
 import com.demo.persistence.ReplyRepository;
 
 @Service
 public class Com_Board_DetailServiceImpl implements Com_Board_DetailService {
 
 	@Autowired
-	Com_Board_DetailReposiotry BoardDetailRepo;
+	Com_Board_DetailRepository BoardDetailRepo;
 
 	@Autowired
 	ReplyRepository ReplyRepo;

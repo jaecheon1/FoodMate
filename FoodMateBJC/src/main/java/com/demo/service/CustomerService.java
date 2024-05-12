@@ -2,12 +2,15 @@ package com.demo.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.demo.domain.AdminQnaBoard;
-import com.demo.domain.Inquiry;
+import com.demo.domain.askBoard;
 
-@Service
+
 public interface CustomerService {
-	List<AdminQnaBoard> getAllQnaBoards();
+    List<String> getQnAList();
+    void addInquiry(askBoard inquiry);
+    List<askBoard> getInquiryList();
+    List<askBoard> getInquiriesBySubject(String subject);
+    List<askBoard> getInquiriesBySubjectNamedQuery(String subject);
+    List<AdminQnaBoard> getAllQnaBoards();
 }

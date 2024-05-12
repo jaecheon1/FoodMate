@@ -19,9 +19,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.demo.domain.AdminQnaBoard;
 import com.demo.domain.AdminRecipeBoard;
-import com.demo.domain.Inquiry;
-import com.demo.domain.Member;
+import com.demo.domain.askBoard;
 import com.demo.domain.foodRecipe;
+import com.demo.domain.MemberData;
 import com.demo.service.AdminService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/main.do")
-    public String mainView(@ModelAttribute("loginUser") Member loginUser, Model model) {
+    public String mainView(@ModelAttribute("loginUser") MemberData loginUser, Model model) {
         // loginUser가 존재하는지 확인하고 adminCheck 수행
         if (loginUser != null) {
             adminService.adminCheck(loginUser);
@@ -48,7 +48,7 @@ public class AdminController {
         
         List<AdminRecipeBoard> foodBoardList = adminService.getAllFoodBoardListMain();
         List<AdminQnaBoard> qnaBoardList= adminService.getAllQnaBoardListMain();
-        List<Inquiry> askBoardList = adminService.getAllAskBoardListMain();
+        List<askBoard> askBoardList = adminService.getAllAskBoardListMain();
         
         model.addAttribute("askBoardList", askBoardList);
         model.addAttribute("foodBoardList", foodBoardList);
@@ -62,14 +62,14 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/memberList.do")
-	public String memberInfo(@ModelAttribute("loginUser") Member loginUser, Model model) {
+	public String memberInfo(@ModelAttribute("loginUser") MemberData loginUser, Model model) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
         	return "admin/admin_main";    // 초기 로그인 화면으로 이동 **********************(수정필요)
         }
 		
-		List<Member> memberList = adminService.getAllMemberList();
+		List<MemberData> memberList = adminService.getAllMemberList();
 		model.addAttribute("memberList", memberList);
 		
 		return "admin/boardPage/admin_userlist";  // 회원 정보 페이지로 이동
@@ -80,7 +80,7 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/admin_food.do")
-	public String foodBoard(@ModelAttribute("loginUser") Member loginUser, Model model, Pageable pageable) {
+	public String foodBoard(@ModelAttribute("loginUser") MemberData loginUser, Model model, Pageable pageable) {
 	    if (loginUser == null) {
 	        return "redirect:/main.do";  // 초기 로그인 화면으로 리다이렉션
 	    }
@@ -94,7 +94,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/foodRegister.do")
-	public String foodRegiView(@ModelAttribute("loginUser") Member loginUser) {
+	public String foodRegiView(@ModelAttribute("loginUser") MemberData loginUser) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } 
@@ -102,7 +102,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/foodReg.do")  // 나머지 등록과정도 동일
-	public String foodRegister(@ModelAttribute("loginUser") Member loginUser, AdminRecipeBoard vo) {
+	public String foodRegister(@ModelAttribute("loginUser") MemberData loginUser, AdminRecipeBoard vo) {
 		// 로그인 정보를 Member타입으로 받아와서 vo객체에 비어있는 정보에 insert해야함
 		// 로그인 영역에서 처리하는 방식대로 개선
 		vo.setUserid(loginUser.getId());
@@ -115,7 +115,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/foodEdit.do")
-	public String editFood(@ModelAttribute("loginUser") Member loginUser, @RequestParam("foodSelect") int boardnum, RedirectAttributes redirectAttributes) {
+	public String editFood(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("foodSelect") int boardnum, RedirectAttributes redirectAttributes) {
 		adminService.adminCheck(loginUser);
 	    AdminRecipeBoard food = adminService.getByRecipeBoardnum(boardnum);
 
@@ -137,7 +137,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/foodUpdate.do")  // 나머지 등록과정도 동일
-	public String foodUpdate(@ModelAttribute("loginUser") Member loginUser, @RequestParam("foodNum") int boardnum, 
+	public String foodUpdate(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("foodNum") int boardnum, 
 							AdminRecipeBoard vo) {
 		// 로그인 정보를 Member타입으로 받아와서 vo객체에 비어있는 정보에 insert해야함
 		// 로그인 영역에서 처리하는 방식대로 개선
@@ -153,7 +153,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/foodDelete.do")
-    public String deleteFood(@ModelAttribute("loginUser") Member loginUser, @RequestParam("foodSelect") int boardnum) {
+    public String deleteFood(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("foodSelect") int boardnum) {
         // boardnum에 해당하는 Q&A 게시글을 삭제합니다.
 		adminService.adminCheck(loginUser);
         adminService.deleteAdminRecipeBoard(boardnum);
@@ -167,7 +167,7 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/admin_QnA.do")
-	public String QnABoard(@ModelAttribute("loginUser") Member loginUser, Model model, Pageable pageable) {
+	public String QnABoard(@ModelAttribute("loginUser") MemberData loginUser, Model model, Pageable pageable) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
@@ -181,7 +181,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/qnaRegister.do")
-	public String qnaRegiView(@ModelAttribute("loginUser") Member loginUser) {
+	public String qnaRegiView(@ModelAttribute("loginUser") MemberData loginUser) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } 
@@ -189,7 +189,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/qnaReg.do")  // 나머지 등록과정도 동일
-	public String qnaRegister(@ModelAttribute("loginUser") Member loginUser, AdminQnaBoard vo) {
+	public String qnaRegister(@ModelAttribute("loginUser") MemberData loginUser, AdminQnaBoard vo) {
 		// 로그인 정보를 Member타입으로 받아와서 vo객체에 비어있는 정보에 insert해야함
 		// 로그인 영역에서 처리하는 방식대로 개선
 		// 프로그램 실행해보고 vo객체 나머지가 제대로 들어오는지 확인***************
@@ -200,7 +200,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/qnaEdit.do")
-	public String editQna(@ModelAttribute("loginUser") Member loginUser, @RequestParam("qnaSelect") int boardnum, RedirectAttributes redirectAttributes) {
+	public String editQna(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("qnaSelect") int boardnum, RedirectAttributes redirectAttributes) {
 		adminService.adminCheck(loginUser);
 	    AdminQnaBoard qna = adminService.getByQnaBoardnum(boardnum);
 
@@ -222,7 +222,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/qnaUpdate.do")  // 나머지 등록과정도 동일
-	public String qnaUpdate(@ModelAttribute("loginUser") Member loginUser, @RequestParam("qnaNum") int boardnum, 
+	public String qnaUpdate(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("qnaNum") int boardnum, 
 							AdminQnaBoard vo) {
 		// 로그인 정보를 Member타입으로 받아와서 vo객체에 비어있는 정보에 insert해야함
 		// 로그인 영역에서 처리하는 방식대로 개선
@@ -235,7 +235,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/qnaDelete.do")
-    public String deleteQna(@ModelAttribute("loginUser") Member loginUser, @RequestParam("qnaSelect") int boardnum) {
+    public String deleteQna(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("qnaSelect") int boardnum) {
         // boardnum에 해당하는 Q&A 게시글을 삭제합니다.
 		adminService.adminCheck(loginUser);
         adminService.deleteAdminQnaBoard(boardnum);
@@ -249,28 +249,66 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/admin_ask.do")
-	public String AskBoard(@ModelAttribute("loginUser") Member loginUser, Pageable pageable, Model model) {
+	public String AskBoard(@ModelAttribute("loginUser") MemberData loginUser, Pageable pageable, Model model) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
         	return "main.do";    // 초기 로그인 화면으로 이동 **********************(수정필요)
         }
 		
-		Page<Inquiry> askBoardPage = adminService.getAllAskBoardList(PageRequest.of(pageable.getPageNumber(), 10));
+		Page<askBoard> askBoardPage = adminService.getAllAskBoardListWait(PageRequest.of(pageable.getPageNumber(), 10));
+		
 	    model.addAttribute("askBoardPage", askBoardPage);
 			
 		return "admin/boardPage/admin_askboard";  // 관리자 1:1문의 게시판으로 이동
 	}
 	
-	@GetMapping("/askEdit.do")
-	public String askEdit(@ModelAttribute("loginUser") Member loginUser, @RequestParam("askNum") int askNum, Model model) {
+	@PostMapping("/admin_ask.do")
+	public String AskBoardFinish(@ModelAttribute("loginUser") MemberData loginUser, RedirectAttributes redirectAttributes, Pageable pageable, Model model) {
+		if (loginUser != null) {
+            adminService.adminCheck(loginUser);
+        } else {
+        	return "main.do";    // 초기 로그인 화면으로 이동 **********************(수정필요)
+        }
+		
+		Page<askBoard> askBoardPage = adminService.getAllAskBoardListFinish(PageRequest.of(pageable.getPageNumber(), 10));
+		
+		model.addAttribute("askBoardPage", askBoardPage);
+		redirectAttributes.addFlashAttribute("askBoardPage", askBoardPage);
+			
+		return "redirect:/admin_ask_board.do";
+	}
+	
+	@GetMapping("/admin_ask_board.do")
+	public String showFinishAsk(@ModelAttribute("loginUser") MemberData loginUser) {
+	    // 필요한 경우 추가 로직을 구현
+	    return "admin/boardPage/admin_askboardEnd";  // 관리자 1:1문의 게시판 종료된 문의를 보여주는 페이지
+	}
+	
+	@GetMapping("/askDetail.do")
+	public String askDetail(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("askNum") int askNum, Model model) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
         	return "redirect:/admin/admin_main";    // 초기 로그인 화면으로 이동 **********************(수정필요)
         }
 		
-		Inquiry ask = adminService.getByAskBoardnum(askNum);
+		askBoard ask = adminService.getByAskBoardnum(askNum);
+		model.addAttribute("ask", ask);
+		model.addAttribute("end_view", "view");
+		
+		return "admin/boardForm/askEditForm";
+	}
+	
+	@GetMapping("/askEdit.do")
+	public String askEdit(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("askNum") int askNum, Model model) {
+		if (loginUser != null) {
+            adminService.adminCheck(loginUser);
+        } else {
+        	return "redirect:/admin/admin_main";    // 초기 로그인 화면으로 이동 **********************(수정필요)
+        }
+		
+		askBoard ask = adminService.getByAskBoardnum(askNum);
 		model.addAttribute("ask", ask);
 		
 		return "admin/boardForm/askEditForm";
@@ -278,14 +316,14 @@ public class AdminController {
 	}
 	
 	@PostMapping("/askUpdate.do")
-	public void askUpdate(@ModelAttribute("loginUser") Member loginUser, @RequestParam("askNum") Long boardnum, 
-			Inquiry vo) {
-		Inquiry ask = adminService.getByAskBoardnum(boardnum);
+	public void askUpdate(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("askNum") Long boardnum, 
+			askBoard vo) {
+		askBoard ask = adminService.getByAskBoardnum(boardnum);
 		vo.setRegdate(ask.getRegdate());
 		vo.setInquiry_id(boardnum);
 		vo.setEmail(ask.getEmail());
 		vo.setName(ask.getName());
-		vo.setStatus("답변완료");
+		vo.setStatus("답변 완료");
 		
 		adminService.adminCheck(loginUser);
 		adminService.updateAdminInquiry(vo);
@@ -297,7 +335,7 @@ public class AdminController {
 	 */
 	
 	@GetMapping("/recipeReg.do")
-	public String recipeReg(@ModelAttribute("loginUser") Member loginUser, @RequestParam("foodSelect") int boardnum, Model model) {
+	public String recipeReg(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("foodSelect") int boardnum, Model model) {
 		adminService.adminCheck(loginUser);
 		
 		AdminRecipeBoard vo = adminService.getByRecipeBoardnum(boardnum);
@@ -307,7 +345,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/insertDB.do")
-    public String insertRecipe(@ModelAttribute("loginUser") Member loginUser, foodRecipe vo) {
+    public String insertRecipe(@ModelAttribute("loginUser") MemberData loginUser, foodRecipe vo) {
         // boardnum에 해당하는 Q&A 게시글을 삭제합니다.
 		adminService.adminCheck(loginUser);
 		
@@ -318,7 +356,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/dataManager.do")
-	public String dataManager(@ModelAttribute("loginUser") Member loginUser, HttpServletRequest request, Model model) {
+	public String dataManager(@ModelAttribute("loginUser") MemberData loginUser, HttpServletRequest request, Model model) {
 		// loginUser가 존재하는지 확인하고 adminCheck 수행
         if (loginUser != null) {
             adminService.adminCheck(loginUser);
@@ -339,7 +377,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/getSearch.do")
-	public String getSearch(@ModelAttribute("loginUser") Member loginUser, @RequestParam("searchField") String searchField, @RequestParam("searchWord") String searchWord, RedirectAttributes redirectAttributes, Model model) {
+	public String getSearch(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("searchField") String searchField, @RequestParam("searchWord") String searchWord, RedirectAttributes redirectAttributes, Model model) {
 		// loginUser가 존재하는지 확인하고 adminCheck 수행
         if (loginUser != null) {
             adminService.adminCheck(loginUser);
@@ -368,7 +406,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/dbDelete.do")
-    public String deleteDB(@ModelAttribute("loginUser") Member loginUser, @RequestParam("dbidx") int dbidx) {
+    public String deleteDB(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("dbidx") int dbidx) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
@@ -381,7 +419,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/dbEdit.do")
-	public String dbEdit(@ModelAttribute("loginUser") Member loginUser, @RequestParam("dbidx") int dbidx, Model model) {
+	public String dbEdit(@ModelAttribute("loginUser") MemberData loginUser, @RequestParam("dbidx") int dbidx, Model model) {
 		if (loginUser != null) {
             adminService.adminCheck(loginUser);
         } else {
@@ -396,7 +434,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/updateDB.do")
-	public void dbUpdate(@ModelAttribute("loginUser") Member loginUser, foodRecipe vo) {
+	public void dbUpdate(@ModelAttribute("loginUser") MemberData loginUser, foodRecipe vo) {
 		
 		adminService.adminCheck(loginUser);
 		adminService.updateAdminRecipeDB(vo);

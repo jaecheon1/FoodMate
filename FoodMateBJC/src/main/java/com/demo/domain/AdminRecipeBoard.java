@@ -33,7 +33,7 @@ public class AdminRecipeBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipenum_generator")
     @SequenceGenerator(name="recipenum_generator", sequenceName = "RECIPENUM_SEQ", allocationSize = 1)
-    private int recipe_boardnum;
+    private long recipe_boardnum;
     private String userid;
     private String nickname;
     private String title;

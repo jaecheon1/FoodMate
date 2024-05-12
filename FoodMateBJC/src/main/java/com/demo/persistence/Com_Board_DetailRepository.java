@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.demo.domain.Com_Board_Detail;
 
-public interface Com_Board_DetailReposiotry extends JpaRepository<Com_Board_Detail, Integer> {
+public interface Com_Board_DetailRepository extends JpaRepository<Com_Board_Detail, Integer> {
 
 	// 상세페이지 정보 출력
 	@Query(value="SELECT * FROM Com_Board_Detail c WHERE c.seq = ?1 ", nativeQuery=true)

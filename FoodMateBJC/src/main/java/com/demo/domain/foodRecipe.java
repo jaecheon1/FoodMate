@@ -29,7 +29,7 @@ public class foodRecipe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_idx_generator")
     @SequenceGenerator(name="food_idx_generator", sequenceName = "RECIPE_SEQ", allocationSize = 1)
-	private int idx;
+	private long idx;
 	private String name;
 	private String images;
 	private String recipecategory;

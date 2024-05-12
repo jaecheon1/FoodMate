@@ -5,7 +5,7 @@ form {
     margin: 20px;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #f9f9f9;
 }
 
@@ -49,13 +49,32 @@ footer {
 /* userChoice.css */
 
 #bmiGraphic {
-  width: auto; /* 막대의 전체 너비 */
+  width: 700px; /* 막대의 전체 너비 */
   height: 30px; /* 막대의 높이 */
   border: 1px solid black; /* 막대 테두리 */
   margin-top: 20px; /* 막대와 상단 간격 */
   display: flex; /* 내부 요소들을 수평으로 배치하기 위해 flex 속성 추가 */
   position: relative;
 }
+#status {
+    display: flex;
+}
+
+.individual {
+	margin-left: 30px;
+    margin-right: 100px;
+}
+
+.good {
+    margin-right: 120px;
+}
+.danger{
+	margin-right: 100px;
+}
+.wow{
+	margin-right: 60px;
+}
+
 
 /* 각 카테고리의 스타일 지정 */
 .bmiCategory {

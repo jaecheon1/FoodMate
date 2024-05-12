@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>이메일 중복 체크</title>
-<script type="text/javascript" th:inline="javascript">
-function emailOk(){
-  var email = [[${email}]];
-  opener.formm.email.value=email; 
-  opener.formm.reemail.value=email;
-  self.close();
-}
+<script type="text/javascript" th:inline="javascript" th:src="@{js/member.js}" >
 </script>
 </head>
 <body>

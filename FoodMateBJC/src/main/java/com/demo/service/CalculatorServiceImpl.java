@@ -3,7 +3,7 @@ package com.demo.service;
 import org.springframework.stereotype.Service;
 
 import com.demo.dto.CalculationResult;
-import com.demo.dto.MemberData;
+import com.demo.domain.MemberData;
 
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
@@ -21,8 +21,8 @@ public class CalculatorServiceImpl implements CalculatorService {
     
     // BMI 계산 메서드
     private double calculateBMI(MemberData memberData) {      
-        int weight = memberData.getWeight();
-        int height = memberData.getHeight();
+        long weight = memberData.getWeight();
+        long height = memberData.getHeight();
         double height_m = height / 100.0; // 키를 미터 단위로 변환
         return weight / (height_m * height_m);
     }
@@ -30,9 +30,9 @@ public class CalculatorServiceImpl implements CalculatorService {
     // BMR 계산 메서드
     private double calculateBMR(MemberData memberData) {
         // 성별에 따라 계산식이 다르게 적용.
-        int weight = memberData.getWeight();
-        int height = memberData.getHeight();
-        int age = memberData.getAge();
+        long weight = memberData.getWeight();
+        long height = memberData.getHeight();
+        long age = memberData.getAge();
         String gender = memberData.getGender();
         
         if (gender.equalsIgnoreCase("Male")) {

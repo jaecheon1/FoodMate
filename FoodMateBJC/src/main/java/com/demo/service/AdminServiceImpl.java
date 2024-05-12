@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.demo.domain.AdminQnaBoard;
 import com.demo.domain.AdminRecipeBoard;
-import com.demo.domain.Inquiry;
-import com.demo.domain.Member;
+import com.demo.domain.askBoard;
 import com.demo.domain.foodRecipe;
+import com.demo.domain.MemberData;
 import com.demo.persistence.AdminAskBoardRepository;
 import com.demo.persistence.AdminQnaBoardRepository;
 import com.demo.persistence.AdminRecipeBoardRepository;
@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
 	private AdminAskBoardRepository adminAskBoardRepo;
 
 	@Override
-	public int adminCheck(Member vo) {
+	public int adminCheck(MemberData vo) {
 		int result = -1;
 //		
 //		// Member 테이블에서 사용자 조회
@@ -71,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	
 	@Override
-	public List<Member> getAllMemberList() {
+	public List<MemberData> getAllMemberList() {
 		// TODO Auto-generated method stub
 		return adminRecipeBoardRepo.getAllMember();
 	}
@@ -110,17 +110,27 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Page<Inquiry> getAllAskBoardList(Pageable pageable) {
+	public Page<askBoard> getAllAskBoardListWait(Pageable pageable) {
 		// regdate 컬럼을 기준으로 내림차순 정렬하는 Sort 객체 생성
 	    Sort sort = Sort.by(Sort.Direction.DESC, "regdate");
 	    // 페이징과 정렬 정보를 포함하는 Pageable 객체 생성
 	    Pageable sortedByRegdateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 		
-	    return adminAskBoardRepo.findAll(sortedByRegdateDesc);
+	    return adminAskBoardRepo.findAllByStatus("답변 대기", sortedByRegdateDesc);
 	}
 	
 	@Override
-	public List<Inquiry> getAllAskBoardListMain() {
+	public Page<askBoard> getAllAskBoardListFinish(Pageable pageable) {
+		// regdate 컬럼을 기준으로 내림차순 정렬하는 Sort 객체 생성
+	    Sort sort = Sort.by(Sort.Direction.DESC, "regdate");
+	    // 페이징과 정렬 정보를 포함하는 Pageable 객체 생성
+	    Pageable sortedByRegdateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+		
+	    return adminAskBoardRepo.findAllByStatus("답변 완료", sortedByRegdateDesc);
+	}
+	
+	@Override
+	public List<askBoard> getAllAskBoardListMain() {
 		// TODO Auto-generated method stub
 		return adminAskBoardRepo.getAllAskListMain();
 	}
@@ -183,19 +193,19 @@ public class AdminServiceImpl implements AdminService {
 
 
 	@Override
-	public void deleteAdminRecipeBoard(int boardnum) {
+	public void deleteAdminRecipeBoard(long boardnum) {
 		adminRecipeBoardRepo.deleteById(boardnum);
 		
 	}
 	
 	@Override
-	public void deleteAdminQnaBoard(int boardnum) {
+	public void deleteAdminQnaBoard(long boardnum) {
 		adminQnaBoardRepo.deleteById(boardnum);
 		
 	}
 	
 	@Override
-	public void deleteDBData(int dbidx) {
+	public void deleteDBData(long dbidx) {
 		adminRecipeDBRepo.deleteById(dbidx);
 		
 	}
@@ -205,40 +215,36 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	
 	@Override
-	public AdminRecipeBoard getByRecipeBoardnum(int boardnum) {
+	public AdminRecipeBoard getByRecipeBoardnum(long boardnum) {
 		// TODO Auto-generated method stub
 		return adminRecipeBoardRepo.findByRecipeBoardnum(boardnum);
 	}
 	
 	@Override
-	public AdminQnaBoard getByQnaBoardnum(int boardnum) {
+	public AdminQnaBoard getByQnaBoardnum(long boardnum) {
 		// TODO Auto-generated method stub
 		return adminQnaBoardRepo.findByQnaBoardnum(boardnum);
 	}
 	
 	@Override
-	public Inquiry getByAskBoardnum(long boardnum) {
+	public askBoard getByAskBoardnum(long boardnum) {
 		// TODO Auto-generated method stub
 		return adminAskBoardRepo.findByAskBoardnum(boardnum);
 	}
 
 	@Override
-	public foodRecipe getRecipeDBByIndex(int dbidx) {
+	public foodRecipe getRecipeDBByIndex(long dbidx) {
 		// TODO Auto-generated method stub
 		return adminRecipeDBRepo.getRecipeDBByIndex(dbidx);
 	}
 
 	@Override
-	public void updateAdminInquiry(Inquiry vo) {
+	public void updateAdminInquiry(askBoard vo) {
 		adminAskBoardRepo.save(vo);
 		
 	}
 
-	@Override
-	public Inquiry getByAskBoardnum(Long boardnum) {
-		// TODO Auto-generated method stub
-		return adminAskBoardRepo.findByAskBoardnum(boardnum);
-	}
+	
 
 
 	

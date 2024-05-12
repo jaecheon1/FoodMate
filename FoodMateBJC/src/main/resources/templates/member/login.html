@@ -54,19 +54,20 @@
 
 </head>
 <body>
-<form>
+<th:block th:replace="~{includes/header}"></th:block>
+<form action="/login" method="post">
     <table>
     <tr>
         <td><h2>로그인</h2></td>
     </tr>
     <tr>
-        <td><input type="text" placeholder="ID"></td>
+        <td><input type="text" name="id"  placeholder="ID"></td>
     </tr>
     <tr>
-        <td><input type="password" placeholder=Password></td>
+        <td><input type="password" name="password" placeholder=Password></td>
     </tr>
     <tr>
-        <td><input type="submit" value=" 로그인 " class="btn"></td>
+        <td><input type="submit" value=" 로그인 " class="btn" ></td>
     </tr>
    <tr>
      <td class="forgot"><a href="findIdAndPassword">아이디/비밀번호 찾기</a></td>
@@ -76,5 +77,6 @@
     </tr>
     </table>
 </form>
+<th:block th:replace="~{includes/footer}"></th:block>
 </body>
 </html>

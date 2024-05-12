@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.dto.CalculationResult;
-import com.demo.dto.MemberData;
+import com.demo.domain.MemberData;
 import com.demo.service.CalculatorServiceImpl;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.demo.persistence.MemberDataRepository;
 import java.util.Optional;
 
@@ -31,19 +34,22 @@ public class CalculatorController {
     }
 
     @GetMapping("/UserChoice")
-    public String showUserChoicePage(Model model) {
-        Optional<MemberData> optionalMemberData = memberDataRepository.findById("cosherin0");
-        if (optionalMemberData.isPresent()) {
-            MemberData memberData = optionalMemberData.get();
-            CalculationResult result = calculatorServiceImpl.calculate(memberData);
-            model.addAttribute("member", memberData);
+    public String showUserChoicePage(Model model, HttpSession session) {
+        // 세션에서 사용자 정보를 가져옵니다.
+        MemberData loggedInUser = (MemberData) session.getAttribute("loginUser");
+
+        if (loggedInUser != null) {
+            // 사용자 정보가 존재할 경우
+            CalculationResult result = calculatorServiceImpl.calculate(loggedInUser);
+            model.addAttribute("member", loggedInUser);
             model.addAttribute("result", result);
             return "foodRecommend/UserChoice";
         } else {
             // 사용자 정보를 찾을 수 없는 경우 에러 처리
-            model.addAttribute("error", "해당 회원 정보를 찾을 수 없습니다.");
+            model.addAttribute("error", "로그인된 사용자 정보를 찾을 수 없습니다.");
             return "foodRecommend/ErrorPage";
         }
     }
+
 
 }

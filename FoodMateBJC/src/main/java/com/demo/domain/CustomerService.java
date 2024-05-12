@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
     // QnA를 저장하는 리스트
     private List<AdminQnaBoard> qnaList;
-    private List<Inquiry> inquiryList;
+    private List<askBoard> inquiryList;
 
     public CustomerService() {
         this.qnaList = new ArrayList<>();
@@ -25,12 +25,12 @@ public class CustomerService {
     }
     
     // 모든 1:1 문의 리스트 반환
-    public List<Inquiry> getAllInquiries() {
+    public List<askBoard> getAllInquiries() {
         return inquiryList;
     }
 
     // 1:1 문의 추가
-    public void addInquiry(Inquiry inquiry) {
+    public void addInquiry(askBoard inquiry) {
         inquiryList.add(inquiry);
     }
 

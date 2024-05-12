@@ -37,7 +37,7 @@ public class BoardController {
 
 
 	// 게시글 목록 조회
-	@GetMapping("/board_list")
+	@GetMapping(value= {"/board_list", "/board_list_main"})
 	public String getboard_list(@RequestParam(value = "seq", defaultValue = "1") int seq,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {

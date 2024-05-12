@@ -23,4 +23,28 @@ document.addEventListener("DOMContentLoaded", function() {
     severelyObeseBar.innerHTML +=  userName;
 }
 
+// 막대 그래프의 너비를 기준으로 각 그룹의 간격을 조절하는 함수
+function adjustLabelSpacing() {
+    var graphicWidth = document.getElementById("bmiGraphic").clientWidth;
+    var groupLabels = document.querySelectorAll("#status .group");
+    var totalGroupWidth = 0;
+    groupLabels.forEach(function(label) {
+        totalGroupWidth += label.clientWidth;
+    });
+    var totalGroupMarginRight = graphicWidth - totalGroupWidth;
+    var marginRightPerGroup = totalGroupMarginRight / (groupLabels.length - 1);
+    groupLabels.forEach(function(label, index) {
+        if (index < groupLabels.length - 1) {
+            label.style.marginRight = marginRightPerGroup + "px";
+        }
+    });
+}
+
+// 페이지 로드 시 함수 실행
+window.onload = function() {
+    adjustLabelSpacing();
+};
+
+
+
 });

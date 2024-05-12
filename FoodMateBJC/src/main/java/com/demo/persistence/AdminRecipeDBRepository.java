@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.demo.domain.foodRecipe;
 
-public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Integer> {
+public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Long> {
 	
 	@Query(value = "SELECT * FROM food_recipe WHERE name LIKE %:searchWord% ORDER BY idx DESC", nativeQuery = true)
 	List<foodRecipe> getRecipeDBListByName(String searchWord);
@@ -16,5 +16,5 @@ public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Integ
 	List<foodRecipe> getRecipeDBListByIndex(String searchWord);
 	
 	@Query(value = "SELECT * FROM food_recipe WHERE idx = :searchWord", nativeQuery = true)
-	foodRecipe getRecipeDBByIndex(int searchWord);
+	foodRecipe getRecipeDBByIndex(long searchWord);
 }
