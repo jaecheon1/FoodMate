@@ -1,0 +1,203 @@
+/* MyPage Styles */
+/* 마이페이지 스타일 */
+.mypage {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tabcontent {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+/* Menu Styles */
+/* 메뉴 스타일 */
+#menu {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+}
+
+.sidebar {
+    padding-left: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar li a {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar li a:hover {
+    background-color: #0056b3;
+}
+
+/* Info View Styles */
+/* 개인정보 열람 스타일 */
+#infoview {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+#infoview p {
+    margin-bottom: 10px;
+}
+
+/* Info Update Styles */
+/* 개인정보 수정 스타일 */
+#infoupdate {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+#infoupdate form fieldset {
+    margin-bottom: 20px;
+}
+
+#infoupdate form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#infoupdate form input[type="text"],
+#infoupdate form input[type="password"],
+#infoupdate form input[type="email"],
+#infoupdate form select {
+    width: calc(100% - 10px);
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#infoupdate form input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#infoupdate form input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* Body Update Styles */
+/* 바디데이터 수정 스타일 */
+#bodyupdate {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+#bodyupdate form fieldset {
+    margin-bottom: 20px;
+}
+
+#bodyupdate form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#bodyupdate form input[type="text"],
+#bodyupdate form input[type="password"],
+#bodyupdate form input[type="email"],
+#bodyupdate form select {
+    width: calc(100% - 10px);
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#bodyupdate form input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#bodyupdate form input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* My Recipe Styles */
+/* 내 레시피 목록 스타일 */
+#myrecipe {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#myrecipe table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#myrecipe th,
+#myrecipe td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#myrecipe th {
+    background-color: #f2f2f2;
+}
+
+/* Recommend History Styles */
+/* 추천 기록 스타일 */
+#recommend {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#recommend table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#recommend th,
+#recommend td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#recommend th {
+    background-color: #f2f2f2;
+}
+
+#recommend img {
+    max-width: 100px;
+    height: auto;
+    vertical-align: middle;
+}
+
+
+/*스크롤.... 지워줬어요
+이게 맞나...?
+*/ 
+.tbl-content {
+    max-height: 300px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤을 활성화하고 내용이 넘칠 때 스크롤이 표시되도록 설정 */
+}

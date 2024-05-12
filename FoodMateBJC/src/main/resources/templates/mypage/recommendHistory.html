@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Food Recommend History</title>
-<link rel="stylesheet" th:href="@{/css/style.css}">
-<script th:src="@{/js/mypage.js}" defer></script>
-<th:block th:insert="~{/includes/header}"></th:block>
-<th:block th:insert="~{mypage/menu}"></th:block>
+    <meta charset="UTF-8">
+    <title>Food Recommend History</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
 </head>
 <body>
-	<article>
-	    <h3>내가 추천받은 음식기록</h3>
-	    <form name="formm" id="theform" method="post">
-		    <th:block th:if="${foods.isEmpty()}">
-		        <h3 style="color: red;text-align: center;"> 추천받은 기록이 없습니다.. </h3> 
-		        <button onclick="location.href='/getRecommendations'">추천받으러 가기</button>
-		    </div>
-		    <div th:unless="${foods.isEmpty()}">
-		        <table id="recommendHistory">
-		            <thead>
-		                <tr>
-		                    <th>음식 이름</th>
-		                    <th>이미지</th>
-		                    <th>칼로리</th>
-		                    <th>추천받은 날짜</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		            	<!-- 음식이름, 이미지는 a태그 링크로 그 레시피의 상세보기페이지로 이동??-->
-		                <tr th:each="food : ${foods}">
-		                    <td th:text="${food.foodName}"></td>
-		                    <td><img th:src="${food.imageUrl}" alt="Food Image" th:alt="${food.foodName}" style="height:100px;"></td>
-		                    <td th:text="${food.calories}"></td>
-		                    <td th:text="${#dates.format(food.recommendedDate, 'yyyy-MM-dd')}"></td>
-		                </tr>
-		            </tbody>
-		        </table>
-		    </div>
-	    </form>
-    </article>
+<!-- 헤더 -->
+<th:block th:insert="~{/includes/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+
+<!-- 내가 추천받은 음식기록 내용 -->
+    <main class="container">
+        <article id="recommend">
+            <h3>내가 추천받은 음식기록</h3>
+            <form name="formm" id="theform" method="post">
+                <div class="tbl-header">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr>
+                                <th>음식 이름</th>
+                                <th>이미지</th>
+                                <th>칼로리</th>
+                                <th>추천받은 날짜</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tbl-content">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody th:if="${#lists.size(recommend) != 0}">
+                            <tr th:each="history : ${recommend}">
+                                <td th:text="${history.recommend_food.name}"></td>
+                                <td><img th:src="${history.recommend_food.images}" alt="Food Image" th:alt="${history.recommend_food.name}" style="height:100px;"></td>
+                                <td th:text="${history.recommend_food.calories}"></td>
+                                <td th:text="${#dates.format(history.recommended_date, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <th:block th:if="${#lists.size(recommend) == 0}">
+                    <h3 style="color: red; text-align: center;">추천받은 기록이 없습니다.</h3>
+                    <button onclick="location.href='/'">추천받으러 가기</button>
+                </th:block>
+            </form>
+        </article>
+    </main>
+
+<!-- 푸터 -->
 <th:block th:insert="~{/includes/footer}"></th:block>
 </body>
 </html>

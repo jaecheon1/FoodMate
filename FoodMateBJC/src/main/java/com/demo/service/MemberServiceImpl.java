@@ -93,6 +93,30 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
-
+	// 마이페이지용
+	// 개인정보 수정
+	@Override
+	public void changeInfo(MemberData vo) {
+		memberRepo.updateMemberData(vo.getId(), vo.getPassword(), vo.getNickname(), vo.getEmail());
+	}
+	
+	// 바디데이터 수정
+	@Override
+	public void changeBodyData(MemberData vo) {
+		memberRepo.updateBodyData(vo.getId(), vo.getHeight(), vo.getWeight(), vo.getBmi(), vo.getAge(), vo.getGender(), vo.getGoal());
 	}
 
+	@Override
+	public int confirmNickname(String nickname) {
+		int result = 0;
+		MemberData member = memberRepo.findByNickname(nickname);
+		
+		if(member != null) {
+			result = 1;
+		} else {
+			result = -1;
+		}
+		return result;
+	}
+
+}

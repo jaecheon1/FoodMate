@@ -137,5 +137,11 @@ public class Com_Board_DetailServiceImpl implements Com_Board_DetailService {
 		return ReplyRepo.findReplyByreplynumContainingOrderByReplynum(replynum, pageable);
 	}
 
+	// 마이페이지용
+	@Override
+	public List<Com_Board_Detail> getMyRecipe(String id) {
+		return BoardDetailRepo.getMyRecipeListById(id);
+	}
+
 	
 }

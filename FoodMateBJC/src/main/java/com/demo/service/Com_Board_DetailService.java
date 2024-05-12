@@ -31,6 +31,9 @@ public interface Com_Board_DetailService {
 	
 	public Page<Com_Board_Detail> getCom_Board_DetailByGoodpoint(int seq, int page, int size); // 추천순 정렬
 	
+	// 회원별 작성한 레시피 목록(마이페이지용)
+	public List<Com_Board_Detail> getMyRecipe(String id);
+	
 	/**
 	 * 
 	 * 여기서부터 댓글
