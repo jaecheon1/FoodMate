@@ -162,9 +162,9 @@
 							<table id="datatablesSimple">
 								<thead>
 									<tr>
-										<th>Name</th>
-										<th>Position</th>
-										<th>Office</th>
+										<th>문의번호</th>
+										<th>회원명</th>
+										<th>문의내용</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -179,9 +179,9 @@
 											<!-- memberList에 들어있는 값으로 아래 인자(이름) 수정 -->
 											<div>
 												<tr>
-													<td>System Architect</td>
-                                            	<td>System Architect</td>
-                                            	<td>Edinburgh</td>
+													<td>[[${askBoard.inquiry_id}]]</td>
+                                            		<td>[[${askBoard.name}]]</td>
+                                            		<td>[[${askBoard.subject}]]</td>
 												</tr>
 											</div>
 										</th:block>

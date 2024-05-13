@@ -68,7 +68,7 @@ function keyClick(event) {
   <th:block th:each="com_boardVO : ${boardList}">
       <tr>
       <td>
-       <img th:src="${com_boardVO.com_recipe.att_file_no_mk}" style="width: 200px; height: 180px;" />
+       <img th:src="@{${com_boardVO.com_recipe.att_file_no_mk}}" style="width: 200px; height: 180px;"/>
       </td>
       <td>
       <a href="javascript:void(0);" th:onclick="'go_view(' + ${com_boardVO.seq} + ');'">[[${com_boardVO.com_recipe.rcp_nm}]]</a>

@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>비밀번호 찾기</title>
-<link href="CSS/subpage.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{js/member.js}"></script>
 <style type="text/css">
@@ -29,11 +28,7 @@ label {
 }
 
 </style>
-<script type="text/javascript">
-function idok(){
-  self.close();
-}
-</script>
+
 </head>
 <body>
 <div id="wrap">
@@ -45,16 +40,17 @@ function idok(){
       	<label>Password</label> 
         <input type="password"  name="pwd" id="pwd"><br> 
         <label>Retype Password</label> 
-        <input type="password"  name="pwdCheck" id="pwdcheck"><br> 
+        <input type="password"  name="pwdCheck" id="pwdcheck"><br>
         <input type="button" value="확인" class="cancel" onclick="changePassword()">
       </th:block>
       <th:block th:if="${message == -1}">
              잘못된 사용자 정보입니다.
-         <input type="button" value="확인" class="cancel" onclick="idok()">
+         <input type="button" value="확인" class="cancel" onclick="window.close()">
       </th:block>
     </div>
     
   </form>
-</div>  
+</div> 
+ 
 </body>
 </html>

@@ -4,53 +4,51 @@
 <meta charset="UTF-8">
 <title>아이디 중복 체크</title>
 <script type="text/javascript" th:inline="javascript">
-    function idok() {
-        var id = document.getElementById("id").value.trim();
-        opener.document.getElementById("id").value = id;
-        opener.document.getElementById("reid").value = id;
-        self.close();
+function inputIdChk() {
+    
+    if (message == 1) {
+        alert("이미 사용 중인 아이디입니다.");
+        opener.document.getElementById("user_id").value = "";  // ID를 사용하여 입력 필드 찾기
+    } else if (message == -1) {
+        // 사용 가능한 아이디인 경우의 로직 처리
     }
+}
 
-    function inputIdChk() {
-        var message = [[${message}]];
-        if (message == 1) {
-            alert("이미 사용 중인 아이디입니다.");
-            opener.document.getElementById("id").value = "";
-        } else if (message == -1) {
-//            var id = document.getElementById("id").value.trim();
-//            alert("사용 가능한 아이디입니다.");
-//            var useBtn = document.createElement("input");
-//            useBtn.setAttribute("type", "button");
-//            useBtn.setAttribute("value", "사용");
-//            useBtn.setAttribute("class", "cancel");
-//            useBtn.onclick = function() {
-//                opener.document.getElementById("id").value = id;
-//               opener.document.getElementById("reid").value = id;
-//                self.close();
-//            };
-//            document.body.appendChild(useBtn);
-        }
+function go_close(action) {
+	if (opener && opener.handleClose) {
+        opener.handleClose(action);
     }
-    
-    function go_close(){
-    	window.close()
-    }
-    
+    window.close();
+}
 </script>
 </head>
 <body>
 <div id="wrap">
   <h1>ID 중복확인</h1>
   <form method="get" name="formm" id="theform" style="margin-right:0 ">
-    User ID <input type="text" id="id" name="id" th:value="${id}" onkeydown="inputIdChk()" readonly> 
-            <input type="button" value="사용하기" onclick="go_close()"><br>     
-    <div style="margin-top: 20px">   
-      <th:block th:if="${message == 1}">
-        [[${id}]]는 이미 사용중인 아이디입니다.
-      </th:block>
-      <th:block th:if="${message == -1}">
-        [[${id}]]는 사용 가능한 ID입니다.
-      </th:block>
+    User ID <input type="text" id="id" name="id" th:value="${id}" onkeydown="inputIdChk()" readonly>
+    		<th:block th:if="${message == 0}">
+            <input type="button" value="닫기" onclick="go_close()"><br>  
+            </th:block>
+            <th:block th:if="${message == -1}">
+            <input type="button" value="사용하기" onclick="go_close()"><br>  
+            </th:block>
+            <th:block th:if="${message == 1}">
+            <input type="button" value="다시입력" onclick="go_close('reset');"><br>
+            </th:block>
+            
+    <div style="margin-top: 20px">
+    	<th:block th:if="${message == 0}">
+        	아이디를 입력해 주세요.
+      	</th:block>
+    
+      	<th:block th:if="${message == 1}">
+        	[[${id}]]는 이미 사용중인 아이디입니다.
+      	</th:block>
+      	
+      	<th:block th:if="${message == -1}">
+        	[[${id}]]는 사용 가능한 ID입니다.
+      	</th:block>
     </div>
   </form>
 </div>  

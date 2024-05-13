@@ -44,11 +44,10 @@ public interface Com_Board_DetailRepository extends JpaRepository<Com_Board_Deta
 	@Query(value="SELECT * FROM Com_Board_Detail ORDER BY goodpoint DESC ", nativeQuery=true)
 	public Page<Com_Board_Detail> findAllByOrderByGoodpointDesc(int seq, Pageable pageable);
 
-
 	// 마이페이지
-	// 회원별 작성한 게시글(레시피)조회
-	@Query("SELECT b FROM Com_Board_Detail b JOIN b.member_data m WHERE m.id=:id")
-	public List<Com_Board_Detail> getMyRecipeListById(@Param("id")String id);
+		// 회원별 작성한 게시글(레시피)조회
+		@Query("SELECT b FROM Com_Board_Detail b JOIN b.member_data m WHERE m.id=:id")
+		public List<Com_Board_Detail> getMyRecipeListById(@Param("id")String id);
 
 	
                                             

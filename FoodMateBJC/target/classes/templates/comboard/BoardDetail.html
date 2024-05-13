@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 	function go_list() {
 		var theForm = document.frm;
 		theForm.method = "get";
@@ -13,6 +13,7 @@
 
 	function board_update() {
 		var theForm = document.frm;
+		theForm.method = "get";
 		theForm.action = "board_update";
 		theForm.submit();
 	}
@@ -22,29 +23,14 @@
 		theForm.method = "get";
 		theForm.action = "board_delete";
 		theForm.submit();
+
 	}
 
 	//댓글등록	
-	function reply_save(qseq) {
-		var theForm = document.frm;
-		//theForm.qseq.value=qseq;
-		console.log
-		theForm.action = "reply_save";
-		theForm.submit();
-	}
-
-	function reply_update(qseq) {
-		var theForm = document.frm;
-		//theForm.qseq.value=qseq;
-		console.log
-		theForm.action = "reply_update";
-		theForm.submit();
-	}
-
-	function reply_delete(qseq) {
-		var theForm = document.frm;
+	function reply_save() {
+		var theForm = document.replyfrm;
 		theForm.method = "post";
-		theForm.action = "reply_delete";
+		theForm.action = "reply_save";
 		theForm.submit();
 	}
 
@@ -89,17 +75,78 @@
 	//추천
 	function goodpoint_plus(button) {
 		var theForm = document.frm;
-		theForm.method = "get";
+		theForm.method = "post";
 		theForm.action = "goodpoint";
 		theForm.submit();
 
 	}
+
+	//댓글 수정버튼
+	function enableEditMode(button) {
+    event.preventDefault();  // 기본 이벤트 중단
+    var idx = button.getAttribute('data-edit-button');
+    var contentView = document.querySelector('[data-content-view="' + idx + '"]');
+    var contentEdit = document.querySelector('[data-content-edit="' + idx + '"]');
+    var editForm = document.querySelector('[data-edit-form="' + idx + '"]');
+    var saveButton = editForm.querySelector('input[type="submit"]');
+    var cancelButton = editForm.querySelector('button[type="button"]');
+
+    contentView.style.display = 'none';
+    contentEdit.style.display = 'block';
+    editForm.style.display = 'block';
+    saveButton.style.display = 'inline';
+    cancelButton.style.display = 'inline';
+}
+
+// 댓글 수정 취소 함수
+function cancelEditMode(button) {
+    event.preventDefault();  // 기본 이벤트 중단
+    var idx = button.getAttribute('data-cancel-button');
+    var contentView = document.querySelector('[data-content-view="' + idx + '"]');
+    var contentEdit = document.querySelector('[data-content-edit="' + idx + '"]');
+    var editForm = document.querySelector('[data-edit-form="' + idx + '"]');
+    var saveButton = editForm.querySelector('input[type="submit"]');
+    var cancelButton = editForm.querySelector('button[type="button"]');
+
+    contentView.style.display = 'block';
+    contentEdit.style.display = 'none';
+    editForm.style.display = 'none';
+    saveButton.style.display = 'none';
+    cancelButton.style.display = 'none';
+}
+
+function deleteReply(replynum, event) {
+    event.preventDefault(); // 기본 이벤트 중지
+    if (confirm('이 댓글을 삭제하시겠습니까?')) {
+        // AJAX 요청으로 서버에 삭제 요청
+        fetch(`/reply_delete/${replynum}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  },
+            body: JSON.stringify({ replynum: replynum })
+        })
+        .then(response => response.json()) // 서버 응답을 JSON 형식으로 파싱
+        .then(data => {
+            if (data.success) {
+                alert('댓글이 삭제되었습니다.');
+                location.reload(); // 성공 시 페이지를 새로고침
+            } else {
+                alert('댓글 삭제에 실패하였습니다. 오류: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('댓글 삭제 중 오류가 발생하였습니다.');
+        });
+    }
+}
+
 </script>
 </head>
 <body>
 	<article>
 		<h1>유저 레시피 상세페이지</h1>
-		<form name="frm" method="get">
+		<form name="frm" method="post">
 			<input type="hidden" name="seq" id="seq"
 				th:value="${Com_Board_DetailVO.seq}">
 			<table id="Board_deatail_List">
@@ -217,14 +264,17 @@
 				</tr>
 			</table>
 		</form>
-		<form name="replyfrm" method="post">
+		<form name="replyfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}">
 			<table id="Board_deatail_List">
 				<tr>
 					<td colspan="2"><img src="images/opinionimg01.gif"></td>
 				</tr>
 				<tr>
-					<td colspan="2"><textarea name="reply" rows="3" cols="50"></textarea>
-						<input type="button" class="btn" value="저장"></td>
+					<td colspan="2"><textarea name="reply_content" rows="3"
+							cols="50"></textarea> <input type="submit" class="btn" value="저장"
+						th:onClick="reply_save()"></td>
 				</tr>
 			</table>
 			<br>
@@ -232,23 +282,42 @@
 				<tr>
 					<th>댓글</th>
 				</tr>
-				<th:block th:each="ReplyVO : ${ReplyList}">
-					<tr>
-						<td>[[${ReplyVO.member_data.id}]]</td>
-						<td>[[${ReplyVO.content}]]</td>
-					</tr>
+<th:block th:each="replyVO : ${ReplyList}">
+    <tr>
+        <td th:text="${replyVO.member_data.id}"></td>
+        <td>
+            <span th:text="${replyVO.content}" data-content-view="${replyVO.replynum}"></span>
+            <textarea data-content-edit="${replyVO.replynum}" style="display:none;" th:name="content" th:text="${replyVO.content}"></textarea>
+        </td>
+        <td>
+            <th:block th:if="${session.loginUser != null and replyVO.member_data.id.equals(session.loginUser.id)}">
+                <button data-edit-button="${replyVO.replynum}" th:onclick="enableEditMode(this)">수정</button>
+                <button data-delete-button="${replyVO.replynum}" th:onclick="deleteReply('${replyVO.replynum}', event)">삭제</button>
+                   <form data-edit-form="${replyVO.replynum}" style="display:none;" method="post" th:action="@{/reply_update}">
+                    <input type="hidden" name="seq" th:value="${Com_Board_DetailVO.seq}" />
+                    <input type="hidden" name="replynum" th:value="${replyVO.replynum}" />
+                    <input type="submit" value="저장" style="display:none;" />
+                    <button type="button" onclick="cancelEditMode(this)" data-cancel-button="${replyVO.replynum}" style="display:none;">취소</button>
+                </form>
+            </th:block>
+        </td>
+    </tr>
+</th:block>
+
+
+				</td>
+				</tr>
 				</th:block>
-				<!--       <th:block th:if="${ReplyVO.member_data.id == session.loginUser.id }"> 
-    	 <input type="button" class="btn" value="수정" onClick="reply_update()">
-		 <input type="button" class="btn" value="삭제" onClick="reply_delete()">
-     		</th:block>-->
 			</table>
 		</form>
-		<form name="buttonfrm" method="post">
-			<input type="button" class="btn" value="목록" onClick="go_list()">
-			<!-- <th:block th:if="${Com_Board_DetailVO.member_data.id == session.loginUser.id }">  -->
-			<input type="button" class="btn" value="수정" onClick="board_update()">
-			<input type="button" class="btn" value="삭제" onClick="board_delete()">
+		<form name="buttonfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}"> <input type="button"
+				class="btn" value="목록" onClick="go_list()">
+			<th:block
+				th:if="${session.loginUser != null and (Com_Board_DetailVO.member_data.id).equals(session.loginUser.id)}">
+				<input type="button" class="btn" value="수정" onClick="board_update()">
+				<input type="button" class="btn" value="삭제" onClick="board_delete()">
 			</th:block>
 		</form>
 	</article>

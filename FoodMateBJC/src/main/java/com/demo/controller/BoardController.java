@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,17 +20,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.domain.Com_Board_Detail;
+import com.demo.domain.MemberData;
 import com.demo.domain.Reply;
 import com.demo.dto.Com_Recipe;
 import com.demo.service.Com_Board_DetailService;
 
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @Controller
 public class BoardController {
 
 	@Autowired
 	Com_Board_DetailService Board_DetailService;
+	
+	@Autowired
+    private EntityManager entityManager;
 	
 
 	@Value("${com.demo.upload.path}")
@@ -103,26 +110,26 @@ public class BoardController {
 	// 글쓰기 페이지로 이동
 	@GetMapping("/board_write")
 	public String getCom_Board_DetailWriteView(HttpSession session, Model model) {
-		Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+		MemberData loginUser =  (MemberData)session.getAttribute("loginUser");
 
-//			if (loginUser == null) { 
-//				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
-//			} else {
+			if (loginUser == null) { 
+				return "member/login"; 
+			} else {
 		String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
 
 		model.addAttribute("kindList", kindList);
 		return "comboard/BoardWrite";
-//			}
+			}
 	}
-	
-	
+    
 	// 글쓰기 등록
+	@Transactional
 	@PostMapping("/board_write_t")
-	public String insertCom_Board(Com_Board_Detail vo, HttpSession session,
+	public String insertCom_Board(Com_Board_Detail vo, HttpSession session, Model model,
 			@RequestParam("title") String title,
 	        @RequestParam("gredient") String gredient,
 	        @RequestParam("maingredient") String maingredient,
-	        @RequestParam("kind") String kind,
+	        @RequestParam("kind") int kind,
 	        @RequestParam("manual01") String manual01,
 	        @RequestParam("manual02") String manual02,
 	        @RequestParam("manual03") String manual03,
@@ -137,19 +144,37 @@ public class BoardController {
 	        @RequestParam(value = "manual_img06", required = false) MultipartFile manualImg06,
 	        @RequestParam(value = "main_img", required = false) MultipartFile mainuploadFile) {
 
-		// Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
-		
-		 // 이미지 파일 저장 및 DB 경로 설정
-		saveUploadedFile(manualImg01, vo, 1);
-	    saveUploadedFile(manualImg02, vo, 2);
-	    saveUploadedFile(manualImg03, vo, 3);
-	    saveUploadedFile(manualImg04, vo, 4);
-	    saveUploadedFile(manualImg05, vo, 5);
-	    saveUploadedFile(manualImg06, vo, 6);
-	    saveUploadedFile(mainuploadFile, vo, 7);
-	    
+		MemberData loginUser =  (MemberData)session.getAttribute("loginUser");
+		Page<Com_Board_Detail> pageInfo = (Page<Com_Board_Detail>)session.getAttribute("pageInfo");
+
+        if (loginUser != null) {
+        	loginUser = entityManager.merge(loginUser); 
+            entityManager.persist(loginUser);
+        }
+        
+        String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
+        String kindName = kindList[kind];
+        
 	    //레시피에 저장
 	    Com_Recipe recipe = new Com_Recipe();  
+		
+		
+
+		 // 이미지 파일 저장 및 DB 경로 설정
+		saveUploadedFile(manualImg01, recipe, 1);
+	    saveUploadedFile(manualImg02, recipe, 2);
+	    saveUploadedFile(manualImg03, recipe, 3);
+	    saveUploadedFile(manualImg04, recipe, 4);
+	    saveUploadedFile(manualImg05, recipe, 5);
+	    saveUploadedFile(manualImg06, recipe, 6);
+	    saveUploadedFile(mainuploadFile, recipe, 7);	    
+
+	    
+//	    if (recipe != null) { // idx가 번호를 자동으로 생성하게 했음에도 저장순서가 빨라서 null값으로 판정되어 에러가남. 수동으로 저장을 먼저해주기로함
+//	    	recipe = entityManager.merge(recipe); 
+//            entityManager.persist(recipe);
+//        }
+	    
 	    recipe.setRcp_nm(title);
 	    recipe.setHash_tag(maingredient);
 	    recipe.setManual01(manual01);
@@ -159,94 +184,174 @@ public class BoardController {
 	    recipe.setManual05(manual05);
 	    recipe.setManual06(manual06);
 	    recipe.setRcp_parts_dtls(gredient);
-	    recipe.setRcp_pat2(kind);
+	    recipe.setRcp_pat2(kindName);
+	    
 	    
 	    vo.setCom_recipe(recipe);
+	    vo.setMember_data(loginUser);
 	    
-	//	vo.getMember_data().setId(loginUser.getMember_data().getId());
-	 // 로그인기능필요.
-	    
-	    
-	    //vo.setMember_data();  
+	    Board_DetailService.insertRecipe(recipe);
 		Board_DetailService.insertBoard(vo);
 		
-		return "redirect:BoardList";
+		model.addAttribute("pageInfo", pageInfo );
+		
+		return "redirect:/board_list";
 
 	}
 	
 	//이미지등록
-		private void saveUploadedFile(MultipartFile file, Com_Board_Detail vo, int manualNumber) {
-		    if (file != null && !file.isEmpty()) {
-		        try {
-		            String fileName = file.getOriginalFilename(); // 원본 파일 이름
-		            String uuid = UUID.randomUUID().toString(); // 유니크 ID 생성
-		            String saveName = uuid + "_" + fileName; // 저장될 파일명
+	private void saveUploadedFile(MultipartFile file, Com_Recipe vo, int manualNumber) {
+	    if (file != null && !file.isEmpty()) {
+	        try {
+	            String fileName = file.getOriginalFilename();
+	            String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+	            String uuid = UUID.randomUUID().toString();
+	            String saveName = uuid + fileExtension;
 
-		            File saveFile = new File(uploadPath, saveName); // 저장 경로와 파일명 설정
-		            file.transferTo(saveFile); // 파일 저장
-		            
+	            // 프로젝트의 작업 경로 확인
+	            String workingDir = System.getProperty("user.dir");
+	            File directory = new File(workingDir + "/uploads");
+	            if (!directory.exists()) {
+	                boolean created = directory.mkdirs();
+	                System.out.println("Directory creation " + (created ? "succeeded" : "failed") + " at " + directory.getAbsolutePath());
+	            }
 
-		            // 각 조리법 이미지에 따라 경로 설정
-		            switch (manualNumber) {
-		                case 1:
-		                    vo.getCom_recipe().setManual_img01("/images/" + saveName);
-		                    break;
-		                case 2:
-		                    vo.getCom_recipe().setManual_img02("/images/" + saveName);
-		                    break;
-		                case 3:
-		                    vo.getCom_recipe().setManual_img03("/images/" + saveName);
-		                    break;
-		                case 4:
-		                    vo.getCom_recipe().setManual_img04("/images/" + saveName);
-		                    break;
-		                case 5:
-		                    vo.getCom_recipe().setManual_img05("/images/" + saveName);
-		                    break;
-		                case 6:
-		                    vo.getCom_recipe().setManual_img06("/images/" + saveName);
-		                    break;
-		                case 7:
-		                    vo.getCom_recipe().setAtt_file_no_mk("/images/" + saveName);
-		                    break;
-		            }
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    }
+	            File saveFile = new File(directory, saveName);
+	            file.transferTo(saveFile);
+	            System.out.println("File saved to " + saveFile.getAbsolutePath());
+
+	            String filePath = "uploads/" + saveName; // 확장자를 포함한 전체 파일 경로를 저장
+	            switch (manualNumber) {
+	                case 1:
+	                    vo.setManual_img01(filePath);
+	                    break;
+	                case 2:
+	                    vo.setManual_img02(filePath);
+	                    break;
+	                case 3:
+	                    vo.setManual_img03(filePath);
+	                    break;
+	                case 4:
+	                    vo.setManual_img04(filePath);
+	                    break;
+	                case 5:
+	                    vo.setManual_img05(filePath);
+	                    break;
+	                case 6:
+	                    vo.setManual_img06(filePath);
+	                    break;
+	                case 7:
+	                    vo.setAtt_file_no_mk(filePath);
+	                    break;
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            System.err.println("Failed to save file: " + e.getMessage());
+	            throw new RuntimeException("File upload failed", e);
+	        }
+	    }
+	}
+		
+		// 글수정 페이지로 이동
+		@GetMapping("/board_update")
+		public String getCom_Board_DetailUpdateView(HttpSession session, Model model, @RequestParam("seq") int seq) {
+			MemberData loginUser =  (MemberData)session.getAttribute("loginUser");
+			Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
+
+				if (loginUser == null) { 
+					return "member/login"; 
+				} else {
+					
+					String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
+
+					model.addAttribute("kindList", kindList);
+					model.addAttribute("com_boardVO", board);
+					
+					return "comboard/Boardupdate";
+				}
 		}
-
 		
 	// 글 수정
-	@PostMapping("/board_update")
-	public String updateCom_Board(Com_Board_Detail vo, HttpSession session) {
-		Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+	@PostMapping("/board_update_t")
+	public String updateCom_Board(HttpSession session, @RequestParam("seq") int seq,
+			@RequestParam("title") String title,
+	        @RequestParam("gredient") String gredient,
+	        @RequestParam("maingredient") String maingredient,
+	        @RequestParam("kind") int kind,
+	        @RequestParam("manual01") String manual01,
+	        @RequestParam("manual02") String manual02,
+	        @RequestParam("manual03") String manual03,
+	        @RequestParam("manual04") String manual04,
+	        @RequestParam("manual05") String manual05,
+	        @RequestParam("manual06") String manual06,
+	        @RequestParam(value = "manual_img01", required = false) MultipartFile manualImg01,
+	        @RequestParam(value = "manual_img02", required = false) MultipartFile manualImg02,
+	        @RequestParam(value = "manual_img03", required = false) MultipartFile manualImg03,
+	        @RequestParam(value = "manual_img04", required = false) MultipartFile manualImg04,
+	        @RequestParam(value = "manual_img05", required = false) MultipartFile manualImg05,
+	        @RequestParam(value = "manual_img06", required = false) MultipartFile manualImg06,
+	        @RequestParam(value = "main_img", required = false) MultipartFile mainuploadFile) {
+		
+		MemberData loginUser =  (MemberData)session.getAttribute("loginUser");
+		Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
+        
+		if (loginUser == null) { 
+			return "member/login"; 
+		}else if(!(loginUser.getId()).equals(board.getMember_data().getId())){
+			return "본인이 작성한 글만 수정가능합니다.";
+		}else {
+			
+			String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
+	        String kindName = kindList[kind];
+	        
+		    //레시피에 저장
+		    Com_Recipe recipe = new Com_Recipe();  
+			
+			
+			 // 이미지 파일 저장 및 DB 경로 설정
+			saveUploadedFile(manualImg01, recipe , 1);
+		    saveUploadedFile(manualImg02, recipe, 2);
+		    saveUploadedFile(manualImg03, recipe, 3);
+		    saveUploadedFile(manualImg04, recipe, 4);
+		    saveUploadedFile(manualImg05, recipe, 5);
+		    saveUploadedFile(manualImg06, recipe, 6);
+		    saveUploadedFile(mainuploadFile, recipe, 7);	
+		    
 
-//		if (loginUser == null) { 
-//			return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
-//		}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
-//			return "본인이 작성한 글만 수정가능합니다.";
-//		}else {
-		vo.setCnt(vo.getCnt());
-		vo.setD_regdate(vo.getD_regdate());
-		Board_DetailService.updateBoard(vo);
-		return "redirect:BoardDetail";
-//	}
+		    recipe.setRcp_nm(title);
+		    recipe.setHash_tag(maingredient);
+		    recipe.setManual01(manual01);
+		    recipe.setManual02(manual02);
+		    recipe.setManual03(manual03);
+		    recipe.setManual04(manual04);
+		    recipe.setManual05(manual05);
+		    recipe.setManual06(manual06);
+		    recipe.setRcp_parts_dtls(gredient);
+		    recipe.setRcp_pat2(kindName);
+		    
+		    
+		    board.setCom_recipe(recipe);
+		    
+		Board_DetailService.updateBoard(board);
+		Board_DetailService.updateRecipe(recipe);
+		return "redirect:/com_board_detail?seq=" + seq;
+	}
 	}
 
 	// 글 삭제
-	@PostMapping("/board_delete")
-	public String deleteCom_Board(Com_Board_Detail vo, HttpSession session) {
-		Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+	@GetMapping("/board_delete")
+	public String deleteCom_Board(@RequestParam(value = "seq") int seq, Com_Board_Detail vo, HttpSession session) {
+		MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+		Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
 
-//		if (loginUser == null) { 
-//			return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
-//		}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
-//			return "본인이 작성한 글만 삭제가능합니다.";
-//		}else {
-		Board_DetailService.deleteBoard(vo);
-		return "redirect:board_list";
-//	}
+		if (loginUser == null) { 
+			return "member/login"; 
+		}else if(!(loginUser.getId()).equals(board.getMember_data().getId())){
+			return "본인이 작성한 글만 삭제가능합니다.";
+		}else {	
+		Board_DetailService.deleteBoard(board);
+		return "redirect:/board_list";
+	}
 	}
 	
 	//카테고리별 분류
@@ -265,7 +370,7 @@ public class BoardController {
 	}
 	
 	//추천수 관리
-	@GetMapping("/goodpoint")
+	@PostMapping("/goodpoint")
 	public String goodPoint_Action(@RequestParam("seq") int seq, HttpSession session) {
 		Com_Board_Detail com_board = Board_DetailService.getCom_Board_Datail(seq);
 	    HashMap<Integer, String> goodPointStatusMap = (HashMap<Integer, String>) session.getAttribute("goodPointStatusMap");
@@ -332,53 +437,68 @@ public class BoardController {
 			Com_Board_Detail comBoardDetailVO = Board_DetailService.getCom_Board_Datail(seq);
 			model.addAttribute("ReplyList", ReplyList);
 			model.addAttribute("Com_Board_DetailVO", comBoardDetailVO);
-			
-//			System.out.println("********************댓글 목록 = " + ReplyList);
-//			System.out.println("********************게시글상세 목록 = " + comBoardDetailVO);
 			return "comboard/BoardDetail";
 			}
 		
 		
 		//댓글 등록
-		@GetMapping("/reply_save")
-		public String insertReply(Reply vo, HttpSession session) {
-			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+		@PostMapping("/reply_save")
+		public String insertReply(@RequestParam("seq") int seq, HttpSession session,
+				@RequestParam("reply_content") String reply_content, Reply vo) {
+			
+			MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+			Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
+			Reply reply = new Reply();
 			
 			if (loginUser == null) { 
-				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
+				return "member/login"; 
 			}else {
-				Board_DetailService.insertReply(vo);			
-				return "redirect:com_board_detail";
+				reply.setCom_board_detail(board);
+				reply.setMember_data(loginUser);
+				reply.setContent(reply_content);
+				reply.getMember_data().setNo_data(loginUser.getNo_data());
+				reply.setCom_board_detail(Board_DetailService.getCom_Board_Datail(seq));
+				
+				Board_DetailService.insertReply(reply);
+				return "redirect:/com_board_detail?seq=" + seq;
 				}
 		}
 		
 		//댓글 수정
-		@GetMapping("/reply_update")
-		public String updateReply(Reply vo, HttpSession session) {
-			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+		@PostMapping(value="/reply_update")
+		public String updateReply(@RequestParam("replynum") int replynum,
+				@RequestParam("seq") int seq, HttpSession session) {
+			
+			MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+			Reply reply = Board_DetailService.findReplyByreplynum(replynum);
 			
 			if (loginUser == null) { 
-				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
-			}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
+				return "member/login"; 
+			}else if(!(loginUser.getId()).equals(reply.getMember_data().getId())){
 				return "본인이 작성한 댓글만 수정가능합니다.";
 			}else {
-				Board_DetailService.updateReply(vo);			
-				return "redirect:com_board_detail";
+				
+				Board_DetailService.updateReply(reply);			
+				return "redirect:/com_board_detail?seq=" + seq;
 		}
 		}
 		
 		//댓글 삭제 
 		@GetMapping("/reply_delete")
-		public String deleteReply(Reply vo, HttpSession session) {
-			Com_Board_Detail loginUser = (Com_Board_Detail) session.getAttribute("loginUser");
+		public String deleteReply(@RequestParam("replynum") int replynum, 
+				@RequestParam("seq") int seq, HttpSession session) {
+			
+			MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+			Reply reply = Board_DetailService.findReplyByreplynum(replynum);
 			
 			if (loginUser == null) { 
-				return "member/login"; // 로그인페이지 넣기 (아직 안넣음!)
-			}else if(loginUser.getMember_data().getId() == vo.getMember_data().getId()){
+				return "member/login"; 
+			}else if(!(loginUser.getId()).equals(reply.getMember_data().getId())){
 				return "본인이 작성한 댓글만 삭제가능합니다.";
 			}else {
-				Board_DetailService.deleteReply(vo);			
-				return "redirect:com_board_detail";
+
+				Board_DetailService.deleteReply(reply);			
+				return "redirect:/com_board_detail?seq=" + seq;
 		}
 		}
 		

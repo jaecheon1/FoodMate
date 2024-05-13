@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.demo.domain.MemberData;
 import com.demo.service.MemberService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @SessionAttributes("loginUser")
@@ -57,7 +56,7 @@ public class MemberController {
     }
   
  // 아이디 찾기 처리
-  	@PostMapping("/find_id")
+  	@GetMapping("/find_id")
   	public String findIdAction(MemberData vo, Model model) {
   		
   		MemberData member = memberService.getIdByNameEmail(vo.getName(), vo.getEmail());
@@ -75,7 +74,7 @@ public class MemberController {
   	
   	
  	// 비밀번호 찾기
- 	@PostMapping("/find_pwd")
+ 	@GetMapping("/find_pwd")
  	public String findPwdAction(MemberData vo, Model model) {
  		
  		MemberData member = memberService.getPwdByIdNameEmail(vo.getId(), vo.getName(), vo.getEmail());
@@ -93,41 +92,39 @@ public class MemberController {
   	
     
     // 로그인
- 	@PostMapping("/login")
- 	public String loginAction(MemberData vo, Model model, HttpSession session) {
- 	    int result = memberService.loginID(vo);
- 	    String url = "";        
- 	    if (result == 1) { 
- 	        MemberData user = memberService.getMember(vo.getId());
- 	        long usercode = user.getUsercode();
- 	        if(usercode == 1) {
- 	            model.addAttribute("loginUser", user);
- 	            session.setAttribute("loginUser", user); // 세션에 사용자 정보 저장
- 	            url = "redirect:main.do";
- 	        } else {
- 	            model.addAttribute("loginUser", user); // 여기도 수정
- 	            url = "redirect:/";
- 	        }
- 	        
- 	    } else {
- 	        url = "member/login_fail";
- 	    }
- 	    return url;
- 	}
-
-
+    @PostMapping("/login")
+    public String loginAction(MemberData vo, Model model) {
+    	int result = memberService.loginID(vo);
+        String url = "";        
+        if (result == 1) { 
+        	MemberData user = memberService.getMember(vo.getId());
+        	long usercode = user.getUsercode();
+        	if(usercode == 1) {
+        		model.addAttribute("loginUser", user);
+                url = "redirect:main.do";
+        	} else {
+        		model.addAttribute("loginUser", user);
+                url = "redirect:/";
+        	}
+            
+        } else {
+            url = "member/login_fail";
+        }
+        return url;
+    }
 
     // 로그아웃 처리
     @GetMapping("/logout")
     public String logout(SessionStatus status) {
         status.setComplete(); // 세션 완료 상태로 설정
-        return "redirect:/login"; // 로그아웃 후 로그인 화면으로 리다이렉트
+        return "redirect:/"; // 로그아웃 후 로그인 화면으로 리다이렉트
     }
     
    
     // ID 중복 확인 처리
     @GetMapping("/id_check_form")
     public String idCheckView(@RequestParam("id")String id, Model model) {
+    	
         int result = memberService.confirmID(id);
         
         model.addAttribute("message", result);
@@ -147,11 +144,20 @@ public class MemberController {
     
     // 회원가입 처리 (POST 요청)
     @PostMapping("/join")
-    public String joinAction(MemberData vo) {
+    public String joinAction(MemberData vo, RedirectAttributes redirectAttributes) {
         memberService.insertMember(vo);
-        return "redirect:/"; // 회원가입 후 메인 페이지로 리다이렉트
+        redirectAttributes.addFlashAttribute("successMessage", "회원가입에 성공하였습니다");
+        return "redirect:/";
     }
     
-    
+    @PostMapping("/change_pwd")
+    public String changePassword(@RequestParam("id")String id, @RequestParam("pwd")String pwd) {
+    	MemberData member = memberService.getMember(id);
+    	
+    	member.setPassword(pwd);
+    	memberService.insertMember(member);
+    	
+    	return "redirect:/";
+    }
         
 }

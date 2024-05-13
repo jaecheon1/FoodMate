@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QnA Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .qna-detail {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .qna-detail h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .qna-detail p {
+            color: #666;
+        }
+
+        .qna-detail .reg-date {
+            color: #999;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="qna_detail">
+        <h1>QnA Detail</h1>
+        <div>
+            <h2 th:text="${qnaDetail.question}"></h2>
+            <p th:text="${qnaDetail.answer}"></p>
+            <p class="reg-date" th:text="${#dates.format(qnaDetail.regdate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+        </div>
+    </div>
+</body>
+
+</html>

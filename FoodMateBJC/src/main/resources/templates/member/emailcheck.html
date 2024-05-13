@@ -3,26 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <title>이메일 중복 체크</title>
-<script type="text/javascript" th:inline="javascript" th:src="@{js/member.js}" >
+<script type="text/javascript" th:inline="javascript">
+function inputEmailChk() {
+	
+    if (message == 1) {
+        alert("이미 사용 중인 이메일입니다.");
+        opener.document.getElementById("email").value = "";
+    } else if (message == -1) {
+        // 사용 가능한 경우의 로직 처리
+    }
+}
+
+function go_close(action) {
+	if (opener && opener.handleClose) {
+        opener.handleClose(action);
+    }
+    window.close();
+}
 </script>
 </head>
 <body>
 <div id="wrap">
-  <h1>이메일 중복확인</h1>
-  <form method=get name=formm id="theform" style="margin-right:0 "
-  		action="email_check_form" >
-    Email <input type="email" name="email" th:value="${email}"> 
-            <input type="submit" value="검색" class="submit"><br>     
-    <div style="margin-top: 20px">   
-      <th:block th:if="${message == 1}">
-        <script type="text/javascript">
-          opener.document.formm.email.value="";
-        </script>
-        [[${email}]]은(는) 이미 사용중인 이메일입니다.
+  <h1>Email 중복확인</h1>
+  <form method="get" name="formm" id="theform" style="margin-right:0 ">
+    Email <input type="text" id="email" name="email" th:value="${email}" onkeydown="inputEmailChk()" readonly> 
+            <th:block th:if="${message == 0}">
+            <input type="button" value="닫기" onclick="go_close()"><br>  
+            </th:block>
+            <th:block th:if="${message == -1}">
+            <input type="button" value="사용하기" onclick="go_close()"><br>  
+            </th:block>
+            <th:block th:if="${message == 1}">
+            <input type="button" value="다시입력" onclick="go_close('reset2');"><br>
+            </th:block>
+            
+    <div style="margin-top: 20px">
+    
+      <th:block th:if="${message == 0}">
+        이메일을 입력해 주세요.
       </th:block>
-      <th:block th:if="${message==-1}">
-        [[${email}]]은(는) 사용 가능한 이메일입니다.
-        <input type="button" value="사용" class="cancel" onclick="emailOk()">
+      <th:block th:if="${message == 1}">
+        [[${email}]]는 이미 사용중인 이메일입니다.
+      </th:block>
+      <th:block th:if="${message == -1}">
+        [[${email}]]는 사용 가능한 이메일입니다.
       </th:block>
     </div>
   </form>

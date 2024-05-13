@@ -1,26 +1,89 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>All QnA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ddd;
+        }
+
+        tr:hover {
+            background-color: #c9c9c9;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #555;
+        }
+    </style>
 </head>
+
 <body>
     <h1>All QnA</h1>
     <table>
         <thead>
             <tr>
+                <th>No.</th> <!-- 번호를 나타내는 새로운 열 추가 -->
                 <th>질문</th>
-                <th>답변</th>
                 <th>등록일</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="qna : ${qnaList}">
-                <td th:text="${qna.question}"></td>
-                <td th:text="${qna.answer}"></td>
+            <!-- qnaList를 순회하면서 각 질문에 대한 정보를 출력 -->
+            <tr th:each="qna, row : ${qnaList}" th:class="${row.odd} ? 'odd' : 'even'">
+                <!-- 질문 번호 출력 -->
+                <td th:text="${row.index + 1}"></td>
+                <!-- 질문 내용 출력 -->
+                <td>
+                    <!-- 질문을 클릭하면 해당 질문의 세부 정보가 표시되도록 링크를 추가 -->
+                    <a th:href="@{/qna/qna_detail/{id}(id=${qna.getQna_boardnum()})}" th:text="${qna.question}"></a>
+                </td>
+                <!-- 등록일 출력 -->
                 <td th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             </tr>
         </tbody>
     </table>
 </body>
+
 </html>

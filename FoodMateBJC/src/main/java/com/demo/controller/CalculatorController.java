@@ -1,29 +1,29 @@
 package com.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.demo.dto.CalculationResult;
 import com.demo.domain.MemberData;
+import com.demo.dto.CalculationResult;
+import com.demo.persistence.MemberDataRepository;
+import com.demo.persistence.MemberRepository;
 import com.demo.service.CalculatorServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
-
-import com.demo.persistence.MemberDataRepository;
-import java.util.Optional;
 
 @Controller
 public class CalculatorController {
 
     private final CalculatorServiceImpl calculatorServiceImpl;
-    private final MemberDataRepository memberDataRepository;
+    private final MemberRepository memberRepository;
 
-    public CalculatorController(CalculatorServiceImpl calculatorServiceImpl, MemberDataRepository memberDataRepository) {
+    @Autowired
+    public CalculatorController(CalculatorServiceImpl calculatorServiceImpl, MemberRepository memberRepository) {
         this.calculatorServiceImpl = calculatorServiceImpl;
-        this.memberDataRepository = memberDataRepository;
+        this.memberRepository = memberRepository;
     }
     
     @GetMapping("/")
@@ -40,16 +40,15 @@ public class CalculatorController {
 
         if (loggedInUser != null) {
             // 사용자 정보가 존재할 경우
-            CalculationResult result = calculatorServiceImpl.calculate(loggedInUser);
-            model.addAttribute("member", loggedInUser);
+        	MemberData member = memberRepository.findByLoginId(loggedInUser.getId());
+        	CalculationResult result = calculatorServiceImpl.calculate(member);
+            model.addAttribute("member", member);
             model.addAttribute("result", result);
             return "foodRecommend/UserChoice";
         } else {
-            // 사용자 정보를 찾을 수 없는 경우 에러 처리
-            model.addAttribute("error", "로그인된 사용자 정보를 찾을 수 없습니다.");
-            return "foodRecommend/ErrorPage";
+            // 로그인 페이지로 리다이렉트합니다.
+            return "redirect:/login"; 
         }
     }
-
 
 }

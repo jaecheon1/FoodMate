@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.domain.MemberData;
+import com.demo.persistence.MemberDataRepository;
 import com.demo.persistence.MemberRepository;
 
 
@@ -15,6 +16,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberRepository memberRepo;
+    
+    @Autowired
+    private MemberDataRepository memberDataRepo;
 
     @Override
     public void insertMember(MemberData member) {
@@ -67,6 +71,9 @@ public class MemberServiceImpl implements MemberService {
 	public int confirmID(String id) {
 		int result = 0;
 		
+		if (id == "") {
+			result = 0;
+		} else {
 		MemberData member = memberRepo.findByLoginId(id);
 		
 		if(member != null) {
@@ -74,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
 		} else {
 			result = -1;
 		}
-		
+		}
 		return result;
 	}
 
@@ -82,6 +89,9 @@ public class MemberServiceImpl implements MemberService {
 	public int confirmEmail(String email) {
 		int result = 0;
 		
+		if (email == "") {
+			result = 0;
+		} else {
 		MemberData member = memberRepo.findByEmail(email);
 		
 		if(member != null) {
@@ -89,34 +99,34 @@ public class MemberServiceImpl implements MemberService {
 		} else {
 			result = -1;
 		}
-		
+		}
 		return result;
 	}
 
 	// 마이페이지용
-	// 개인정보 수정
-	@Override
-	public void changeInfo(MemberData vo) {
-		memberRepo.updateMemberData(vo.getId(), vo.getPassword(), vo.getNickname(), vo.getEmail());
-	}
-	
-	// 바디데이터 수정
-	@Override
-	public void changeBodyData(MemberData vo) {
-		memberRepo.updateBodyData(vo.getId(), vo.getHeight(), vo.getWeight(), vo.getBmi(), vo.getAge(), vo.getGender(), vo.getGoal());
-	}
-
-	@Override
-	public int confirmNickname(String nickname) {
-		int result = 0;
-		MemberData member = memberRepo.findByNickname(nickname);
-		
-		if(member != null) {
-			result = 1;
-		} else {
-			result = -1;
+		// 개인정보 수정
+		@Override
+		public void changeInfo(MemberData vo) {
+			memberDataRepo.updateMemberData(vo.getId(), vo.getPassword(), vo.getNickname(), vo.getEmail());
 		}
-		return result;
-	}
+		
+		// 바디데이터 수정
+		@Override
+		public void changeBodyData(MemberData vo) {
+			memberDataRepo.updateBodyData(vo.getId(), vo.getHeight(), vo.getWeight(), vo.getBmi(), vo.getAge(), vo.getGender(), vo.getGoal());
+		}
+
+		@Override
+		public int confirmNickname(String nickname) {
+			int result = 0;
+			MemberData member = memberRepo.findByNickname(nickname);
+			
+			if(member != null) {
+				result = 1;
+			} else {
+				result = -1;
+			}
+			return result;
+		}
 
 }

@@ -17,7 +17,13 @@ public interface CustomerServiceRepository extends JpaRepository<askBoard, Long>
     // Named 쿼리 사용 예시
     @Query(value="SELECT * FROM ask_board WHERE subject = :subject", nativeQuery = true)
     List<askBoard> findBySubjectNamedQuery(@Param("subject") String subject);
+    
+    @Query(value="SELECT * FROM ask_board WHERE name = :name", nativeQuery = true)
+    List<askBoard> findByNameNamedQuery(@Param("name") String name);
 	
     @Query(value="SELECT * FROM ask_board ORDER BY regdate", nativeQuery = true)
+    List<askBoard> findAll();
+
+    @Query("SELECT a FROM askBoard a ORDER BY a.regdate")
     List<askBoard> getInquiryList();
 }

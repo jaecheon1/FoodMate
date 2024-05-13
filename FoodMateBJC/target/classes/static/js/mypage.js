@@ -6,13 +6,13 @@
  * 개인정보 수정 (닉네임, 비밀번호, 이메일) 
  */
 function info_save() {
-	if ($("#pwd").val() == "") {
+	if ($("#password").val() == "") {
 		alert("변경할 비밀번호를 입력하세요.");
-		$("#pwd").focus();
+		$("#password").focus();
 		return false;
-	} else if ($("#pwd").val() != $("#pwdcheck").val()) {
+	} else if ($("#password").val() != $("#pwdcheck").val()) {
 		alert("비밀번호가 일치하지 않습니다.");
-		$("#pwd").focus();
+		$("#password").focus();
 		return false;
 	} else if ($("#nickname").val() == "") {
 		alert("변경할 닉네임을 입력하세요.");

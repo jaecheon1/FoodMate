@@ -1,7 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<Script type="text/javascript">
+function go_mov() {
+    var theForm = document.frm
+    theForm.method = "get";
+    theForm.action = "board_list";
+    theForm.submit();
+}   
 
+function go_mod_save() {
+    var theForm = document.getElementById('update_form');
+    theForm.action = "/board_update_t";
+    theForm.submit();
+}
+</script>
 
 <article>
 <h1>유저 레시피 글 수정</h1>  
@@ -9,129 +23,98 @@
 <input type="hidden" name="seq" th:value="${com_boardVO.seq}">
 <input type="hidden" th:value="${com_boardVO.d_regdate}">
 <!-- 기존 이미지 저장  -->
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img01}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img02}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img03}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img04}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img05}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.manual_img06}">
-<input type="hidden" name="nonmakeImg" th:value="${Com_Board_detailVO.com_recipe.att_file_no_mk}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img01}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img02}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img03}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img04}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img05}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.manual_img06}">
+<input type="hidden" name="nonmakeImg" th:value="${com_boardVO.com_recipe.att_file_no_mk}">
 <table id="list">
   <tr>
-    <th>분류</th>
+     <th>분류</th>
     <td colspan="5">
-		[[${category}]]
+        <select name="kind" id="kind">
+            <th:block th:each=" kind, status : ${kindList}">
+            <th:block th:if="${kind==status.count}">
+            <option th:value="${status.count}" selected="selected">[[${kind}]]</option>
+            </th:block>
+            <th:block th:unless="${kind==status.count}">
+            <option th:value="${status.count}">[[${kind}]]</option>
+          </th:block>
+          </th:block>
+        </select>      
     </td>
-  </tr>
-  <tr>
+</tr>
+<tr>
     <th>요리명</th>
-    <td width="343" colspan="5">
-      <input type="text" name="title" id="title" size="47" maxlength="100" th:value="${com_boardVO.com_recipe.rcp_nm}">
+    <td colspan="5">
+        <input type="text" name="title" id="title" size="47" maxlength="100" th:value="${com_boardVO.com_recipe.rcp_nm}">
     </td>
-  </tr>
-  <tr>
+</tr>
+<tr>
     <th>주재료</th>
-    <td width="70">        
-      <input type="text" name="maingredient" id="maingredient" size="11" onKeyUp='NumFormat(this)' th:value="${Com_Board_detailVO.com_recipe.hash_tag}">
+    <td colspan="5">        
+        <input type="text" name="maingredient" id="maingredient" size="47" th:value="${com_boardVO.com_recipe.hash_tag}">
     </td>
+</tr>
+<tr>
     <th>재료</th>
-    <td width="70">
-      <input type="text" name="gredient" id="gredient" size="11" onBlur="go_ab()" onKeyUp='NumFormat(this)' th:value="${Com_Board_detailVO.com_recipe.rcp_parts_dtls}">
+    <td colspan="5">
+        <input type="text" name="gredient" id="gredient" size="47" th:value="${com_boardVO.com_recipe.rcp_parts_dtls}">
     </td>
-  </tr>
-  <h3>조리법</h3>
-  <tr>
+</tr>
+<!-- 반복되는 조리법 입력 부분 -->
+<tr>
     <th>첫번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual01}]]</textarea>
+        <textarea name="manual01" id="manual01" rows="8" cols="70"> [[${com_boardVO.com_recipe.manual01}]]</textarea>
+        <input type="file" name="manualImg1" id="manualImg1">
+        <input type="hidden" name="image_h1" th:value="${com_boardVO.com_recipe.manual_img01}">
     </td>
-  </tr>
-  <tr>
-    <th>첫번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img01}" width="200pt">     
-      <br>
-      <input type="file" name="image1" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img01}">
-    </td> 
-  </tr>
-    <tr>
+</tr>
+<tr>
     <th>두번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual02}]]</textarea>
+        <textarea name="manual02" id="manual02" rows="8" cols="70" >[[${com_boardVO.com_recipe.manual02}]]</textarea>
+        <input type="file" name="manualImg2" id="manualImg2">
+        <input type="hidden" name="image_h2" th:value="${com_boardVO.com_recipe.manual_img02}">
     </td>
-  </tr>
-  <tr>
-    <th>두번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img02}" width="200pt">     
-      <br>
-      <input type="file" name="image2" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img02}">
-    </td> 
-  </tr>
-    <tr>
+</tr>
+<tr>
     <th>세번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual03}]]</textarea>
+        <textarea name="manual03" id="manual03" rows="8" cols="70"> [[${com_boardVO.com_recipe.manual03}]]</textarea>
+        <input type="file" name="manualImg3" id="manualImg3">
+        <input type="hidden" name="image_h3" th:value="${com_boardVO.com_recipe.manual_img03}">
     </td>
-  </tr>
-  <tr>
-    <th>세번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img03}" width="200pt">     
-      <br>
-      <input type="file" name="image3" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img03}">
-    </td> 
-  </tr>
-    <tr>
+</tr>
+<tr>
     <th>네번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual04}]]</textarea>
+        <textarea name="manual04" id="manual04" rows="8" cols="70"> [[${com_boardVO.com_recipe.manual04}]]</textarea>
+        <input type="file" name="manualImg4" id="manualImg4">
+        <input type="hidden" name="image_h4" th:value="${com_boardVO.com_recipe.manual_img04}">
     </td>
-  </tr>
-  <tr>
-    <th>네번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img04}" width="200pt">     
-      <br>
-      <input type="file" name="image4" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img04}">
-    </td> 
-  </tr>
-    <tr>
+</tr>
+<tr>
     <th>다섯번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual05}]]</textarea>
+        <textarea name="manual05" id="manual05" rows="8" cols="70"> [[${com_boardVO.com_recipe.manual05}]]</textarea>
+        <input type="file" name="manualImg5" id="manualImg5">
+        <input type="hidden" name="image_h5" th:value="${com_boardVO.com_recipe.manual_img05}">
     </td>
-  </tr>
-  <tr>
-    <th>다섯번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img05}" width="200pt">     
-      <br>
-      <input type="file" name="image5" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img05}">
-    </td> 
-  </tr>
-    <tr>
+</tr>
+<tr>
     <th>여섯번째 조리법</th>
     <td colspan="5">
-      <textarea name="content" id="content" rows="8" cols="70" >[[${Com_Board_detailVO.com_recipe.manual06}]]</textarea>
+        <textarea name="manual06" id="manual06" rows="8" cols="70">[[${com_boardVO.com_recipe.manual06}]]</textarea>
+        <input type="file" name="manualImg6" id="manualImg6">
+        <input type="hidden" name="image_h6" th:value="${com_boardVO.com_recipe.manual_img06}">
     </td>
-  </tr>
-  <tr>
-    <th>여섯번째 조리법 이미지</th>
-    <td colspan="5">
-      <img th:src="@{/com_board_images/} + ${Com_Board_detailVO.com_recipe.manual_img06}" width="200pt">     
-      <br>
-      <input type="file" name="image6" id="image">
-      <input type="hidden" name="image_h" th:value="${Com_Board_detailVO.com_recipe.manual_img06}">
-    </td> 
-  </tr>    
+</tr>
 </table>
-<input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod_save('+${com_boardVO.seq}+');'">           
+<input class="btn" type="submit" value="수정" onClick="go_mod_save()">           
 <input class="btn" type="button" value="취소" onClick="go_mov()">
 </form> 
 </article>

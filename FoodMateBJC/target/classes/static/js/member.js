@@ -152,95 +152,66 @@ function find_id_form() {
 ** 아이디 찾기 요청
 */
 function findMemberId() {
-    // 이름이 비어있는 경우
-    if ($("#name").val() == "") {
-        // 알림 표시
-        alert("이름을 입력해 주세요.");
-        // 이름 필드에 포커스 설정
-        $("#name").focus();
-        // 폼 제출 중지
-        return false;
-    } 
-    // 이메일이 비어있는 경우
-    else if ($("#email").val() == "") {
-        // 알림 표시
-        alert("이메일을 입력해 주세요.");
-        // 이메일 필드에 포커스 설정
-        $("#email").focus();
-        // 폼 제출 중지
-        return false;
-    } 
-    // 모든 입력이 채워진 경우
-    else {
-        // 아이디 찾기 요청
-        var form = $("#findId");
-        form.action = "find_id";  // 컨트롤러 요청 URL
-        form.submit();  // 컨트롤러로 전송
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+
+    if (!name) {
+        alert('이름을 입력해주세요.');
+        return;
     }
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return;
+    }
+
+    var url = "find_id?name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email);
+    window.open(url, '_blank');
 }
 
 /*
 ** 비밀번호 찾기 요청
 */
 function findPassword() {
-    // 아이디가 비어있는 경우
-    if ($("#id2").val() == "") {
-        // 알림 표시
-        alert("아이디를 입력해 주세요.");
-        // 폼 제출 중지
-        return false;
-    } 
-    // 이름이 비어있는 경우
-    else if ($("#name2").val() == "") {
-        // 알림 표시
-        alert("이름을 입력해 주세요.");
-        // 폼 제출 중지
-        return false;
-    } 
-    // 이메일이 비어있는 경우
-    else if ($("#email2").val() == "") {
-        // 알림 표시
-        alert("이메일을 입력해 주세요.");
-        // 폼 제출 중지
-        return false;
-    } 
-    // 모든 입력이 채워진 경우
-    else {
-        // 비밀번호 찾기 요청
-        $("#findPW").action = "find_pwd";  // 비밀번호 찾기 URL
-        $("#findPW").submit();
+	var id = document.getElementById('id2').value;
+    var name = document.getElementById('name2').value;
+    var email = document.getElementById('email2').value;
+
+
+	if (!id) {
+        alert('아이디를 입력해주세요.');
+        return;
     }
+    if (!name) {
+        alert('이름을 입력해주세요.');
+        return;
+    }
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return;
+    }
+
+    var url = "find_pwd?id=" + encodeURIComponent(id) + "&name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email);
+    window.open(url, '_blank');
 }
 
 /*
 ** 비밀번호 변경
 */
 function changePassword() {
-    // 비밀번호가 비어있는 경우
-    if ($("#pwd").val() == "") {
-        // 알림 표시
-        alert("비밀번호를 입력해 주세요.");
-        // 비밀번호 필드에 포커스 설정
-        $("#pwd").focus();
-        // 폼 제출 중지
-        return false;
-    } 
-    // 비밀번호가 확인용 비밀번호와 일치하지 않는 경우
-    else if ($("#pwd").val() != $("#pwdcheck").val()) {
-        // 알림 표시
-        alert("비밀번호가 맞지 않습니다. 다시 입력해 주세요");
-        // 비밀번호 필드에 포커스 설정
-        $("#pwd").focus();
-        // 폼 제출 중지
-        return false;
-    } 
-    // 모든 조건이 충족된 경우
-    else {
-        // 비밀번호 변경 요청
-        $("#pwd_form").action = "change_pwd";
-        $("#pwd_form").submit();
-    }
+  
+	  if ($("#pwd").val() == "") {
+	    alert("비밀번호를 입력해 주세요.");
+	    $("#pwd").focus();
+	    return false;
+	  } else if ($("#pwd").val() != $("#pwdcheck").val()) {
+	    alert("비밀번호가 맞지 않습니다. 다시 입력해 주세요");
+	    $("#pwd").focus();
+	    return false;
+	  } else {
+	    $("#pwd_form").submit(); // 폼 제출
+	  }
 }
+
 
 // 비밀번호 유효성 검사
 function validatePassword(password) {

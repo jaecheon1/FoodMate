@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Info Update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
     <script th:src="@{/js/mypage.js}" defer></script>
 </head>
@@ -23,7 +24,7 @@
                     <input type="text" name="id" id="id" th:value="${loginUser.id}" readonly>
                     <span class="readonly-text">(※ 수정할 수 없습니다.)</span><br>
                     <label>비밀번호</label>
-                    <input type="password" name="pwd" id="pwd" th:value="${loginUser.password}"><br>
+                    <input type="password" name="password" id="password" th:value="${loginUser.password}"><br>
                     <label>비밀번호 확인</label>
                     <input type="password" name="pwdcheck" id="pwdcheck" th:value="${loginUser.password}"><br>
                     <label>이름</label>
