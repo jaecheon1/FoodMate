@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<Script type="text/javascript">
+function go_save() {	
+	if ($("#title").val() == "") {
+		alert("요리명을 입력하세요.");
+		$("#title").focus();
+		return false;
+	} else if ($("#gredient").val() == "") {
+		alert("재료를 입력하세요.");
+		$("#gredient").focus();
+		return false;
+	} else if ($("#manual01").val() == "") {
+		alert("조리법을 입력하세요.");
+		$("#manual01").focus();
+		return false;
+	} else{
+		var theform = $("#write_form");
+		theform.attr("method", "post");
+		theform.attr("enctype", "multipart/form-data");
+		theform.attr("action", "/board_write_t");
+		theform.submit();
+	}
+		}
+	
+		
+function go_list()
+{
+	   var theForm = document.frm;
+	   theForm.method = "get";
+	   theForm.action="board_list";
+	   theForm.submit();
+}		
+</Script>
+
+<article>
+<h1>유저 레시피 글쓰기</h1>  
+<form name="frm" id="write_form" method="post" enctype="multipart/form-data">
+<table id="Board_List">
+<tr>
+  <th>카테고리</th>
+  <td colspan="5">
+  <select name="kind" id="kind">
+    <th:block th:each="kind, status : ${kindList}">
+    <option th:value="${status.count}">[[${kind}]]</option>
+    </th:block>
+  </select>      
+<tr>
+  <th>요리명</th>
+  <td width="343" colspan="5">
+       <input type="text" name="title" id="title" size="47" maxlength="100" >
+  </td>
+</tr>
+<tr>
+  <th>주재료</th>
+  <td width="70">
+    <input type="text" name="maingredient" id="maingredient" size="11" >
+  </td>
+  </tr>
+  <tr>
+  <th>재료</th>
+  <td width="70">
+     <textarea name="gredient" id="gredient" rows="8" cols="70"></textarea>
+  </td>
+  </tr>
+  <tr>
+  <th>대표 이미지 등록</th>
+  <td width="70">
+     <input type="file" name="main_img" id="manual_img">
+  </td>
+  </tr>
+  	<tr>
+  		<th><br></th>
+  		<td><br><h3><조리법></h3><br><hr></td>
+  	</tr>
+  <tr>
+    <th>첫번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual01" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>첫번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img01" id="manual_img">
+      <hr>
+    </td>
+  </tr>    
+    <tr>
+    <th>두번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual02" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>두번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img02" id="manual_img">
+      <hr>
+    </td>
+  </tr>
+      <tr>
+    <th>세번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual03" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>세번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img03" id="manual_img">
+      <hr>
+    </td>
+  </tr>
+      <tr>
+    <th>네번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual04" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>네번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img04" id="manual_img">
+      <hr>
+    </td>
+  </tr>
+      <tr>
+    <th>다섯번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual05" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>다섯번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img05" id="manual_img">
+      <hr>
+    </td>
+  </tr>
+      <tr>
+    <th>여섯번째 조리법</th>
+    <td colspan="5">
+      <textarea name="manual06" id="manual" rows="8" cols="70" ></textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>여섯번째 조리법 이미지</th>
+    <td width="343" colspan="5">
+      <input type="file" name="manual_img06" id="manual_img">
+      <hr>
+    </td>
+  </tr>    
+</table>
+<hr>
+<br>
+<button class="btn" type="submit" onClick="go_save()">등록</button>           
+<button class="btn" type="button" onClick="go_list()">취소</button>
+</form> 
+</article>
+</body>
+</html>

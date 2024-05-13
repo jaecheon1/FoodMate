@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>닉네임 중복 체크</title>
+<style type="text/css">
+body{   
+  background-color:#B96DB5;
+  font-family: Verdana;
+}
+#wrap{     
+  margin: 0 20px;
+}
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 45px;
+  color: #CCC;
+  font-weight: normal;
+}
+input[type=button], input[type=submit] {
+  float: right;
+}
+</style>
+<script type="text/javascript" th:inline="javascript">
+function idok(){
+	var nickname = [[${nickname}]];
+
+  opener.formm.nickname.value=nickname; 
+  opener.formm.renickname.value=nickname;
+  self.close();
+}
+</script>
+</head>
+<body>
+<div id="wrap">
+  <h1>닉네임 중복확인</h1>
+  <form method=get name=formm id="theform" style="margin-right:0 "
+  		action="nickname_check_form" >
+    User ID <input type=text name="nickname" th:value="${nickname}"> 
+            <input type=submit value="검색" class="submit"><br>     
+    <div style="margin-top: 20px">   
+      <th:block th:if="${message == 1}">
+        <script type="text/javascript">
+          opener.document.formm.nickname.value="";
+        </script>
+        [[${nickname}]]은(는) 이미 사용중인 닉네임입니다.
+      </th:block>
+      <th:block th:if="${message == -1}">
+        [[${nickname}]]은(는) 사용 가능한 닉네임입니다.
+        <input type="button" value="사용" class="cancel" onclick="idok()">
+      </th:block>
+    </div>
+  </form>
+</div>  
+</body>
+</html>

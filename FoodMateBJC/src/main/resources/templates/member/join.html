@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join</title>
+<style>
+    table {
+        width: 280px;
+        height: 550px;
+        margin: auto;
+        
+    }
+    .email {
+        width: 250px;
+        height: 32px;
+        font-size: 15px;
+        border: 0;
+        border-color: lightgray;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 10px;
+        background-color: rgb(233,233,233);
+    }
+    .text {
+        width: 250px;
+        height: 32px;
+        font-size: 15px;
+        border: 0;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 10px;
+        background-color: rgb(233,233,233);
+    }
+    select {
+        width: 100px;
+        height: 32px;
+        font-size: 15px;
+        border: 1;
+        border-color: lightgray;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 10px;
+    }
+    .btn {
+        width: 262px;
+        height: 32px;
+        font-size: 15px;
+        border: 0;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 10px;
+        background-color: rgb(164, 199, 255);
+    }
+    .btn:active {
+        width: 262px;
+        height: 32px;
+        font-size: 15px;
+        border: 0;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 10px;
+        background-color: rgb(61, 135, 255);
+    }
+</style>
+</head>
+<script type="text/javascript">
+function idcheck(){
+	const id = document.querySelector('.id_input').value;
+	document.getElementById('reid').value = id;
+	document.getElementById('id_checked').value = 'true';
+	const url = `id_check_form?id=${id}`;
+	
+	window.open(url, '_blank', 'width=600,height=400');
+}
+
+function handleClose(action) {
+    if (action === "reset") {
+        document.getElementById("user_id").value = "";
+    } else if(action === "reset2") {
+    	document.getElementById("email").value = "";
+    }
+}
+
+function emailcheck() {
+	const email = document.querySelector('.email').value;
+	document.getElementById('reemail').value = email;
+	document.getElementById('email_checked').value = 'true';
+	const url = `email_check_form?email=${email}`;
+	
+	window.open(url, '_blank', 'width=600,height=400');
+}
+
+function validateForm() {
+    const id = document.getElementById('user_id').value;
+    const password = document.getElementById('password').value;
+    const passwordCheck = document.getElementById('passwordCheck').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+
+    if(id === ""){
+        alert("아이디를 입력해주세요");
+        document.getElementById('user_id').focus();
+        return false;
+    }
+    
+    if(password === ""){
+        alert("비밀번호를 입력해주세요");
+        document.getElementById('password').focus();
+        return false;
+    }
+    
+    if(passwordCheck === "") {
+        alert("비밀번호 확인을 입력해주세요");
+        document.getElementById('passwordCheck').focus();
+        return false;
+    }
+    
+    if(name === "") {
+        alert("이름을 입력해주세요");
+        document.getElementById('name').focus();
+        return false;
+    }
+    
+    if(email === "") {
+        alert("이메일을 입력해주세요");
+        document.getElementById('email').focus();
+        return false;
+    }
+
+    const idMatch = document.getElementById('reid').value === id && document.getElementById('id_checked').value === 'true';
+    const emailMatch = document.getElementById('reemail').value === email && document.getElementById('email_checked').value === 'true';
+
+    if (!idMatch || !emailMatch) {
+        alert('중복체크를 확인해주세요!');
+        return false;
+    }
+    return true;
+}
+
+</script>
+<body>
+<form method="post" action="join" onsubmit="return validateForm()">
+    <table>
+    
+    <tr>
+        <td><h2>회원가입</h2></td>
+    </tr>
+    <tr><td>아이디</td></tr>
+    <tr><td>
+    <input type="text" class="text id_input" id="user_id" name="id" check_result="fail" required />
+    <button type="button" class="id_overlap_button" onclick="idcheck()">id 중복확인</button>
+    <input type="hidden" id="reid" name="reid">
+    <img id="id_check_sucess" style="display: none;">
+</td></tr>
+    <tr><td>비밀번호</td></tr>
+    <tr><td><input type="password" class="text" id="password" placeholder="비밀번호를 입력하세요">
+    </td></tr>
+    <tr><td>비밀번호 확인</td></tr>
+    <tr><td><input type="password" name="password" class="text" id="passwordCheck"></td></tr>
+    <tr><td>이름</td></tr>
+    <tr><td><input type="text" class="text" id="name" name="name"></td></tr>
+    <tr><td>이메일</td></tr>
+    <tr>
+        <td>
+        	<input type="text" class="email" name="email" id="email"> 
+   			<input type="button" onclick="emailcheck()" value="중복확인">
+   			<input type="hidden" id="reemail" name="reemail">
+   			<input type="hidden" id="id_checked" value="false">
+			<input type="hidden" id="email_checked" value="false">
+        </td>
+    </tr>
+    
+    <tr>
+    	<td><input type="submit" value="가입하기" class="btn"></td>
+    </tr>
+    </table>
+</form>
+</body>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/board.css">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script type="text/javascript">
+function go_view(seq) {
+	  var theForm = document.createElement('form');
+      theForm.method = "get";
+      theForm.action = "/com_board_detail";
+      
+      var hiddenSeq = document.createElement('input');
+      hiddenSeq.type = "hidden";
+      hiddenSeq.name = "seq";
+      hiddenSeq.value = seq;
+      
+      theForm.appendChild(hiddenSeq);
+      document.body.appendChild(theForm);
+      theForm.submit();
+	}
+	
+function keyClick(event) {
+    var category = event.target.getAttribute('data-category');
+    var url = '/category';
+    if (category === 'cnt_sort' || category === 'goodpoint_sort'|| category === 'date_sort') {
+        url = '/sorted_board_list';
+        url += '?sort=' + category;
+    } else {
+        url += '?category=' + encodeURIComponent(category);
+    }
+    window.location.href = url;
+}	
+
+  
+</script>
+</head>
+<body>
+<article>
+<h1>유저 레시피 공유 페이지</h1>  
+<form id="searchForm" th:action="@{/board_search}" method="get">
+    <select name="searchType">
+        <option value="title">제목</option>
+        <option value="id">ID</option>
+    </select>
+    <input type="text" name="searchKeyword">
+    <button type="submit">검색</button>  
+</form>
+<br>
+<h3>카테고리로 보기</h3>
+<a href="#" data-category="반찬" onclick="keyClick(event)" th:text="'반찬'"></a>
+<a href="#" data-category="국&찌개" onclick="keyClick(event)" th:text="'국&찌개'"></a>
+<a href="#" data-category="후식" onclick="keyClick(event)" th:text="'후식'"></a>
+<a href="#" data-category="일품" onclick="keyClick(event)" th:text="'일품'"></a> <br>
+<h3>인기순 보기</h3>
+<a href="#" data-category="cnt_sort" onclick="keyClick(event)" th:text="'조회수순'"></a>
+<a href="#" data-category="goodpoint_sort" onclick="keyClick(event)" th:text="'추천수순'"></a>
+<a href="#" data-category="date_sort" onclick="keyClick(event)" th:text="'최신순'"></a>
+<form id="writeForm" method="get" action="/board_write">
+    <button type="submit" class="btn">글쓰기</button>
+</form>
+  <hr>        
+<form name="frm" method="get">
+<table id="BoardList">
+  <tr>
+    <th></th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>추천수</th>   
+  </tr>
+  <th:block th:each="com_boardVO : ${boardList}">
+      <tr>
+      <td>
+       <img th:src="@{${com_boardVO.com_recipe.att_file_no_mk}}" style="width: 200px; height: 180px;"/>
+      </td>
+      <td>
+      <a href="javascript:void(0);" th:onclick="'go_view(' + ${com_boardVO.seq} + ');'">[[${com_boardVO.com_recipe.rcp_nm}]]</a>
+      </td>
+      <td>[[${com_boardVO.member_data.id}]] </td>
+      <td>[[${com_boardVO.cnt}]]</td>
+      <td>[[${com_boardVO.goodpoint}]]</td>
+      </tr>
+    </th:block>
+    </table>
+     [[${paging}]]
+    </form>
+    <th:block th:insert="~{./page_area}"></th:block>    
+  </article>
+</body>
+</html>

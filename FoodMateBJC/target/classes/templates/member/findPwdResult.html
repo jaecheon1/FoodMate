@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기</title>
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{js/member.js}"></script>
+<style type="text/css">
+body{   
+  background-color:#B96DB5;
+  font-family: Verdana;
+}
+#wrap{     
+  margin: 0 20px;
+}
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 45px;
+  color: #CCC;
+  font-weight: normal;
+}
+input[type=button], input[type=submit] {
+  float: right;
+}
+label {
+	display: inline-block;
+    width: 150px;
+}
+
+</style>
+
+</head>
+<body>
+<div id="wrap">
+  <h1>비밀번호 찾기 결과</h1>
+  <form method="post" name="formm" action="change_pwd" id="pwd_form" style="margin-right:0" >
+    <label>User ID</label><input type=text name="id" th:value="${id}" readonly="readonly">   
+    <div style="margin-top: 20px">  
+      <th:block th:if="${message == 1}"> 
+      	<label>Password</label> 
+        <input type="password"  name="pwd" id="pwd"><br> 
+        <label>Retype Password</label> 
+        <input type="password"  name="pwdCheck" id="pwdcheck"><br>
+        <input type="button" value="확인" class="cancel" onclick="changePassword()">
+      </th:block>
+      <th:block th:if="${message == -1}">
+             잘못된 사용자 정보입니다.
+         <input type="button" value="확인" class="cancel" onclick="window.close()">
+      </th:block>
+    </div>
+    
+  </form>
+</div> 
+ 
+</body>
+</html>

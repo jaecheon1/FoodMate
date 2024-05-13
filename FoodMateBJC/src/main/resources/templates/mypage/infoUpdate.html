@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info Update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{/includes/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+
+<!-- 개인정보 수정 내용 -->
+    <main class="container">
+        <article id="infoupdate">
+            <h3>개인정보 수정하기</h3>
+            <form action="update_info" id="update_info" method="post" name="formm">
+                <fieldset>
+                    <label>아이디</label>
+                    <input type="text" name="id" id="id" th:value="${loginUser.id}" readonly>
+                    <span class="readonly-text">(※ 수정할 수 없습니다.)</span><br>
+                    <label>비밀번호</label>
+                    <input type="password" name="password" id="password" th:value="${loginUser.password}"><br>
+                    <label>비밀번호 확인</label>
+                    <input type="password" name="pwdcheck" id="pwdcheck" th:value="${loginUser.password}"><br>
+                    <label>이름</label>
+                    <input type="text" name="name" id="name" th:value="${loginUser.name}" readonly>
+                    <span class="readonly-text">(※ 수정할 수 없습니다.)</span><br>
+                    <label>닉네임</label>
+                    <input type="text" name="nickname" id="nickname" th:value="nickname">
+                    <input type="hidden" name="renickname" id="renickname" th:value="${renickname}">
+                    <input type="button" value="중복 체크" class="dup" onclick="nickcheck()"><br>
+                    <label>이메일</label>
+                    <input type="email" name="email" id="email" th:value="${loginUser.email}"><br>
+                
+                    <div>
+                        <input type="button" value="수정하기" onclick="info_save()">
+                        <input type="button" value="취소" onclick="location.href='/mypage';">
+                    </div>
+                </fieldset>
+            </form>
+        </article>
+    </main>
+
+<!-- 푸터 -->
+<th:block th:insert="~{/includes/footer}"></th:block>
+</body>
+</html>

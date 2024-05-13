@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyRecipeList</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>  
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{/includes/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+
+<!-- 내가 작성한 레시피 내용 -->
+    <main class="container">
+        <article id="myrecipe">
+            <h3>내가 작성한 레시피</h3>
+            <form name="formm" id="theform" method="post">
+                <div class="tbl-header">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>제목</th>
+                                <th>작성일</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tbl-content">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody th:if="${#lists.size(recipeList) != 0}">
+                            <tr th:each="myRecipe : ${recipeList}">
+                                <td th:text="${myRecipe.index}"></td>
+                                <td th:text="${myRecipe.com_recipe.rcp_nm}"></td>
+                                <td th:text="${myRecipe.d_regdate}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <th:block th:if="${#lists.size(recipeList) == 0}">
+                    <h3 style="color: red; text-align: center;">작성한 레시피가 없습니다.</h3>
+                </th:block>
+                <div id="buttons" style="float: right">
+                    <input type="button" value="작성하기" class="cancel" onclick="location.href='/'">
+                </div>
+            </form>
+        </article>
+    </main>
+
+<!-- 푸터 -->
+<th:block th:insert="~{/includes/footer}"></th:block>
+</body>
+</html>

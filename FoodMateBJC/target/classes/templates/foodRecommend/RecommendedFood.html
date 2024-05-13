@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>식단 추천</title>
+    <link rel="stylesheet" th:href="@{/css/recommendedFood.css}" href="/css/recommendedFood.css">
+</head>
+<body>
+    <div class="container">
+        <h1>식단 추천</h1>
+        <!-- BMI, BMR, 하루 권장 칼로리 결과를 표시할 섹션 -->
+    <div id="result-section">
+    <h2>계산 결과</h2>
+    <p><strong>BMI:</strong> <span th:text="${String.format('%1$.2f', result.bmi)}"></span></p>
+    <p><strong>BMR:</strong> <span th:text="${String.format('%1$.2f', result.bmr)}"></span> kcal</p>
+    <p><strong>하루 권장 칼로리:</strong> <span th:text="${String.format('%1$.2f', result.dailyCalories)}"></span> kcal</p>
+</div>
+
+
+
+
+        <!-- 식단 추천 내용을 표시할 섹션 -->
+        <div id="recommendation-section">
+            <h2>식단 추천:</h2>
+            <ul id="food-recommendations">
+                <!-- 식단 추천 내용을 동적으로 추가 -->
+            </ul>
+        </div>
+    </div>
+    
+</body>
+</html>

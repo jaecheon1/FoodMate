@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Body Update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{/includes/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+
+<!-- 바디데이터 수정 내용 -->
+    <main class="container">
+        <article id="bodyupdate">
+            <h3>바디데이터 수정하기</h3>
+            <form action="update_body" id="update_body" method="post" name="formm">
+                <fieldset>
+                    <label>성별</label>
+                    <select name="gender" id="gender">
+                        <option value="Male">남자</option>
+                        <option value="Female">여자</option>
+                    </select><br>
+                    <label>나이</label>
+                    <input type="text" name="age" id="age"><br>
+                    <label>키</label>
+                    <input type="text" name="height" id="height"><br>
+                    <label>몸무게</label>
+                    <input type="text" name="weight" id="weight"><br>
+                    <label>bmi</label>
+                    <input type="text" name="bmi" id="bmi" readonly>
+                    <input type="button" value="계산하기" onclick="my_bmi()"><br>
+                    <label>목표체중</label>
+                    <input type="text" name="goal" id="goal"><br>
+                
+                    <div>
+                        <input type="button" value="수정하기" onclick="body_save()">
+                        <input type="button" value="취소" onclick="location.href='/mypage';">
+                    </div>
+                </fieldset>
+            </form>
+        </article>
+    </main>
+
+<!-- 푸터 -->
+<th:block th:insert="~{/includes/footer}"></th:block>
+</body>
+</html>

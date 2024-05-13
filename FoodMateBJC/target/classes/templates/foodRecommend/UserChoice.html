@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음식 기호 및 제외 재료 선택</title>
+    <link rel="stylesheet" th:href="@{/css/userChoice.css}" href="/css/userChoice.css">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="js/bmi.js"></script> 
+     
+</head>
+<body>
+    <th:block th:replace="~{includes/header}"></th:block>
+    <h1>음식 기호 및 제외 재료 선택</h1>
+    <form id="foodPreferenceForm" action="/saveFoodPreferences" method="post">
+        <h2>사용자 정보</h2>
+        <p>이름: <span id="userName" th:text="${member.name}"></span></p>
+        <p>나이: <span th:text="${member.age}"></span></p>
+		<p>몸무게: <span th:text="${member.weight}"></span></p>
+		<p>키: <span th:text="${member.height}"></span></p>
+		<p>성별: <span th:text="${member.gender}"></span></p>
+        <p>BMI: <span id="userBMI" th:text="${result.bmi}"></span></p>
+		<p>BMR: <span th:text="${result.bmr}"></span> kcal</p>
+		<p>하루 권장 칼로리: <span th:text="${result.dailyCalories}"></span> kcal</p>
+		<!-- 사용자 BMI 범위에 따른 그래픽 표시 -->
+		<div id="bmiGraphic">
+		    <div id="underweight" class="bmiCategory" data-label="18.5"></div>
+		    <div id="normal" class="bmiCategory" data-label="23"></div>
+		    <div id="overweight" class="bmiCategory" data-label="25"></div>
+		    <div id="obese" class="bmiCategory" data-label="30"></div>
+		    <div id="severelyObese" class="bmiCategory"></div>
+		</div>
+		<br>
+		<div id="status">
+		<p>
+        <span class="individual">저체중</span>
+        <span class="good">정상</span>
+        <span class="danger">과체중</span>
+        <span class="wow">비만</span>
+        <span class="amazing">고도비만</span>
+    </p>
+		</div>
+
+		
+		<br><br><br>
+        <h2>좋아하는 키워드 선택:</h2>
+        <input type="checkbox" id="spicy" name="keywords" value="spicy">
+        <label for="spicy">매운맛</label><br>
+        <input type="checkbox" id="sweet" name="keywords" value="sweet">
+        <label for="sweet">달콤함</label><br>
+        <input type="checkbox" id="savory" name="keywords" value="savory">
+        <label for="savory">짠맛</label><br>
+        <h2>제외시키고 싶은 음식 재료 선택:</h2>
+        <input type="checkbox" id="gluten" name="excludeIngredients" value="gluten">
+        <label for="gluten">글루텐</label><br>
+        <input type="checkbox" id="dairy" name="excludeIngredients" value="dairy">
+        <label for="dairy">유제품</label><br>
+        <input type="checkbox" id="nuts" name="excludeIngredients" value="nuts">
+        <label for="nuts">견과류</label><br>
+        <button type="submit">선택 완료</button>
+    </form>
+    
+    <th:block th:replace="~{includes/footer}"></th:block>
+     
+</body>
+</html>

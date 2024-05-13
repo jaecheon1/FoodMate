@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+	function go_list() {
+		var theForm = document.frm;
+		theForm.method = "get";
+		theForm.action = "board_list";
+		theForm.submit();
+	}
+
+	function board_update() {
+		var theForm = document.frm;
+		theForm.method = "get";
+		theForm.action = "board_update";
+		theForm.submit();
+	}
+
+	function board_delete() {
+		var theForm = document.frm;
+		theForm.method = "get";
+		theForm.action = "board_delete";
+		theForm.submit();
+
+	}
+
+	//댓글등록	
+	function reply_save() {
+		var theForm = document.replyfrm;
+		theForm.method = "post";
+		theForm.action = "reply_save";
+		theForm.submit();
+	}
+
+	//댓글출력
+	function reply_list() {
+		var seq = $('#seq').val();
+
+		$.ajax({
+			url : '/reply_list',
+			type : 'post',
+			data : {
+				seq : seq
+			},
+			success : function(response) {
+				var updatedContent = $(response).find('#reply_list').html(); // 응답에서 댓글 목록 부분만 추출
+				$('#reply_list').html(updatedContent); // 페이지의 댓글 목록 부분만 업데이트
+			},
+			error : function(error) {
+				console.error("댓글 로드 중 오류 발생: ", error);
+			}
+		});
+	}
+
+	// 페이지 로드 완료 후 댓글 목록 로드
+	$(document).ready(function() {
+		reply_list();
+	});
+
+	//클립보드복사
+	function copyboard() {
+		var copy = document.createElement('input'), text = window.location.href;
+
+		document.body.appendChild(copy);
+		copy.value = text;
+		copy.select();
+		document.execCommand('copy');
+		document.body.removeChild(copy);
+
+		alert('복사되었습니다');
+	}
+
+	//추천
+	function goodpoint_plus(button) {
+		var theForm = document.frm;
+		theForm.method = "post";
+		theForm.action = "goodpoint";
+		theForm.submit();
+
+	}
+
+	//댓글 수정버튼
+	function enableEditMode(button) {
+    event.preventDefault();  // 기본 이벤트 중단
+    var idx = button.getAttribute('data-edit-button');
+    var contentView = document.querySelector('[data-content-view="' + idx + '"]');
+    var contentEdit = document.querySelector('[data-content-edit="' + idx + '"]');
+    var editForm = document.querySelector('[data-edit-form="' + idx + '"]');
+    var saveButton = editForm.querySelector('input[type="submit"]');
+    var cancelButton = editForm.querySelector('button[type="button"]');
+
+    contentView.style.display = 'none';
+    contentEdit.style.display = 'block';
+    editForm.style.display = 'block';
+    saveButton.style.display = 'inline';
+    cancelButton.style.display = 'inline';
+}
+
+// 댓글 수정 취소 함수
+function cancelEditMode(button) {
+    event.preventDefault();  // 기본 이벤트 중단
+    var idx = button.getAttribute('data-cancel-button');
+    var contentView = document.querySelector('[data-content-view="' + idx + '"]');
+    var contentEdit = document.querySelector('[data-content-edit="' + idx + '"]');
+    var editForm = document.querySelector('[data-edit-form="' + idx + '"]');
+    var saveButton = editForm.querySelector('input[type="submit"]');
+    var cancelButton = editForm.querySelector('button[type="button"]');
+
+    contentView.style.display = 'block';
+    contentEdit.style.display = 'none';
+    editForm.style.display = 'none';
+    saveButton.style.display = 'none';
+    cancelButton.style.display = 'none';
+}
+
+function deleteReply(replynum, event) {
+    event.preventDefault(); // 기본 이벤트 중지
+    if (confirm('이 댓글을 삭제하시겠습니까?')) {
+        // AJAX 요청으로 서버에 삭제 요청
+        fetch(`/reply_delete/${replynum}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  },
+            body: JSON.stringify({ replynum: replynum })
+        })
+        .then(response => response.json()) // 서버 응답을 JSON 형식으로 파싱
+        .then(data => {
+            if (data.success) {
+                alert('댓글이 삭제되었습니다.');
+                location.reload(); // 성공 시 페이지를 새로고침
+            } else {
+                alert('댓글 삭제에 실패하였습니다. 오류: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('댓글 삭제 중 오류가 발생하였습니다.');
+        });
+    }
+}
+
+</script>
+</head>
+<body>
+	<article>
+		<h1>유저 레시피 상세페이지</h1>
+		<form name="frm" method="post">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}">
+			<table id="Board_deatail_List">
+				<tr>
+					<td><img
+						th:src="${Com_Board_DetailVO.com_recipe.att_file_no_mk}"
+						style="width: 200px; height: 180px;" /></td>
+				</tr>
+				<tr>
+					<th width="20%">요리명</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_nm}]]</td>
+				</tr>
+				<tr>
+					<th></th>
+					<th></th>
+					<td><button type="button" onclick="copyboard()">공유하기</button></td>
+					<th:block
+						th:if="${session.goodPointStatusMap != null and session.goodPointStatusMap[Com_Board_DetailVO.seq] == 'on'}">
+						<td><button type="button"
+								th:attr="data-seq=${Com_Board_DetailVO.seq}"
+								onclick="goodpoint_plus(this)">추천하셨습니다</button></td>
+					</th:block>
+					<th:block
+						th:if="${session.goodPointStatusMap == null or session.goodPointStatusMap[Com_Board_DetailVO.seq] != 'on'}">
+						<td><button type="button"
+								th:attr="data-seq=${Com_Board_DetailVO.seq}"
+								onclick="goodpoint_plus(this)">추천하기</button></td>
+					</th:block>
+				</tr>
+				<tr>
+					<th>등록일</th>
+					<td>[[${#dates.format(Com_Board_DetailVO.d_regdate,
+						"yyyy-MM-dd") }]]</td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td>[[${Com_Board_DetailVO.member_data.id}]]</td>
+				</tr>
+				<tr>
+					<th>조회수</th>
+					<td>[[${Com_Board_DetailVO.cnt}]]</td>
+				</tr>
+				<tr>
+					<th>추천수</th>
+					<td>[[${Com_Board_DetailVO.goodpoint}]]</td>
+				</tr>
+				<tr>
+					<th>분류</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_pat2}]]</td>
+				</tr>
+				<tr>
+					<th>주재료</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.hash_tag}]]</td>
+				</tr>
+				<tr>
+					<th>재료</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_parts_dtls}]]</td>
+				</tr>
+			</table>
+			<h3>조리법</h3>
+			<table id="Board_deatail_List">
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img01 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img01}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual01}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img02 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img02}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual02}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img03 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img03}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual03}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img04 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img04}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual04}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img05 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img05}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual05}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img06 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img06}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual06}]]</td>
+					</th:block>
+				</tr>
+			</table>
+		</form>
+		<form name="replyfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}">
+			<table id="Board_deatail_List">
+				<tr>
+					<td colspan="2"><img src="images/opinionimg01.gif"></td>
+				</tr>
+				<tr>
+					<td colspan="2"><textarea name="reply_content" rows="3"
+							cols="50"></textarea> <input type="submit" class="btn" value="저장"
+						th:onClick="reply_save()"></td>
+				</tr>
+			</table>
+			<br>
+			<table id="reply_list">
+				<tr>
+					<th>댓글</th>
+				</tr>
+<th:block th:each="replyVO : ${ReplyList}">
+    <tr>
+        <td th:text="${replyVO.member_data.id}"></td>
+        <td>
+            <span th:text="${replyVO.content}" data-content-view="${replyVO.replynum}"></span>
+            <textarea data-content-edit="${replyVO.replynum}" style="display:none;" th:name="content" th:text="${replyVO.content}"></textarea>
+        </td>
+        <td>
+            <th:block th:if="${session.loginUser != null and replyVO.member_data.id.equals(session.loginUser.id)}">
+                <button data-edit-button="${replyVO.replynum}" th:onclick="enableEditMode(this)">수정</button>
+                <button data-delete-button="${replyVO.replynum}" th:onclick="deleteReply('${replyVO.replynum}', event)">삭제</button>
+                   <form data-edit-form="${replyVO.replynum}" style="display:none;" method="post" th:action="@{/reply_update}">
+                    <input type="hidden" name="seq" th:value="${Com_Board_DetailVO.seq}" />
+                    <input type="hidden" name="replynum" th:value="${replyVO.replynum}" />
+                    <input type="submit" value="저장" style="display:none;" />
+                    <button type="button" onclick="cancelEditMode(this)" data-cancel-button="${replyVO.replynum}" style="display:none;">취소</button>
+                </form>
+            </th:block>
+        </td>
+    </tr>
+</th:block>
+
+
+				</td>
+				</tr>
+				</th:block>
+			</table>
+		</form>
+		<form name="buttonfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}"> <input type="button"
+				class="btn" value="목록" onClick="go_list()">
+			<th:block
+				th:if="${session.loginUser != null and (Com_Board_DetailVO.member_data.id).equals(session.loginUser.id)}">
+				<input type="button" class="btn" value="수정" onClick="board_update()">
+				<input type="button" class="btn" value="삭제" onClick="board_delete()">
+			</th:block>
+		</form>
+	</article>
+</body>
+</html>

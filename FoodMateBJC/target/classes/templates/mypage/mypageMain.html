@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <th:block th:insert="~{/includes/header}"></th:block>
+
+    <!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+
+    <!-- 마이페이지 컨텐츠 -->
+    <main class="mypage">
+        <div class="container">
+            <div class="content">
+                <div id="InfoView" class="tabcontent">
+                    <!-- 개인정보 열람 페이지 내용 -->
+                </div>
+                <div id="InfoUpdate" class="tabcontent">
+                    <!-- 개인정보 수정 페이지 내용 -->
+                </div>
+                <div id="Preferences" class="tabcontent">
+                    <!-- 음식 호불호 및 알레르기 페이지 내용 -->
+                </div>
+                <div id="MyRecipeList" class="tabcontent">
+                    <!-- 내가 작성한 레시피 목록 페이지 내용 -->
+                </div>
+                <div id="FoodRecommend" class="tabcontent">
+                    <!-- 추천받은 음식 페이지 내용 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{/includes/footer}"></th:block>
+</body>
+</html>

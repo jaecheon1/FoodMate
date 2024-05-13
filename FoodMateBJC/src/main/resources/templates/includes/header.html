@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FoodMate - 다이어트 식단 추천</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+    <header>
+        <h1>FoodMate</h1>
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">Home</a></li>
+                 <!-- 세션에 loginUser가 있는 경우에만 로그아웃 링크를 표시 -->
+            	<li th:if="${session.loginUser != null}">
+                <a th:href="@{/logout}">Logout</a></li>
+            	<!-- 세션에 loginUser가 없는 경우에만 로그인 링크를 표시 -->
+            	<li th:unless="${session.loginUser != null}">
+                <a th:href="@{/login}">Login</a></li>
+                <li><a th:href="@{/board_list_main}">Community</a></li> <!-- 커뮤니티 페이지 -->
+                <li><a th:href="@{/Top_recipes}">Top_recipes</a><li> <!-- 탑 레시피 -->
+                <li><a th:href="@{/mypage}">MyPage</a></li> <!--  마이 페이지 -->
+                <li><a th:href="@{/customer_service}">Customer_Service</a></li> <!-- 고객센터 -->
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>
