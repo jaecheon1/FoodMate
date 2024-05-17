@@ -146,7 +146,6 @@ public class MemberController {
     @PostMapping("/join")
     public String joinAction(MemberData vo, RedirectAttributes redirectAttributes) {
         memberService.insertMember(vo);
-        redirectAttributes.addFlashAttribute("successMessage", "회원가입에 성공하였습니다");
         return "redirect:/";
     }
     

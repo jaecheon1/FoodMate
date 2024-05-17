@@ -4,12 +4,14 @@ public class CalculationResult {
     private double bmi;
     private double bmr;
     private double dailyCalories;
+    private double dietCalories; // 다이어트 권장 칼로리
     private String obesity;
 
-    public CalculationResult(double bmi, double bmr, double dailyCalories) {
+    public CalculationResult(double bmi, double bmr, double dailyCalories, double dietCalories) {
         this.bmi = bmi;
         this.bmr = bmr;
         this.dailyCalories = dailyCalories;
+        this.dietCalories = dietCalories;
         setObesity(bmi); // BMI를 기준으로 비만도를 설정합니다.
     }
 
@@ -36,6 +38,14 @@ public class CalculationResult {
 
     public void setDailyCalories(double dailyCalories) {
         this.dailyCalories = dailyCalories;
+    }
+    
+    public double getDietCalories() {
+        return dietCalories;
+    }
+
+    public void setDietCalories(double dietCalories) {
+        this.dietCalories = dietCalories;
     }
 
     public String getObesity() {

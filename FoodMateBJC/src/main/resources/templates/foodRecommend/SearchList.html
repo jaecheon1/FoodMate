@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 결과</title>
+</head>
+    <script>
+    // 중복 키워드를 방지하기 위한 Set 생성
+    var selectedKeywords = new Set();
+
+    function registerKeyword(button) {
+        // 선택된 키워드 가져오기
+        var keyword = button.parentElement.parentElement.querySelector("td").innerText;
+
+        // 이미 선택된 키워드인지 확인
+        if (!selectedKeywords.has(keyword)) {
+            // 선택된 키워드가 아니면 추가하고 화면에 표시
+            selectedKeywords.add(keyword);
+            window.opener.document.getElementById("keyword_display").innerText += keyword + ", ";
+        } else {
+            // 이미 선택된 키워드라면 알림
+            alert("이미 선택된 키워드입니다.");
+        }
+    }
+    </script>
+<body>
+    <h1>음식 재료 검색 결과</h1>
+    <form method="post" action="getSearchKeywords">
+        <label>검색</label>
+        <input type="text" id="searchInput" name="searchInput">
+        <input type="submit" value="검색">
+    </form>
+    <!-- 검색된 결과를 표시할 테이블 -->
+    <table>
+        <thead>
+            <tr>
+                <th>키워드</th>
+                <th>등록</th> <!-- 등록 버튼을 위한 열 추가 -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- filteredList가 비어있는 경우 -->
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td colspan="2">검색된 결과가 없습니다.</td>
+            </tr>
+            <!-- filteredList가 비어있지 않은 경우 -->
+            <tr th:each="keyword : ${keywordList}">
+                <td th:text="${keyword}">키워드</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+                <!-- 등록 버튼 추가 -->
+                
+            </tr>
+        </tbody>
+    </table>
+    <a href="javascript:window.close()">창닫기</a>
+
+</body>
+</html>

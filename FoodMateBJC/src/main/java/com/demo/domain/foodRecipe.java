@@ -4,6 +4,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @ToString
@@ -26,33 +29,37 @@ import lombok.ToString;
 @DynamicInsert
 @DynamicUpdate
 public class foodRecipe {
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_idx_generator")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_idx_generator")
     @SequenceGenerator(name="food_idx_generator", sequenceName = "RECIPE_SEQ", allocationSize = 1)
-	private long idx;
-	private String name;
-	private String images;
-	private String recipecategory;
-	private String keywords;
-	private String recipeingredientparts;
-	@ColumnDefault("0")
-	private int calories;
-	@ColumnDefault("0")
-	private int fatcontent;
-	@ColumnDefault("0")
-	private int saturatedfatcontent;
-	@ColumnDefault("0")
-	private int cholesterolcontent;
-	@ColumnDefault("0")
-	private int sodiumcontent;
-	@ColumnDefault("0")
-	private int carbohydratecontent;
-	@ColumnDefault("0")
-	private int fibercontent;
-	@ColumnDefault("0")
-	private int sugarcontent;
-	@ColumnDefault("0")
-	private int proteincontent;
-	private String recipeinstructions;
-	
+    private long idx;
+    private String name;
+    @Column(columnDefinition = "VARCHAR2(4000)")
+    private String images;
+    @Column(columnDefinition = "VARCHAR2(1000)")
+    private String recipecategory;
+    @Column(columnDefinition = "VARCHAR2(1000)")
+    private String keywords;
+    @Column(columnDefinition = "VARCHAR2(3000)")
+    private String recipeingredientparts;
+    @ColumnDefault("0")
+    private BigDecimal calories;
+    @ColumnDefault("0")
+    private BigDecimal fatcontent;
+    @ColumnDefault("0")
+    private BigDecimal saturatedfatcontent;
+    @ColumnDefault("0")
+    private BigDecimal cholesterolcontent;
+    @ColumnDefault("0")
+    private BigDecimal sodiumcontent;
+    @ColumnDefault("0")
+    private BigDecimal carbohydratecontent;
+    @ColumnDefault("0")
+    private BigDecimal fibercontent;
+    @ColumnDefault("0")
+    private BigDecimal sugarcontent;
+    @ColumnDefault("0")
+    private BigDecimal proteincontent;
+    @Column(columnDefinition = "VARCHAR2(4000)")
+    private String recipeinstructions;
 }

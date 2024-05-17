@@ -40,12 +40,12 @@ public class AdminRecipeBoard {
     private String content;
     private String images;
     private String tag;
-	@Column(columnDefinition = "NUMBER default 0")
+	@Column(columnDefinition = "NUMBER(10) DEFAULT 0")
     private int count;
     @Temporal(value=TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "DATE default sysdate")
+    @Column(columnDefinition = "DATE DEFAULT sysdate")
     private Date regdate;
-    @Column(columnDefinition = "DATE default sysdate")
+    @Column(columnDefinition = "DATE DEFAULT sysdate")
     private Date editdate;
 	
 	

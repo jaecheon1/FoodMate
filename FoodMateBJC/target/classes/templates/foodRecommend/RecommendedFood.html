@@ -5,22 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>식단 추천</title>
     <link rel="stylesheet" th:href="@{/css/recommendedFood.css}" href="/css/recommendedFood.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script>
+$(document).ready(function() {
+    // 데이터 검색
+    var foodList = JSON.parse(sessionStorage.getItem('foodList'));
+
+    // 데이터 처리
+    if (foodList) {
+        // 식단 추천 목록을 가져와서 표시합니다.
+        var foodRecommendations = $('#food-recommendations');
+        foodList.forEach(function(food) {
+            var idx = food.idx;
+            var listItem = $('<li>'); // 리스트 아이템 생성
+            
+            var image = $('<img>').attr('src', food.images);
+            listItem.append(image);
+            
+            // hidden input 요소로 음식의 idx 추가
+            var hiddenInput = $('<input>').attr('type', 'hidden').attr('name', 'foodIdx').val(food.idx);
+            listItem.append(hiddenInput);
+
+            var text = $('<span>').text(food.images + " - " + food.idx + " - " + food.name + " - " + food.calories + " kcal"); // 텍스트 생성
+            listItem.append(text); // 텍스트를 식단 추천 목록에 추가
+
+            foodRecommendations.append(listItem);
+        });
+    } else {
+        // 데이터가 없는 경우에 대한 처리
+        console.log("No food recommendations available.");
+    }
+});
+
+
+
+</script>
 <body>
     <div class="container">
         <h1>식단 추천</h1>
-        <!-- BMI, BMR, 하루 권장 칼로리 결과를 표시할 섹션 -->
-    <div id="result-section">
-    <h2>계산 결과</h2>
-    <p><strong>BMI:</strong> <span th:text="${String.format('%1$.2f', result.bmi)}"></span></p>
-    <p><strong>BMR:</strong> <span th:text="${String.format('%1$.2f', result.bmr)}"></span> kcal</p>
-    <p><strong>하루 권장 칼로리:</strong> <span th:text="${String.format('%1$.2f', result.dailyCalories)}"></span> kcal</p>
-</div>
-
-
-
-
-        <!-- 식단 추천 내용을 표시할 섹션 -->
+       <!-- 식단 추천 내용을 표시할 섹션 -->
         <div id="recommendation-section">
             <h2>식단 추천:</h2>
             <ul id="food-recommendations">
@@ -28,6 +52,5 @@
             </ul>
         </div>
     </div>
-    
 </body>
 </html>

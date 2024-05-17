@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.domain.MemberData;
 import com.demo.persistence.MemberDataRepository;
@@ -113,7 +114,8 @@ public class MemberServiceImpl implements MemberService {
 		// 바디데이터 수정
 		@Override
 		public void changeBodyData(MemberData vo) {
-			memberDataRepo.updateBodyData(vo.getId(), vo.getHeight(), vo.getWeight(), vo.getBmi(), vo.getAge(), vo.getGender(), vo.getGoal());
+		    
+		    memberDataRepo.updateBodyData(vo.getId(), vo.getHeight(), vo.getWeight(), vo.getBmi(), vo.getAge(), vo.getGender(), vo.getGoal(), vo.getGoalDay());
 		}
 
 		@Override
@@ -130,3 +132,5 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 }
+
+
