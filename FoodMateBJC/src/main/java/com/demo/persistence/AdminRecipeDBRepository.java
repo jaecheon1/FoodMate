@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.demo.domain.foodRecipe;
+import com.demo.dto.RecommendData;
 
 public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Long> {
 	
@@ -23,4 +24,7 @@ public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Long>
 	
 	@Query(value = "SELECT * FROM food_recipe WHERE idx = :searchWord", nativeQuery = true)
 	foodRecipe getRecipeDBByIndex(long searchWord);
+	
+	@Query(value = "SELECT * FROM food_recipe WHERE idx = :idx", nativeQuery = true)
+	foodRecipe getFoodByIndex(int idx);
 }

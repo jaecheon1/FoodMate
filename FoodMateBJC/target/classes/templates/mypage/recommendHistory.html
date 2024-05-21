@@ -5,7 +5,52 @@
     <title>Food Recommend History</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
     <script th:src="@{/js/mypage.js}" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script>
+function delHistory() {
+    // 체크된 체크박스 요소를 모두 선택합니다.
+    var checkboxes = document.querySelectorAll('input[name="delete"]:checked');
+    
+    // 선택된 체크박스가 없으면 함수를 종료합니다.
+    if (checkboxes.length === 0) {
+        alert("삭제할 항목을 선택하세요.");
+        return;
+    }
+    
+var confirmation = confirm("정말로 삭제하시겠습니까?");
+    
+    // 사용자가 "예"를 클릭한 경우에만 삭제를 진행합니다.
+    if (confirmation) {
+    	
+    // 선택된 체크박스의 값을 배열로 저장합니다.
+    var deleteIdxArray = [];
+    checkboxes.forEach(function(checkbox) {
+        deleteIdxArray.push(Number(checkbox.value));
+    });
+    
+    // 서버에 선택된 항목을 삭제하는 요청을 보냅니다.
+    $.ajax({
+        type: "POST",
+        url: "/deleteHistory",
+        data: JSON.stringify(deleteIdxArray),
+        contentType: "application/json; charset=utf-8",
+        success: function(response) {
+            if (response === "success") {
+                console.log("삭제 요청이 성공적으로 처리되었습니다.");
+                // 새로고침하여 변경된 내용을 반영합니다.
+                location.reload();
+            } else {
+                console.error("로그인이 필요합니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("오류가 발생했습니다:", error);
+        }
+    });
+    }
+}
+</script>
 <body>
 <!-- 헤더 -->
 <th:block th:insert="~{/includes/header}"></th:block>
@@ -14,43 +59,51 @@
 <th:block th:insert="~{mypage/menu}"></th:block>
 
 <!-- 내가 추천받은 음식기록 내용 -->
-    <main class="container">
-        <article id="recommend">
-            <h3>내가 추천받은 음식기록</h3>
-            <form name="formm" id="theform" method="post">
-                <div class="tbl-header">
-                    <table cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <tr>
-                                <th>음식 이름</th>
-                                <th>이미지</th>
-                                <th>칼로리</th>
-                                <th>추천받은 날짜</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="tbl-content">
-                    <table cellpadding="0" cellspacing="0" border="0">
-                        <tbody th:if="${#lists.size(recommend) != 0}">
-                            <tr th:each="history : ${recommend}">
-                                <td th:text="${history.recommend_food.name}"></td>
-                                <td><img th:src="${history.recommend_food.images}" alt="Food Image" th:alt="${history.recommend_food.name}" style="height:100px;"></td>
-                                <td th:text="${history.recommend_food.calories}"></td>
-                                <td th:text="${#dates.format(history.recommended_date, 'yyyy-MM-dd')}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <th:block th:if="${#lists.size(recommend) == 0}">
-                    <h3 style="color: red; text-align: center;">추천받은 기록이 없습니다.</h3>
-                    <button onclick="location.href='/'">추천받으러 가기</button>
-                </th:block>
-            </form>
-        </article>
-    </main>
+<main class="container">
+    <article id="recommend">
+        <h3>내가 추천받은 음식기록</h3>
+        <form name="formm" id="theform" method="post">
+            <div class="tbl-header">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <tr>
+                            <th>음식 이름</th>
+                            <th>이미지</th>
+                            <th>칼로리</th>
+                            <th>추천받은 날짜</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="tbl-content">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tbody th:if="${#lists.size(recommend) != 0}">
+                        <tr th:each="history : ${recommend}">
+                            <td th:text="${history.recommendFood.name}"></td>
+                            <td>
+    							<img th:src="${#strings.substringBefore(history.recommendFood.images, '.jpg') + '.jpg'}" />
+                            </td>
+                            <td th:text="${history.recommendFood.calories}"></td>
+                            <td th:text="${#dates.format(history.recommendDate, 'yyyy-MM-dd HH:mm')}"></td>
+                        	<td>
+                        		<input type="checkbox" name="delete" th:value="${history.historyId}">
+                        	</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <th:block th:if="${#lists.size(recommend) == 0}">
+                <h3 style="color: red; text-ailgn: center;">추천받은 기록이 없습니다.</h3>
+                <button onclick="location.href='/'">추천받으러 가기</button>
+            </th:block>
+        </form>
+        
+        <input type="button" value="삭제" onclick="delHistory()">
+    </article>
+</main>
 
 <!-- 푸터 -->
 <th:block th:insert="~{/includes/footer}"></th:block>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </body>
 </html>

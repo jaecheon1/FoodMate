@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.demo.domain.AdminQnaBoard;
 import com.demo.domain.AdminRecipeBoard;
-import com.demo.domain.askBoard;
 import com.demo.domain.MemberData;
+import com.demo.domain.askBoard;
 import com.demo.domain.foodRecipe;
 
 public interface AdminService {
@@ -67,6 +67,8 @@ public interface AdminService {
 	// db의 데이터 삭제
 	void deleteDBData(long dbidx);
 
+	// 추천 데이터 핸들
+	public foodRecipe getFoodByIndex(int idx);
 	
 
 

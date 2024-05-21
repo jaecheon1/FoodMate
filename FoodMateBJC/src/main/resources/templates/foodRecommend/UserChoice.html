@@ -6,7 +6,38 @@
 <title>음식 기호 및 제외 재료 선택</title>
 <link rel="stylesheet" th:href="@{/css/userChoice.css}"
     href="/css/userChoice.css">
+<style>
+    /* 로딩 창 스타일 추가 */
+    #loadingOverlay {
+        display: none; /* 기본적으로 숨김 */
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 9999;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        color: #333;
+    }
 
+    #loadingOverlay .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 </head>
 <script type="text/javascript">
 
@@ -61,59 +92,59 @@ function addKeywordToList(checkbox) {
     switch (checkbox.value) {
         case "exercise":
             if (checkbox.checked) {
-                checkedKeywords.push("Healthy", "Protein", "Chicken Breast", "Low Cholesterol", "Egg");
+                checkedKeywords.push("Turkey Breasts", "Chicken", "Chicken Thigh & Leg", "Chicken Livers", "High Fiber", "Poultry", "Veal", "High Protein", "Whole Chicken", "Chicken Breast", "Steam", "Broil/Grill");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Healthy", "Protein", "Chicken Breast", "Low Cholesterol", "Egg"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Turkey Breasts", "Chicken", "Chicken Thigh & Leg", "Chicken Livers", "High Fiber", "Poultry", "Veal", "High Protein", "Whole Chicken", "Chicken Breast", "Steam", "Broil/Grill"].includes(keyword));
             }
             break;
         case "mealkit":
             if (checkbox.checked) {
-                checkedKeywords.push("< 15 Mins", "< 30 Mins", "Easy", "Lunch", "Inexpensive");
+                checkedKeywords.push("Easy", "Canning", "Stir Fry", "Refrigerator", "Beginner Cook", "Microwave", "Camping", "Potluck", "< 60 Mins", "Inexpensive", "Small Appliance", "< 30 Mins", "< 15 Mins", "One Dish Meal", "Breakfast", "Freezer");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["< 15 Mins", "< 30 Mins", "Easy", "Lunch", "Inexpensive"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Canning", "Stir Fry", "Easy", "Refrigerator", "Beginner Cook", "Microwave", "Camping", "Potluck", "< 60 Mins", "Inexpensive", "Small Appliance", "< 30 Mins", "< 15 Mins", "Freezer", "One Dish Meal", "Breakfast"].includes(keyword));
             }
             break;
         case "meat":
             if (checkbox.checked) {
-                checkedKeywords.push("Meat", "Chicken", "Pork", "Chicken Breast", "Protein");
+                checkedKeywords.push("Costa Rican", "Deer", "Ham", "Beef Liver", "Roast Beef", "Pork", "Rabbit", "Lamb/Sheep", "Meat", "Steak", "Pheasant");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Meat", "Chicken", "Pork", "Chicken Breast", "Protein"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Deer", "Costa Rican", "Ham", "Beef Liver", "Roast Beef", "Pork", "Rabbit", "Pheasant", "Lamb/Sheep", "Meat", "Steak"].includes(keyword));
             }
             break;
-        case "vegetable":
+        case "diet":
             if (checkbox.checked) {
-                checkedKeywords.push("Healthy", "Low Cholesterol", "Easy", "Breakfast", "Fruits");
+                checkedKeywords.push("Dairy Free Foods", "Lactose Free", "Tuna", "Vegetable", "Greens", "Nuts", "Low Cholesterol", "Yam/Sweet Potato", "Potato", "Salad", "Avocado", "Beans", "Spinach", "Collard Greens", "Healthy");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Healthy", "Low Cholesterol", "Easy", "Breakfast", "Fruits"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Dairy Free Foods", "Lactose Free", "Tuna", "Vegetable", "Greens", "Nuts", "Low Cholesterol", "Yam/Sweet Potato", "Potato", "Salad", "Avocado", "Beans", "Spinach", "Collard Greens", "Healthy"].includes(keyword));
             }
             break;
         case "dessert":
             if (checkbox.checked) {
-                checkedKeywords.push("Dessert", "Breads", "Sweet", "Snacks", "Cookie & Brownie");
+                checkedKeywords.push("Cheesecake", "Sweet", "Snacks", "Frozen Desserts", "Ice Cream", "Smoothies", "Bread Machine", "Dessert", "Cookie & Brownie", "Cocktail", "Beverage", "Breads", "Chocolate Chip Cookies", "Candy", "Cookie");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Dessert", "Breads", "Sweet", "Snacks", "Cookie & Brownie"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Cheesecake", "Sweet", "Snacks", "Frozen Desserts", "Ice Cream", "Smoothies", "Bread Machine", "Dessert", "Cookie & Brownie", "Cocktail", "Beverage", "Breads", "Chocolate Chip Cookies", "Candy", "Cookie"].includes(keyword));
             }
             break;
         // 나머지 체크박스들에 대한 처리
-        case "breakfast":
+        case "nocook":
             if (checkbox.checked) {
-                checkedKeywords.push("Easy", "< 15 Mins", "Breakfast", "Potato", "Fruits", "Microwave");
+                checkedKeywords.push("Cauliflower", "Lemon", "Wild Game", "No Cook", "Shakes", "Lentil");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Easy", "< 15 Mins", "Breakfast", "Potato", "Fruits", "Microwave"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Cauliflower", "Lemon", "Wild Game", "No Cook", "Shakes", "Lentil"].includes(keyword));
             }
             break;
         case "foreign":
             if (checkbox.checked) {
-                checkedKeywords.push("European", "Christmas", "Asian", "Thanksgiving", "Mexican", "Kosher", "Southwestern");
+                checkedKeywords.push("Swedish", "Turkish", "Brazilian", "Malaysian", "Sudanese", "Somalian", "Icelandic", "Scottish", "Indonesian", "Hawaiian", "Chilean", "Cambodian", "Iraqi", "Creole", "Czech", "Dutch", "Russian", "Nigerian", "Portuguese", "Norwegian", "Tex Mex", "Ecuadorean", "European", "Southwestern U.S.", "Hanukkah", "Mexican", "Welsh", "Indian", "Danish", "Greek", "Venezuelan", "Kosher", "Asian", "Egyptian", "Native American", "Japanese", "Pennsylvania Dutch", "German", "Swiss", "Filipino", "Scandinavian", "Georgian", "Peruvian", "Szechuan", "Puerto Rican", "Australian", "Chinese", "Vietnamese", "Caribbean", "Guatemalan", "Lebanese", "Spanish", "Thai", "Palestinian", "South American", "Southwest Asia (middle East", "Pakistani", "Belgian", "New Zealand", "Colombian", "Ethiopian", "Canadian", "Polynesian", "Cuban", "Austrian", "Moroccan", "African", "Hungarian", "Ramadan");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["European", "Christmas", "Asian", "Thanksgiving", "Mexican", "Kosher", "Southwestern"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Swedish", "Turkish", "Brazilian", "Malaysian", "Sudanese", "Somalian", "Icelandic", "Scottish", "Indonesian", "Hawaiian", "Chilean", "Cambodian", "Iraqi", "Creole", "Czech", "Dutch", "Russian", "Nigerian", "Portuguese", "Norwegian", "Tex Mex", "Ecuadorean", "European", "Southwestern U.S.", "Hanukkah", "Mexican", "Welsh", "Indian", "Danish", "Greek", "Venezuelan", "Kosher", "Asian", "Egyptian", "Native American", "Japanese", "Pennsylvania Dutch", "German", "Swiss", "Filipino", "Scandinavian", "Georgian", "Peruvian", "Szechuan", "Puerto Rican", "Australian", "Chinese", "Vietnamese", "Caribbean", "Guatemalan", "Lebanese", "Spanish", "Thai", "Palestinian", "South American", "Southwest Asia (middle East", "Pakistani", "Belgian", "New Zealand", "Colombian", "Ethiopian", "Canadian", "Polynesian", "Cuban", "Austrian", "Moroccan", "African", "Hungarian", "Ramadan"].includes(keyword));
             }
             break;
-        case "wild":
+        case "fruit":
             if (checkbox.checked) {
-                checkedKeywords.push("Fruit", "Vegetable", "Egg", "Berries", "Beans", "Nuts");
+                checkedKeywords.push("Berries", "Kiwifruit", "Papaya", "Pineapple", "Cherries", "Raspberries", "Pears", "Apple", "Oranges", "Grapes", "Melons", "Citrus", "Tropical Fruits", "Strawberry", "Plums", "Coconut", "Mango", "Lime", "Fruit");
             } else {
-                checkedKeywords = checkedKeywords.filter(keyword => !["Fruit", "Vegetable", "Egg", "Berries", "Beans", "Nuts"].includes(keyword));
+                checkedKeywords = checkedKeywords.filter(keyword => !["Berries", "Kiwifruit", "Papaya", "Pineapple", "Cherries", "Raspberries", "Pears", "Apple", "Oranges", "Grapes", "Melons", "Citrus", "Tropical Fruits", "Strawberry", "Plums", "Coconut", "Mango", "Lime", "Fruit"].includes(keyword));
             }
             break;
         case "vegan":
@@ -123,10 +154,31 @@ function addKeywordToList(checkbox) {
                 checkedKeywords = checkedKeywords.filter(keyword => !["Vegan"].includes(keyword));
             }
             break;
+        case "fish":
+            if (checkbox.checked) {
+                checkedKeywords.push("Crawfish", "Tilapia", "Crab", "Trout", "Salmon", "Lobster", "Oysters", "Squid");
+            } else {
+                checkedKeywords = checkedKeywords.filter(keyword => !["Crawfish", "Tilapia", "Crab", "Trout", "Salmon", "Lobster", "Oysters", "Squid"].includes(keyword));
+            }
+            break;
+        case "memorialday":
+            if (checkbox.checked) {
+                checkedKeywords.push("Christmas", "Spring", "Winter", "Birthday", "Thanksgiving", "Halloween", "Summer", "Memorial Day", "For Large Groups", "Homeopathy/Remedies", "Labor Day");
+            } else {
+                checkedKeywords = checkedKeywords.filter(keyword => !["Christmas", "Spring", "Winter", "Birthday", "Thanksgiving", "Halloween", "Summer", "Memorial Day", "For Large Groups", "Homeopathy/Remedies", "Labor Day"].includes(keyword));
+            }
+            break;
+        case "normal":
+            if (checkbox.checked) {
+                checkedKeywords.push("White Rice", "Stocks", "Brunch", "Weeknight", "Stew", "Rice", "Short Grain Rice", "Onions", "Roast", "Penne", "Soy/Tofu", "Long Grain Rice", "Brown Rice", "Spaghetti", "Pasta Shells", "Mixer", "Corn", "Deep Fried");
+            } else {
+                checkedKeywords = checkedKeywords.filter(keyword => !["White Rice", "Stocks", "Brunch", "Weeknight", "Stew", "Rice", "Short Grain Rice", "Onions", "Roast", "Penne", "Soy/Tofu", "Long Grain Rice", "Brown Rice", "Spaghetti", "Pasta Shells", "Mixer", "Corn", "Deep Fried"].includes(keyword));
+            }
+            break;
     }
 
     // 중복 제거 후 키워드 목록을 문자열로 변환하여 출력
-    keywordsList.value = Array.from(new Set(checkedKeywords)).join(", ");
+    keywordsList.value = Array.from(new Set(checkedKeywords.filter(keyword => keyword !== ''))).join(", ");
     
    
 }
@@ -167,8 +219,12 @@ function setFatValue(value) {
     updateNutrientChoice();
 }
 
+
 // 파이썬용 오류시 삭제
     function sendSelectedKeywords() {
+    	// 버튼 클릭 시 로딩 창 표시
+        document.getElementById("loadingOverlay").style.display = "flex";
+	
         //var selectedKeywords = document.getElementById("selected_keywords").value;
         var selectedKeywords = $("#selected_keywords").val();
         var excludeIngredients = document.getElementById("keyword_display").innerText;
@@ -176,7 +232,7 @@ function setFatValue(value) {
         var dietCalory = $("#dietCalory").val();
         //var nutrientChoice = document.getElementById("nutrientChoice").value;
         var nutrientChoice = $("#nutrientChoice").val();
-        alert("sendSelectedKeywords() 호출");
+        
         // Ajax를 사용하여 선택된 키워드와 제외할 재료를 서버에 전송
         $.ajax({
             type: "POST",
@@ -189,9 +245,12 @@ function setFatValue(value) {
             },
             error: function(xhr, status, error) {
                 console.error("Error occurred:", error);
+             	// 에러 발생 시 로딩 창 감춤
+                document.getElementById("loadingOverlay").style.display = "none";
             }
         });
-    }
+     
+}
     
  	// 현재 페이지에서 데이터를 저장하고 페이지 이동
     function handleFoodList(response) {
@@ -215,7 +274,12 @@ function setFatValue(value) {
             // 데이터가 없는 경우에 대한 처리
         }
     }
-
+	
+    document.addEventListener("DOMContentLoaded", function() {
+        // 초기 로딩 시 로딩 창 표시
+        document.getElementById("loadingOverlay").style.display = "none";
+    });
+    
 </script>
 <body>
     <th:block th:replace="~{includes/header}"></th:block>
@@ -249,10 +313,13 @@ function setFatValue(value) {
         </p>
         <th:block th:if="${result.dietCalories != 0}">
             <p>
-                다이어트 권장 칼로리: <span id="dietCalories"
+                다이어트 권장 칼로리(1일 평균): <span id="dietCalories"
                     th:text="${result.dietCalories}"></span> kcal
             </p>
             <input type="hidden" id="dietCalory" name="dietCalory" th:value ="${result.dietCalories}">
+        </th:block>
+        <th:block th:if="${result.dietCalories == 0}">
+        	<input type="hidden" id="dietCalory" name="dietCalory" th:value="${result.dailyCalories}">
         </th:block>
         <!-- 사용자 BMI 범위에 따른 그래픽 표시 -->
         <div id="bmiGraphic">
@@ -292,20 +359,24 @@ function setFatValue(value) {
         <br>
         <h2>좋아하는 키워드 선택:</h2>
         
-        <input type="text" id="selected_keywords" name="selected_keywords">
+        <input type="hidden" id="selected_keywords" name="selected_keywords">
         <input type="checkbox" id="exercise" value="exercise" onclick="addKeywordToList(this)" name="keywords"> <label for="exercise">운동</label><br>
         <input type="checkbox" id="mealkit" value="mealkit" onclick="addKeywordToList(this)" name="keywords"> <label for="mealkit">간편식</label><br>
         <input type="checkbox" id="meat" value="meat" onclick="addKeywordToList(this)" name="keywords"> <label for="meat">육류</label><br>
-        <input type="checkbox" id="vegetable" value="vegetable" onclick="addKeywordToList(this)" name="keywords"> <label for="vegetable">채소</label><br>
+        <input type="checkbox" id="diet" value="diet" onclick="addKeywordToList(this)" name="keywords"> <label for="diet">다이어트</label><br>
         <input type="checkbox" id="dessert" value="dessert" onclick="addKeywordToList(this)" name="keywords"> <label for="dessert">디저트</label><br>
-        <input type="checkbox" id="breakfast" value="breakfast" onclick="addKeywordToList(this)" name="keywords"> <label for="breakfast">아침</label><br>
+        <input type="checkbox" id="nocook" value="nocook" onclick="addKeywordToList(this)" name="keywords"> <label for="nocook">생식</label><br>
         <input type="checkbox" id="foreign" value="foreign" onclick="addKeywordToList(this)" name="keywords"> <label for="foreign">외국식</label><br>
-        <input type="checkbox" id="wild" value="wild" onclick="addKeywordToList(this)" name="keywords"> <label for="wild">선식</label><br>
+        <input type="checkbox" id="fruit" value="fruit" onclick="addKeywordToList(this)" name="keywords"> <label for="fruit">과일류</label><br>
         <input type="checkbox" id="vegan" value="vegan" onclick="addKeywordToList(this)" name="keywords"> <label for="vegan">비건</label><br>
+        <input type="checkbox" id="fish" value="fish" onclick="addKeywordToList(this)" name="keywords"> <label for="fish">해산물</label><br>
+        <input type="checkbox" id="memorialday" value="memorialday" onclick="addKeywordToList(this)" name="keywords"> <label for="memorialday">기념일</label><br>
+        <input type="checkbox" id="normal" value="normal" onclick="addKeywordToList(this)" name="keywords"> <label for="normal">일반식</label><br>
         
         
         <br>
-        <h2>제외시키고 싶은 음식 재료 검색:</h2>
+        <h2>알레르기성 재료 검색(최대 3개):</h2>
+        <p style="font-size: 16px">등록한 재료의 음식은 제외됩니다.</p>
         <label>검색</label>
         <input type="text" id="searchWord" name="excludeIngredients" onclick="go_searchKeywords()">
         <br><label>저장된 기록</label>
@@ -336,17 +407,23 @@ function setFatValue(value) {
                 <input type="radio" name="fatSelect" value="25" onchange="setFatValue('25')"> 고함량
             </label>
             <!-- 설정 안해서 nutrientChoice가 비어있는 경우 0을 받도록 설정필요 -->
-            <input type="text" id="nutrientChoice">
+            <input type="hidden" id="nutrientChoice" value="0,0,0">
             <br>
         <br>
 
         <button type="button" onclick="sendSelectedKeywords();">선택 완료</button>
     </form>
 
+	<div id="loadingOverlay">
+        <div class="spinner"></div>
+        <div>로딩 중...</div>
+    </div>
+
     <th:block th:replace="~{includes/footer}"></th:block>
 
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="css/loading.css"></script>
 	<script src="js/bmi.js"></script>
 
 </body>

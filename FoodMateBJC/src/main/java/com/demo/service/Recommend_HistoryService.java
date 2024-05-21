@@ -2,11 +2,17 @@ package com.demo.service;
 
 import java.util.List;
 
+import com.demo.domain.MemberData;
 import com.demo.domain.Recommend_History;
+import com.demo.domain.foodRecipe;
 
-public interface Recommend_HistoryService {
+public interface Recommend_HistoryService { // 인터페이스 이름 수정
 
-	// 회원별 추천받은 음식(레시피)기록 조회
-	public List<Recommend_History> getMyRecommendHistory(String id);
-	
-}
+    List<Recommend_History> getMyRecommendHistory(MemberData member); // 메서드 시그니처 수정
+//
+//    List<RecommendData> getMyRecommendData(long idx); // 메서드 시그니처 수정
+
+    void saveRecommendHistory(Recommend_History history); // 메서드 시그니처 수정
+
+    void deleteRecommendHistory(int idx);
+	}

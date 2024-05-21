@@ -1,5 +1,5 @@
 /* MyPage Styles */
-/* ë§ˆì´í˜ì´ì§€ ìŠ¤íƒ€ì¼ */
+/* ¸¶ÀÌÆäÀÌÁö ½ºÅ¸ÀÏ */
 .mypage {
     padding: 50px 0;
     text-align: center;
@@ -19,7 +19,7 @@
 }
 
 /* Menu Styles */
-/* ë©”ë‰´ ìŠ¤íƒ€ì¼ */
+/* ¸Ş´º ½ºÅ¸ÀÏ */
 #menu {
     background-color: #007bff;
     color: #fff;
@@ -46,7 +46,7 @@
 }
 
 /* Info View Styles */
-/* ê°œì¸ì •ë³´ ì—´ëŒ ìŠ¤íƒ€ì¼ */
+/* °³ÀÎÁ¤º¸ ¿­¶÷ ½ºÅ¸ÀÏ */
 #infoview {
     text-align: left;
     margin: 20px auto;
@@ -58,7 +58,7 @@
 }
 
 /* Info Update Styles */
-/* ê°œì¸ì •ë³´ ìˆ˜ì • ìŠ¤íƒ€ì¼ */
+/* °³ÀÎÁ¤º¸ ¼öÁ¤ ½ºÅ¸ÀÏ */
 #infoupdate {
     text-align: left;
     margin: 20px auto;
@@ -99,7 +99,7 @@
 }
 
 /* Body Update Styles */
-/* ë°”ë””ë°ì´í„° ìˆ˜ì • ìŠ¤íƒ€ì¼ */
+/* ¹Ùµğµ¥ÀÌÅÍ ¼öÁ¤ ½ºÅ¸ÀÏ */
 #bodyupdate {
     text-align: left;
     margin: 20px auto;
@@ -140,7 +140,7 @@
 }
 
 /* My Recipe Styles */
-/* ë‚´ ë ˆì‹œí”¼ ëª©ë¡ ìŠ¤íƒ€ì¼ */
+/* ³» ·¹½ÃÇÇ ¸ñ·Ï ½ºÅ¸ÀÏ */
 #myrecipe {
     text-align: left;
     margin: 20px auto;
@@ -164,7 +164,7 @@
 }
 
 /* Recommend History Styles */
-/* ì¶”ì²œ ê¸°ë¡ ìŠ¤íƒ€ì¼ */
+/* ÃßÃµ ±â·Ï ½ºÅ¸ÀÏ */
 #recommend {
     text-align: left;
     margin: 20px auto;
@@ -194,10 +194,10 @@
 }
 
 
-/*ìŠ¤í¬ë¡¤.... ì§€ì›Œì¤¬ì–´ìš”
-ì´ê²Œ ë§ë‚˜...?
+/*½ºÅ©·Ñ.... Áö¿öÁá¾î¿ä
+ÀÌ°Ô ¸Â³ª...?
 */ 
 .tbl-content {
-    max-height: 300px; /* ìµœëŒ€ ë†’ì´ ì„¤ì • */
-    overflow-y: auto; /* ì„¸ë¡œ ìŠ¤í¬ë¡¤ì„ í™œì„±í™”í•˜ê³  ë‚´ìš©ì´ ë„˜ì¹  ë•Œ ìŠ¤í¬ë¡¤ì´ í‘œì‹œë˜ë„ë¡ ì„¤ì • */
+    max-height: 300px; /* ÃÖ´ë ³ôÀÌ ¼³Á¤ */
+    overflow-y: auto; /* ¼¼·Î ½ºÅ©·ÑÀ» È°¼ºÈ­ÇÏ°í ³»¿ëÀÌ ³ÑÄ¥ ¶§ ½ºÅ©·ÑÀÌ Ç¥½ÃµÇµµ·Ï ¼³Á¤ */
 }

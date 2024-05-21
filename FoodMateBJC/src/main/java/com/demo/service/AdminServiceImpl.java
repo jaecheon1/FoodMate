@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.demo.domain.AdminQnaBoard;
 import com.demo.domain.AdminRecipeBoard;
+import com.demo.domain.MemberData;
 import com.demo.domain.askBoard;
 import com.demo.domain.foodRecipe;
-import com.demo.domain.MemberData;
 import com.demo.persistence.AdminAskBoardRepository;
 import com.demo.persistence.AdminQnaBoardRepository;
 import com.demo.persistence.AdminRecipeBoardRepository;
@@ -242,6 +242,12 @@ public class AdminServiceImpl implements AdminService {
 	public void updateAdminInquiry(askBoard vo) {
 		adminAskBoardRepo.save(vo);
 		
+	}
+
+	@Override
+	public foodRecipe getFoodByIndex(int idx) {
+		// TODO Auto-generated method stub
+		return adminRecipeDBRepo.getFoodByIndex(idx);
 	}
 
 	
