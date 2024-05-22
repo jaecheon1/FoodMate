@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영양소 정보</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>영양소 정보</h1>
+        <canvas id="nutrientChart"></canvas>
+    </div>
+		<h1>레시피 정보</h1>
+        <div id="recipeIntroduce"></div>
+    <script>
+    $(document).ready(function() {
+        // URL에서 idx 파라미터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const foodIdx = urlParams.get('idx');
+
+        // Ajax를 통해 데이터를 가져옴
+        $.ajax({
+            type: "GET",
+            url: "/getNutrientData", // 영양소 정보를 반환하는 컨트롤러의 엔드포인트
+            data: { idx: foodIdx },
+            success: function(response) {
+                // response 데이터를 사용하여 차트를 업데이트
+                const data = {
+                    labels: ['탄수화물', '단백질', '지방', '포화지방', '콜레스테롤', '나트륨','당류'],
+                    datasets: [{
+                        data: [response.carbohydrates, response.protein, response.fat, response.saturatedfat, response.cholesterol, response.sodium, response.sugar],
+                        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#ff8c66', '#fa3926', '#ff99cc']
+                    }]
+                };
+
+                // 차트를 생성
+                const ctx = document.getElementById('nutrientChart').getContext('2d');
+                const nutrientChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: data
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred while getting nutrient data:", error);
+            }
+        });
+    
+    
+    $.ajax({
+        type: "GET",
+        url: "/getRecipeData", // 레시피 정보를 반환하는 컨트롤러의 엔드포인트
+        data: { idx: foodIdx },
+        success: function(response) {
+            // response 데이터를 사용하여 레시피 정보를 업데이트
+            if (response && response.recipe) {
+                $('#recipeIntroduce').text(response.recipe); 
+            } else {
+                $('#recipeIntroduce').text('레시피 정보를 찾을 수 없습니다.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred while getting recipe data:", error);
+            $('#recipeIntroduce').text('레시피 정보를 가져오는 중 오류가 발생했습니다.');
+        }
+    });
+    });
+    </script>
+    
+		
+</body>
+</html>

@@ -18,7 +18,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "inquiries")
 @Getter
 @Setter
 @ToString
@@ -40,5 +39,7 @@ public class askBoard {
     private String comments;
     // status 속성 추가
     private String status;
+    
+    
 
 }

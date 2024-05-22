@@ -16,7 +16,7 @@ public interface Com_Board_DetailService {
 	
 	public void updateBoard(Com_Board_Detail vo);
 	
-	public void updateRecipe(Com_Recipe vo); //레시피 글수정
+	public Com_Recipe updateRecipe(Com_Recipe vo); //레시피 글수정
 	
 	public void deleteBoard(Com_Board_Detail vo);
 
@@ -36,10 +36,6 @@ public interface Com_Board_DetailService {
 	
 	public Page<Com_Board_Detail> getCom_Board_DetailByGoodpoint(int seq, int page, int size); // 추천순 정렬
 	
-	// 회원별 작성한 레시피 목록(마이페이지용)
-		public List<Com_Board_Detail> getMyRecipe(String id);
-		
-	
 	/**
 	 * 
 	 * 여기서부터 댓글
@@ -56,6 +52,9 @@ public interface Com_Board_DetailService {
 	public Page<Reply> getReplyList_paging(int replynum , int page, int size);
 	
 	public Reply findReplyByreplynum(int replynum);
+	
+	// 회원별 작성한 레시피 목록(마이페이지용)
+    public List<Com_Board_Detail> getMyRecipe(String id);
 	
 
 }

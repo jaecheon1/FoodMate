@@ -15,5 +15,8 @@ public interface CustomerService {
     List<AdminQnaBoard> getAllQnaBoards();
 	AdminQnaBoard getQnaDetailsById(String question);
 	AdminQnaBoard getQnaDetailsById(Long id);
+	askBoard getInquiryDetailsById(Long id);
+	askBoard findById(askBoard inquiry);
+	
 
 }

@@ -1,0 +1,177 @@
+/* 로그인 페이지 CSS */
+#login-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px; /* 폼 컨테이너 너비 */
+  margin: auto; /* 가운데 정렬을 위한 자동 마진 */
+}
+
+#login-container h2 {
+  text-align: center;
+}
+
+#login-form {
+  width: 100%; /* 폼 너비 */
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"],
+#login-form input[type="submit"] {
+  width: 100%;
+  height: 32px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  margin-bottom: 10px; /* 입력 필드 간격 */
+}
+
+#login-form input[type="submit"] {
+  background-color: rgb(164, 199, 255);
+  cursor: pointer;
+}
+
+#login-form input[type="submit"]:active {
+  background-color: rgb(61, 135, 255);
+}
+
+#login-form a {
+  font-size: 12px;
+  color: darkgray;
+  text-decoration-line: none;
+  text-align: center;
+  display: inline-block; /* 링크를 블록 요소로 변환하여 간격 적용 */
+  margin-top: 10px; /* 링크 상단 간격 */
+}
+
+#login-form a:hover{
+	background-color: #3c3c3c;
+}
+
+/* 회원가입 페이지 */
+#join-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* 폼 컨테이너 너비 */
+    margin: auto; /* 가운데 정렬을 위한 자동 마진 */
+}
+
+#join-container h2 {
+    text-align: center;
+}
+
+#join-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#join-container input[type="text"],
+#join-container input[type="password"],
+#join-container input[type="button"],
+#join-container input[type="submit"] {
+    width: 250px; /* 모든 입력 필드와 버튼의 가로 길이를 일정하게 유지 */
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    margin-bottom: 10px; /* 각 요소 사이 간격 */
+    background-color: rgb(233, 233, 233);
+}
+
+#join-container .id_check,
+#join-container .email_check {
+    background-color: rgba(170, 172, 219, 0.33); /* 중복확인 버튼 색상 변경 */
+}
+
+#join-container input[type="submit"] {
+    background-color: rgb(164, 199, 255);
+    text-align: center;
+}
+
+#join-container input[type="submit"]:active {
+    background-color: rgb(61, 135, 255);
+}
+
+#join-container .btn:hover,
+#join-container .id_check:hover,
+#join-container .email_check:hover {
+    background-color: rgb(209, 228, 255); /* 호버 시 밝고 시원한 느낌의 색상으로 변경 */
+}
+
+#join-container .btn:active,
+#join-container .id_check:active,
+#join-container .email_check:active {
+    background-color: rgb(61, 135, 255);
+}
+
+/* 약관동의 페이지 */
+#contract {
+	text-align: center;
+}
+/* 약관 텍스트 스타일 */
+#contract article textarea {
+    width: 90%; /* 텍스트 영역의 너비를 조정할 수 있습니다. */
+    height: 300px; /* 텍스트 영역의 높이를 조정할 수 있습니다. */
+    padding: 10px;
+    margin: 0 auto 20px auto; /* 가운데 정렬 및 아래쪽 여백 추가 */
+    display: block; /* 텍스트 영역을 블록 요소로 지정하여 가로 영역을 차지하도록 설정 */
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+/* 동의 라디오 버튼 스타일 */
+#contract article .form-group {
+    text-align: center; /* 내용을 가운데로 정렬 */
+    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+}
+
+#contract article .form-group input[type="radio"] {
+    display: inline-block; /* 인라인 블록 요소로 설정하여 같은 줄에 표시 */
+    margin-right: 10px;
+}
+
+/* 제출 버튼 스타일 */
+#contract article .form-group input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#contract article .form-group input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

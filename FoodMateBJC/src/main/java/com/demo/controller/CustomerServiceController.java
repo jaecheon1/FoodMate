@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -11,14 +12,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.demo.domain.AdminQnaBoard;
 import com.demo.domain.MemberData;
 import com.demo.domain.askBoard;
+import com.demo.persistence.CustomerServiceRepository;
 import com.demo.service.CustomerService;
+
 
 @Controller
 @RequestMapping("/")
+@SessionAttributes("loginUser")
 public class CustomerServiceController {
 
     private final CustomerService customerService;
@@ -28,6 +35,7 @@ public class CustomerServiceController {
         this.customerService = customerService;
     }
 
+    
     
     // 1:1 문의 등록 폼 보여주기
     @GetMapping("/inquiry/inquiryForm")
@@ -40,17 +48,19 @@ public class CustomerServiceController {
     @PostMapping("/saveInquiry")
     public String saveInquiry(@ModelAttribute("loginUser") MemberData loginUser, askBoard vo) {
         // 현재 사용자의 이름 가져오기
-        String username = loginUser.getName();
+        MemberData member = loginUser;
         
         // 사용자 정보를 이용하여 작업 수행
         askBoard inquiry = new askBoard();
-        inquiry.setName(username);
+        inquiry.setName(member.getName());
         inquiry.setSubject(vo.getSubject());
         inquiry.setMessage(vo.getMessage());
         inquiry.setRegdate(new Date()); // 현재 시간으로 설정
         customerService.addInquiry(inquiry);
         
         return "redirect:/inquiry/inquiryList";
+        
+        
     }
 
 
@@ -62,6 +72,7 @@ public class CustomerServiceController {
         // inquiryList를 가져와서 모델에 추가
         List<askBoard> inquiries = customerService.getInquiryList();
         
+        
         // 현재 로그인된 사용자의 이름 가져오기
         String username = loginUser.getName();
         
@@ -69,6 +80,22 @@ public class CustomerServiceController {
         model.addAttribute("username", username);
         model.addAttribute("inquiries", inquiries);
         return "inquiry/inquiryList";
+    }
+    
+    @GetMapping("/inquiry/inquiry_detail/{id}")
+    public String showInquiryDetails(@PathVariable Long id, Model model) {
+    	// 서비스 클래스를 통해 해당 ID에 대한 질문 세부 정보를 가져옵니다.
+        askBoard inquiryDetail = customerService.getInquiryDetailsById(id);
+        
+     // 가져온 질문 세부 정보가 null인지 확인합니다.
+        if (inquiryDetail == null) {
+            // 가져온 질문 세부 정보가 null인 경우, 적절한 오류 처리를 수행하거나 사용자에게 메시지를 전달할 수 있습니다.
+            // 여기서는 간단히 오류 페이지로 리다이렉트하도록 하겠습니다.
+            return "redirect:/error"; // 예를 들어, error 페이지로 리다이렉트합니다.
+        }
+        
+        model.addAttribute("inquiryDetail", inquiryDetail);
+        return "inquiry/inquiry_detail"; // 질문 세부 정보를 보여주는 뷰의 이름을 반환합니다.
     }
 
 
@@ -79,6 +106,8 @@ public class CustomerServiceController {
         model.addAttribute("qnaList", qnaList);
         return "qna/all";
     }
+    
+    
     
     @GetMapping("/qna/qna_detail/{id}")
     public String showQnaDetails(@PathVariable Long id, Model model) {
@@ -93,6 +122,7 @@ public class CustomerServiceController {
         }
         
         model.addAttribute("qnaDetail", qnaDetail);
+        
         return "qna/qna_detail"; // 질문 세부 정보를 보여주는 뷰의 이름을 반환합니다.
     }
     
@@ -108,5 +138,18 @@ public class CustomerServiceController {
         // 여기에서 필요한 모델 데이터를 추가할 수 있습니다.
         return "customer_service/customer_service"; // 해당 뷰 이름 반환
     }
+    
+ 
+    @GetMapping("/customer_service/introduce")
+    public String showIntroduce(Model model) {
+//        model.addAttribute("loginUser", new askBoard());
+        return "/customer_service/introduce";
+    }
+    
+    @GetMapping("/inquiry/search")
+    public String showInquirySearchPage() {
+        return "inquiry/search";
+    }
+    
 	
 }

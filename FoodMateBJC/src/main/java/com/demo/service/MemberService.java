@@ -28,18 +28,15 @@ public interface MemberService {
 	public int confirmEmail(String email);
 	
 	public int confirmNickname(String nickname);
-	
+
+
 	// 마이페이지
-		// 개인정보 수정
-		public void changeInfo(MemberData vo);
-		// 바디데이터 수정
-		public void changeBodyData(MemberData vo);
-
-
-
+	// 개인정보 수정
+	public void changeInfo(MemberData vo);
+	// 바디데이터 수정
+	public void changeBodyData(MemberData vo);
+	
 
 
 
 }
-
-

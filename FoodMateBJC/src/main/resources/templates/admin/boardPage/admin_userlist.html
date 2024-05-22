@@ -8,7 +8,7 @@
         <meta name="author" content="" />
         <title>관리자 페이지(Admin)</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="/css/styles.css" rel="stylesheet" />
+        <link href="/css/admin_styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -37,10 +37,11 @@
                                     <a class="nav-link" href="admin_food.do">음식레시피 게시판</a>
                                     <a class="nav-link" href="admin_QnA.do">Q&A 게시판</a>
                                      <a class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+                                     <a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
                                 </nav>
                             </div>
                              <a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
-                             <a class="sb-sidenav-menu-heading" href="logout.do">로그아웃</a>
+                             <a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -62,11 +63,9 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>회원번호</th>
+                                            <th>회원명</th>
                                             <th>ID</th>
-                                            <th>이름</th>
-                                            <th>닉네임</th>
-                                            <th>나이</th>
-                                            <th>성별</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -81,11 +80,9 @@
                                     	<!-- memberList에 들어있는 값으로 아래 인자(이름) 수정 -->
                                     		<div>
                                         	<tr>
-                                            	<td>[[${member.id}]]</td>
+                                            	<td>[[${member.no_data}]]</td>
                                             	<td>[[${member.name}]]</td>
-                                            	<td>[[${member.nickname}]]</td>
-                                            	<td>[[${member.age}]]</td>
-                                            	<td>[[${member.gender}]]</td>
+                                            	<td>[[${member.id}]]</td>
                                        		</tr>
                                         	</div>
                                         	</th:block>

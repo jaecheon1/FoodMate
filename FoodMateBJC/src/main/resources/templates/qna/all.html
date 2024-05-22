@@ -1,13 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>All QnA</title>
+    <th:block th:insert="~{includes/header.html}"></th:block>
+    <title>QnA</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+    /* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+    width: 40px;
+    text-align:center;
+    
+}
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #fff;
             margin: 0;
             padding: 20px;
         }
@@ -15,75 +43,418 @@
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
+            position: relative; /* 아이콘을 h1 요소에 상대적으로 배치 */
         }
 
+        /* 검색 입력란 스타일 */
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* 패딩과 보더를 포함한 크기 계산 */
+            margin-bottom: 20px;
+        }
+
+        /* 테이블 스타일 */
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            border-collapse: collapse; /* 테이블 셀 경계 병합 */
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
             text-align: left;
         }
 
-        th {
-            background-color: #f2f2f2;
-            color: #333;
+        /* 각 질문을 둥근 사각형으로 스타일링 */
+        .question {
+            padding: 20px;
+            border-radius: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ccc;
+            cursor: pointer; /* 클릭 가능한 요소임을 나타내기 위해 커서 변경 */
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        /* 마우스 호버 시 색상 변경 */
+        .question:hover {
+            background-color: #f0f0f0;
         }
 
-        tr:nth-child(odd) {
-            background-color: #ddd;
+        /* 질문 텍스트 스타일 */
+        .question-text {
+            font-weight: bold;
+            color: #666;
+            text-decoration: none; /* 밑줄 제거 */
         }
 
-        tr:hover {
-            background-color: #c9c9c9;
-        }
-
-        a {
+        /* 질문 텍스트에 호버 시 밑줄이 나타나지 않도록 함 */
+        .question-text:hover {
             text-decoration: none;
-            color: #333;
+        }
+
+        /* 게시일 텍스트 스타일 */
+        .date {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* 게시일이 표시되도록 질문의 너비를 줄임 */
+        .date {
+            width: 120px;
+        }
+
+        /* 총 QnA 수 문구 스타일 */
+        .total-qna {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* n의 스타일 */
+        .total-qna span {
+            color: #ff0000; /* n의 색상을 빨간색으로 지정 */
+        }
+
+        /* 검색 입력란 아이콘 스타일 */
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px; /* 왼쪽에 배치 */
+            transform: translateY(-50%);
+            color: #555;
+            cursor: pointer;
+        }
+
+        /* 만족도 조사 폼 스타일 */
+        .satisfaction-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .satisfaction-form label {
+            margin-right: 10px;
+        }
+
+        .satisfaction-form input[type="radio"] {
+            display: none;
+        }
+
+        .satisfaction-form label i {
+            font-size: 24px;
+            color: #28a745;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .satisfaction-form input[type="radio"]:checked + label i {
+            color: #ff0000;
+        }
+        
+        /* 만족도 문구 스타일 */
+        .satisfaction-message {
+            margin-top: 20px;
+            font-size: 18px;
             font-weight: bold;
         }
 
-        a:hover {
+        /* 의견 입력란 스타일 */
+        #userOpinion {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        /* 의견 입력 버튼 스타일 */
+        #submitOpinion {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50; /* 녹색으로 변경 */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #submitOpinion:hover {
+            background-color: #45a049; /* 호버 시 더 진한 녹색으로 변경 */
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .search-container .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
             color: #555;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-    <h1>All QnA</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>No.</th> <!-- 번호를 나타내는 새로운 열 추가 -->
-                <th>질문</th>
-                <th>등록일</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- qnaList를 순회하면서 각 질문에 대한 정보를 출력 -->
-            <tr th:each="qna, row : ${qnaList}" th:class="${row.odd} ? 'odd' : 'even'">
-                <!-- 질문 번호 출력 -->
-                <td th:text="${row.index + 1}"></td>
-                <!-- 질문 내용 출력 -->
-                <td>
-                    <!-- 질문을 클릭하면 해당 질문의 세부 정보가 표시되도록 링크를 추가 -->
-                    <a th:href="@{/qna/qna_detail/{id}(id=${qna.getQna_boardnum()})}" th:text="${qna.question}"></a>
-                </td>
-                <!-- 등록일 출력 -->
-                <td th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            </tr>
-        </tbody>
-    </table>
-</body>
+<!-- 챗봇 아이콘 -->
+        <div id="chatbot-icon" onclick="toggleChatbotPopup()">
+            <i class="fas fa-robot"></i>
+        </div>
+        
+        <!-- 칼로리 계산기 아이콘 -->
+        <div id="calorie-icon" onclick="toggleCaloriePopup()">
+            <i class="fas fa-calculator"></i>
+        </div>
+    <div class="container">
+        <h1><i class="fas fa-comment-alt"></i> QnA</h1>
 
+        <!-- 검색 입력란 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchQuestion()"
+                placeholder="검색어를 입력하세요...">
+                <!-- 검색 아이콘 -->
+            <i class="fas fa-search search-icon" onclick="searchQuestion()"></i>
+        </div>
+        
+        <!-- 총 QnA 수 문구 -->
+        <p class="total-qna">
+            총 <span th:text="${qnaList.size()}"></span>건의 QnA가 있습니다.
+        </p>
+        <!-- QnA 테이블 -->
+        <table id="qnaTable">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <!-- 번호를 나타내는 새로운 열 추가 -->
+                    <th>질문</th>
+                    <th>게시일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- qnaList를 순회하면서 각 질문에 대한 정보를 출력 -->
+                <tr th:each="qna, row : ${qnaList}"
+                    th:class="${row.odd} ? 'odd' : 'even'">
+                    <!-- 질문 번호 출력 -->
+                    <td th:text="${row.index + 1}"></td>
+                    <!-- 질문 내용 출력 -->
+                    <td class="question"><a
+                        th:href="@{/qna/qna_detail/{id}(id=${qna.getQna_boardnum()})}"
+                        th:text="${qna.question}" class="question-text"></a></td>
+                    <!-- 게시일 출력 -->
+                    <td class="date"><span
+                        th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="pagination" class="pagination"></div>
+    <!-- 만족도 조사 폼 -->
+        <form class="satisfaction-form">
+            <p>이 페이지에서 제공하는 정보에 대하여 어느 정도 만족하셨습니까?</p>
+            <label for="very-satisfied"><input type="radio" id="very-satisfied" name="satisfaction" value="very-satisfied" onchange="incrementCount('very-satisfied')"><i class="fas fa-grin"></i></label>
+            <label for="satisfied"><input type="radio" id="satisfied" name="satisfaction" value="satisfied" onchange="incrementCount('satisfied')"><i class="fas fa-smile"></i></label>
+            <label for="neutral"><input type="radio" id="neutral" name="satisfaction" value="neutral" onchange="incrementCount('neutral')"><i class="fas fa-meh"></i></label>
+            <label for="dissatisfied"><input type="radio" id="dissatisfied" name="satisfaction" value="dissatisfied" onchange="incrementCount('dissatisfied')"><i class="fas fa-frown"></i></label>
+            <label for="very-dissatisfied"><input type="radio" id="very-dissatisfied" name="satisfaction" value="very-dissatisfied" onchange="incrementCount('very-dissatisfied')"><i class="fas fa-sad-tear"></i></label>
+        </form>
+    
+    <!-- 만족도 문구 -->
+    <div class="satisfaction-message" id="satisfactionMessage" style="display: none;"></div>
+    <!-- 의견 입력란 -->
+    <textarea id="userOpinion" placeholder="고객님의 의견을 입력해주세요."></textarea>
+    <!-- 의견 제출 버튼 -->
+    <button id="submitOpinion" onclick="submitOpinion()">의견 제출</button>
+    
+    
+    <!-- JavaScript -->
+    <script>
+        function searchQuestion() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("qnaTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // 질문 내용이 있는 열
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        
+     // 만족도 라디오 버튼 클릭 시 해당하는 문구 표시
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                const satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+                const messageDiv = document.getElementById('satisfactionMessage');
+                switch (satisfaction) {
+                    case 'very-satisfied':
+                        messageDiv.innerText = '매우 만족하셨습니다.';
+                        break;
+                    case 'satisfied':
+                        messageDiv.innerText = '만족하셨습니다.';
+                        break;
+                    case 'neutral':
+                        messageDiv.innerText = '보통입니다.';
+                        break;
+                    case 'dissatisfied':
+                        messageDiv.innerText = '불만족하셨습니다.';
+                        break;
+                    case 'very-dissatisfied':
+                        messageDiv.innerText = '매우 불만족하셨습니다.';
+                        break;
+                    default:
+                        messageDiv.innerText = '';
+                }
+                messageDiv.style.display = 'block'; // 문구 표시
+            });
+        });
+     
+     // 만족도 카운트 변수 초기화
+        let verySatisfiedCount = 0;
+        let satisfiedCount = 0;
+        let neutralCount = 0;
+        let dissatisfiedCount = 0;
+        let veryDissatisfiedCount = 0;
+
+        // 만족도 라디오 버튼 클릭 시 해당하는 카운트 증가 함수
+        function incrementCount(satisfaction) {
+            switch (satisfaction) {
+                case 'very-satisfied':
+                    verySatisfiedCount++;
+                    break;
+                case 'satisfied':
+                    satisfiedCount++;
+                    break;
+                case 'neutral':
+                    neutralCount++;
+                    break;
+                case 'dissatisfied':
+                    dissatisfiedCount++;
+                    break;
+                case 'very-dissatisfied':
+                    veryDissatisfiedCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+     
+
+     // 만족도 버튼 클릭 시 서버로 전송
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                const satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+
+                // 서버로 만족도 전송
+                fetch('/submitSatisfaction.do', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ satisfaction: satisfaction })
+                }).then(response => {
+                    if (response.ok) {
+                        // 만족도 정보 전송 성공 시 처리
+                        console.log('만족도 조사 결과 전송 완료');
+                    } else {
+                        // 만족도 정보 전송 실패 시 처리
+                        console.error('만족도 조사 결과 전송 실패');
+                    }
+                });
+            });
+        });
+
+        // 버튼 클릭 이벤트 핸들러 설정
+        document.getElementById('showResultsButton').addEventListener('click', showSurveyResults);
+
+        // 만족도 결과 표시 함수
+        function showSurveyResults() {
+            // 결과를 표시할 공간을 가져옵니다.
+            const surveyResults = document.getElementById('surveyResults');
+            // 결과를 표시할 텍스트를 생성합니다.
+            const countsDisplay = document.getElementById('countsDisplay');
+            countsDisplay.innerHTML = `
+                Very Satisfied: ${verySatisfiedCount}<br>
+                Satisfied: ${satisfiedCount}<br>
+                Neutral: ${neutralCount}<br>
+                Dissatisfied: ${dissatisfiedCount}<br>
+                Very Dissatisfied: ${veryDissatisfiedCount}
+            `;
+            // 결과를 표시합니다.
+            surveyResults.style.display = 'block';
+        }
+
+        function submitOpinion() {
+            const opinion = document.getElementById('userOpinion').value;
+
+            fetch('/submitOpinion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ opinion: opinion })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('의견 제출 완료');
+                    // 성공적으로 제출되었을 때 사용자에게 알림을 줄 수 있습니다.
+                    alert('의견이 성공적으로 제출되었습니다.');
+                } else {
+                    console.error('의견 제출 실패');
+                    alert('의견 제출에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+                alert('의견 제출에 실패했습니다.');
+            });
+        }
+
+        function incrementCount(satisfaction) {
+            fetch('/submitSatisfaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ satisfaction: satisfaction })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+
+    </script>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
 </html>

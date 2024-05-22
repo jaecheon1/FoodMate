@@ -11,21 +11,33 @@
 
     function registerKeyword(button) {
         // 선택된 키워드 가져오기
-        var keyword = button.parentElement.parentElement.querySelector("td").innerText;
+        var keyword = button.parentElement.parentElement.querySelector("td").innerText.trim();
 
         // 이미 선택된 키워드인지 확인
         if (!selectedKeywords.has(keyword)) {
-            // 선택된 키워드가 아니면 추가하고 화면에 표시
-            selectedKeywords.add(keyword);
-            alert("등록되었습니다.");
-            window.opener.document.getElementById("keyword_display").innerText += keyword + ", ";
-            window.location.href = "/go_searchList"
+            // 부모 창의 키워드 표시 요소 가져오기
+            var keywordDisplay = window.opener.document.getElementById("keyword_display");
+            // 현재 키워드 목록 가져오기
+            var currentKeywords = keywordDisplay.innerText.split(",").map(kw => kw.trim()).filter(kw => kw.length > 0);
+
+            if (currentKeywords.length < 3) {
+                // 키워드 추가
+                selectedKeywords.add(keyword);
+                alert("등록되었습니다.");
+                // 키워드 표시 텍스트 업데이트
+                keywordDisplay.innerText = currentKeywords.concat(keyword).join(", ");
+                // 검색 목록 페이지로 이동
+                window.location.href = "/go_searchList";
+            } else {
+                alert("선택재료가 초과되었습니다.");
+                window.close();
+            }
         } else {
             // 이미 선택된 키워드라면 알림
             alert("이미 선택된 키워드입니다.");
         }
     }
-    </script>
+</script>
 <body>
     <h1>음식 재료 검색 결과</h1>
     <form method="post" action="getSearchKeywords">
@@ -119,7 +131,7 @@
                 <td>Beef</td>
                 <td>
                 	<input type="button" value="등록" onclick="registerKeyword(this)">
-                </td>홍합
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(keywordList)}">
                 <td>Chicken</td>

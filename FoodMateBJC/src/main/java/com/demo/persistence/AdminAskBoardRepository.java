@@ -11,10 +11,10 @@ import com.demo.domain.askBoard;
 
 public interface AdminAskBoardRepository extends JpaRepository<askBoard, Long> {
 
-	@Query(value="SELECT * FROM inquiries ORDER BY regdate DESC", nativeQuery = true)
+	@Query(value="SELECT * FROM ask_board ORDER BY regdate DESC", nativeQuery = true)
 	List<askBoard> getAllAskListMain();
 	
-	@Query(value="SELECT * FROM inquiries WHERE inquiry_id = :boardnum", nativeQuery = true)
+	@Query(value="SELECT * FROM ask_board WHERE inquiry_id = :boardnum", nativeQuery = true)
 	askBoard findByAskBoardnum(long boardnum);
 	
 	Page<askBoard> findAllByStatus(String status, Pageable pageable);

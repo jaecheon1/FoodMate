@@ -33,7 +33,8 @@ public interface Com_Board_DetailRepository extends JpaRepository<Com_Board_Deta
 	public Page<Com_Board_Detail> findAllCom_Board_Detail(int seq, Pageable pageable); //전체글 페이징처리 
 	
 	//정렬 상품 조회
-	@Query(value="SELECT b.* FROM Com_Board_Detail b JOIN Com_Recipe r ON b.idx = r.idx WHERE r.rcp_pat2 = ?1 ", nativeQuery=true)
+	@Query(value = "SELECT b.seq, b.d_regdate, b.cnt, b.goodpoint, b.idx, b.no_data, r.idx AS r_idx, r.rcp_pat2"
+			+ " FROM Com_Board_Detail b JOIN Com_Recipe r ON b.idx = r.idx WHERE r.rcp_pat2 = ?1", nativeQuery=true)
 	public Page<Com_Board_Detail> findCom_Board_DetailByKindContaining(String kind, int seq, Pageable pageable);
 	
 	//조회순 정렬
@@ -43,11 +44,12 @@ public interface Com_Board_DetailRepository extends JpaRepository<Com_Board_Deta
 	//추천순 정렬
 	@Query(value="SELECT * FROM Com_Board_Detail ORDER BY goodpoint DESC ", nativeQuery=true)
 	public Page<Com_Board_Detail> findAllByOrderByGoodpointDesc(int seq, Pageable pageable);
-
+	
 	// 마이페이지
-		// 회원별 작성한 게시글(레시피)조회
-		@Query("SELECT b FROM Com_Board_Detail b JOIN b.member_data m WHERE m.id=:id")
-		public List<Com_Board_Detail> getMyRecipeListById(@Param("id")String id);
+    // 회원별 작성한 게시글(레시피)조회
+    @Query("SELECT b FROM Com_Board_Detail b JOIN b.member_data m WHERE m.id=:id")
+    public List<Com_Board_Detail> getMyRecipeListById(@Param("id")String id);
+
 
 	
                                             

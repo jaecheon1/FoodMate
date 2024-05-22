@@ -2,28 +2,46 @@ package com.demo.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.demo.domain.Com_Board_Detail;
 import com.demo.domain.MemberData;
 import com.demo.domain.Reply;
+import com.demo.dto.BlogFood;
 import com.demo.dto.Com_Recipe;
+import com.demo.dto.NaverBlogApi;
 import com.demo.service.Com_Board_DetailService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
@@ -37,17 +55,33 @@ public class BoardController {
 	
 	@Autowired
     private EntityManager entityManager;
-	
 
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
+	
+	//네이버 api 로그인
+    @Value("${naver.client.id}")
+    private String clientId;
+
+    @Value("${naver.client.secret}")
+    private String clientSecret;
+    
+    @GetMapping("/chat")
+	public String go_chat() {
+		return "comboard/Chat";
+			}
+    
+    @GetMapping("/cal")
+	public String go_cal() {
+		return "comboard/Foodcal";
+			}
 
 
 	// 게시글 목록 조회
 	@GetMapping(value= {"/board_list", "/board_list_main"})
 	public String getboard_list(@RequestParam(value = "seq", defaultValue = "1") int seq,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
+			@RequestParam(value = "size", defaultValue = "6") int size, Model model) {
 		Page<Com_Board_Detail> pageList = Board_DetailService.getAllCom_Board(seq, page, size);
 		List<Com_Board_Detail> boardList = pageList.getContent();
 
@@ -87,7 +121,7 @@ public class BoardController {
 	public String getSearchByType(@RequestParam(value = "seq", defaultValue = "1") int seq,
 			@RequestParam("searchType") String searchType, @RequestParam("searchKeyword") String keyword,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
+			@RequestParam(value = "size", defaultValue = "6") int size, Model model) {
 
 		Page<Com_Board_Detail> pageList;
 
@@ -153,27 +187,21 @@ public class BoardController {
         }
         
         String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
-        String kindName = kindList[kind];
+        String kindName = kindList[kind-1];
         
 	    //레시피에 저장
 	    Com_Recipe recipe = new Com_Recipe();  
 		
-		
 
 		 // 이미지 파일 저장 및 DB 경로 설정
-		saveUploadedFile(manualImg01, recipe, 1);
+		saveUploadedFile(manualImg01, recipe , 1);
 	    saveUploadedFile(manualImg02, recipe, 2);
 	    saveUploadedFile(manualImg03, recipe, 3);
 	    saveUploadedFile(manualImg04, recipe, 4);
 	    saveUploadedFile(manualImg05, recipe, 5);
 	    saveUploadedFile(manualImg06, recipe, 6);
 	    saveUploadedFile(mainuploadFile, recipe, 7);	    
-
 	    
-//	    if (recipe != null) { // idx가 번호를 자동으로 생성하게 했음에도 저장순서가 빨라서 null값으로 판정되어 에러가남. 수동으로 저장을 먼저해주기로함
-//	    	recipe = entityManager.merge(recipe); 
-//            entityManager.persist(recipe);
-//        }
 	    
 	    recipe.setRcp_nm(title);
 	    recipe.setHash_tag(maingredient);
@@ -218,7 +246,6 @@ public class BoardController {
 
 	            File saveFile = new File(directory, saveName);
 	            file.transferTo(saveFile);
-	            System.out.println("File saved to " + saveFile.getAbsolutePath());
 
 	            String filePath = "uploads/" + saveName; // 확장자를 포함한 전체 파일 경로를 저장
 	            switch (manualNumber) {
@@ -266,14 +293,17 @@ public class BoardController {
 
 					model.addAttribute("kindList", kindList);
 					model.addAttribute("com_boardVO", board);
+					model.addAttribute("com_boardVO.seq", board.getSeq());
+			        }
 					
 					return "comboard/Boardupdate";
-				}
+				
 		}
 		
 	// 글 수정
 	@PostMapping("/board_update_t")
 	public String updateCom_Board(HttpSession session, @RequestParam("seq") int seq,
+			@RequestParam("idx") int idx,
 			@RequestParam("title") String title,
 	        @RequestParam("gredient") String gredient,
 	        @RequestParam("maingredient") String maingredient,
@@ -284,13 +314,20 @@ public class BoardController {
 	        @RequestParam("manual04") String manual04,
 	        @RequestParam("manual05") String manual05,
 	        @RequestParam("manual06") String manual06,
-	        @RequestParam(value = "manual_img01", required = false) MultipartFile manualImg01,
-	        @RequestParam(value = "manual_img02", required = false) MultipartFile manualImg02,
-	        @RequestParam(value = "manual_img03", required = false) MultipartFile manualImg03,
-	        @RequestParam(value = "manual_img04", required = false) MultipartFile manualImg04,
-	        @RequestParam(value = "manual_img05", required = false) MultipartFile manualImg05,
-	        @RequestParam(value = "manual_img06", required = false) MultipartFile manualImg06,
-	        @RequestParam(value = "main_img", required = false) MultipartFile mainuploadFile) {
+	        @RequestParam(value = "manualImg1", required = false) MultipartFile manualImg01,
+	        @RequestParam(value = "manualImg2", required = false) MultipartFile manualImg02,
+	        @RequestParam(value = "manualImg3", required = false) MultipartFile manualImg03,
+	        @RequestParam(value = "manualImg4", required = false) MultipartFile manualImg04,
+	        @RequestParam(value = "manualImg5", required = false) MultipartFile manualImg05,
+	        @RequestParam(value = "manualImg6", required = false) MultipartFile manualImg06,
+	        @RequestParam(value = "main_img", required = false) MultipartFile mainuploadFile,
+	        @RequestParam("manual_img01") String existingManualImg01,
+	        @RequestParam("manual_img02") String existingManualImg02,
+	        @RequestParam("manual_img03") String existingManualImg03,
+	        @RequestParam("manual_img04") String existingManualImg04,
+	        @RequestParam("manual_img05") String existingManualImg05,
+	        @RequestParam("manual_img06") String existingManualImg06,
+	        @RequestParam("att_file_no_mk") String existingMainuploadFile) {
 		
 		MemberData loginUser =  (MemberData)session.getAttribute("loginUser");
 		Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
@@ -303,21 +340,42 @@ public class BoardController {
 			
 			String[] kindList = { "반찬", "국&찌개", "후식", "일품" }; // 카테고리
 	        String kindName = kindList[kind];
-	        
-		    //레시피에 저장
+
 		    Com_Recipe recipe = new Com_Recipe();  
 			
-			
-			 // 이미지 파일 저장 및 DB 경로 설정
-			saveUploadedFile(manualImg01, recipe , 1);
-		    saveUploadedFile(manualImg02, recipe, 2);
-		    saveUploadedFile(manualImg03, recipe, 3);
-		    saveUploadedFile(manualImg04, recipe, 4);
-		    saveUploadedFile(manualImg05, recipe, 5);
-		    saveUploadedFile(manualImg06, recipe, 6);
-		    saveUploadedFile(mainuploadFile, recipe, 7);	
+		    recipe.setManual_img01(existingManualImg01);
+	        recipe.setManual_img02(existingManualImg02);
+	        recipe.setManual_img03(existingManualImg03);
+	        recipe.setManual_img04(existingManualImg04);
+	        recipe.setManual_img05(existingManualImg05);
+	        recipe.setManual_img06(existingManualImg06);
+	        recipe.setAtt_file_no_mk(existingMainuploadFile);
+
+	        // 새로 업로드된 이미지가 있을 경우 덮어쓰기
+	        if (manualImg01 != null && !manualImg01.isEmpty()) {
+	            saveUploadedFile(manualImg01, recipe, 1);
+	        }
+	        if (manualImg02 != null && !manualImg02.isEmpty()) {
+	            saveUploadedFile(manualImg02, recipe, 2);
+	        }
+	        if (manualImg03 != null && !manualImg03.isEmpty()) {
+	            saveUploadedFile(manualImg03, recipe, 3);
+	        }
+	        if (manualImg04 != null && !manualImg04.isEmpty()) {
+	            saveUploadedFile(manualImg04, recipe, 4);
+	        }
+	        if (manualImg05 != null && !manualImg05.isEmpty()) {
+	            saveUploadedFile(manualImg05, recipe, 5);
+	        }
+	        if (manualImg06 != null && !manualImg06.isEmpty()) {
+	            saveUploadedFile(manualImg06, recipe, 6);
+	        }
+	        if (mainuploadFile != null && !mainuploadFile.isEmpty()) {
+	            saveUploadedFile(mainuploadFile, recipe, 7);
+	        }
 		    
 
+		    recipe.setIdx(idx);
 		    recipe.setRcp_nm(title);
 		    recipe.setHash_tag(maingredient);
 		    recipe.setManual01(manual01);
@@ -327,20 +385,22 @@ public class BoardController {
 		    recipe.setManual05(manual05);
 		    recipe.setManual06(manual06);
 		    recipe.setRcp_parts_dtls(gredient);
-		    recipe.setRcp_pat2(kindName);
+		    recipe.setRcp_pat2(kindName);	    
 		    
 		    
-		    board.setCom_recipe(recipe);
+		    Com_Recipe svrecipe = Board_DetailService.updateRecipe(recipe);
+		    board.setCom_recipe(svrecipe);
+		    board.setMember_data(loginUser);
+		    
 		    
 		Board_DetailService.updateBoard(board);
-		Board_DetailService.updateRecipe(recipe);
 		return "redirect:/com_board_detail?seq=" + seq;
 	}
 	}
 
 	// 글 삭제
 	@GetMapping("/board_delete")
-	public String deleteCom_Board(@RequestParam(value = "seq") int seq, Com_Board_Detail vo, HttpSession session) {
+	public String deleteCom_Board(@RequestParam(value = "seq") int seq, HttpSession session) {
 		MemberData loginUser = (MemberData) session.getAttribute("loginUser");
 		Com_Board_Detail board = Board_DetailService.getCom_Board_Datail(seq);
 
@@ -358,15 +418,15 @@ public class BoardController {
 	@GetMapping("/category")
 	public String com_BoardKindAction(@RequestParam(value = "seq", defaultValue = "1") int seq,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size,
+			@RequestParam(value = "size", defaultValue = "6") int size,
 			Model model, @RequestParam(value = "", required = false)String category) {
 		Page<Com_Board_Detail> pageList = Board_DetailService.getCom_Board_DetailByKind(seq, page, size, category);
 		List<Com_Board_Detail> kindlist = pageList.getContent();
 		
-		model.addAttribute("boardKindList", kindlist);
+		model.addAttribute("boardList", kindlist);
 		model.addAttribute("pageInfo", pageList);
 		
-		return "comboard/BoardKind";
+		return "comboard/BoardList";
 	}
 	
 	//추천수 관리
@@ -400,12 +460,14 @@ public class BoardController {
 	}
 	
 	
-	//인기도순 정렬
-		@GetMapping("/sorted_board_list")
+	//차트용 정렬
+		@GetMapping(value="/sorted_board_list" , produces = MediaType.APPLICATION_JSON_VALUE)
+		@ResponseBody
 		public String getSortedBoardList(@RequestParam(value = "seq", defaultValue = "1") int seq,
 				@RequestParam(value = "page", defaultValue = "1") int page,
-				@RequestParam(value = "size", defaultValue = "10") int size,
-				@RequestParam("sort") String sort, Model model) {
+				@RequestParam(value = "size", defaultValue = "6") int size,
+				@RequestParam("sort") String sort, Model model,
+				@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
 		    
 		    Page<Com_Board_Detail> pageList = null;
 
@@ -419,16 +481,73 @@ public class BoardController {
 		        case "date_sort":
 		            pageList = Board_DetailService.getAllCom_Board(seq, page, size);
 		            break;
+		            
 		    }
-		    List<Com_Board_Detail> boardList = pageList.getContent();
-			model.addAttribute("boardList", boardList);
-		    model.addAttribute("pageInfo", pageList);
 		    
-		    return "comboard/BoardList";
+		    
+		    List<Com_Board_Detail> boardList = pageList.getContent();
+		    List<Com_Board_Detail> cnttop3BoardList = boardList.stream()
+	                .sorted((b1, b2) -> Integer.compare(b2.getCnt(), b1.getCnt()))
+	                .limit(3)
+	                .collect(Collectors.toList());
+		    List<Com_Board_Detail> goodpointtop3BoardList = boardList.stream()
+	                .sorted((b1, b2) -> Integer.compare(b2.getGoodpoint(), b1.getGoodpoint()))
+	                .limit(3)
+	                .collect(Collectors.toList());
+		    
+		    
+		    model.addAttribute("cnttop3BoardList", new Gson().toJson(cnttop3BoardList));
+		    model.addAttribute("goodpointtop3BoardList", new Gson().toJson(goodpointtop3BoardList));
+		
+		    		if (sort.equals("cnt_sort")) {
+		    		 return new Gson().toJson(cnttop3BoardList);
+		            } else {
+		             return new Gson().toJson(goodpointtop3BoardList);
+		    }
 		}
 		
+		//인기도 정렬
+		 @GetMapping(value = "/sorted_board_list", produces = MediaType.TEXT_HTML_VALUE)
+		    public String getSortedBoardListHtml(@RequestParam(value = "seq", defaultValue = "1") int seq,
+		                                         @RequestParam(value = "page", defaultValue = "1") int page,
+		                                         @RequestParam(value = "size", defaultValue = "6") int size,
+		                                         @RequestParam("sort") String sort, Model model) {
+
+		        Page<Com_Board_Detail> pageList = null;
+
+		        switch (sort) {
+		            case "cnt_sort":
+		                pageList = Board_DetailService.getCom_Board_DetailByCnt(seq, page, size);
+		                break;
+		            case "goodpoint_sort":
+		                pageList = Board_DetailService.getCom_Board_DetailByGoodpoint(seq, page, size);
+		                break;
+		            case "date_sort":
+		                pageList = Board_DetailService.getAllCom_Board(seq, page, size);
+		                break;
+		        }
+
+		        List<Com_Board_Detail> boardList = pageList.getContent();
+
+
+		        model.addAttribute("boardList", boardList);
+		        model.addAttribute("pageInfo", pageList);
+		        
+		        List<Com_Board_Detail> top3Cnt = new ArrayList<>();
+		        List<Com_Board_Detail> top3Goodpoint = new ArrayList<>();
+		        
+		        if (sort.equals("cnt_sort")) {
+		            top3Cnt = boardList.stream().sorted((b1, b2) -> Integer.compare(b2.getCnt(), b1.getCnt())).limit(3).collect(Collectors.toList());
+		            model.addAttribute("top3Cnt", top3Cnt);
+		        } else if (sort.equals("goodpoint_sort")) {
+		            top3Goodpoint = boardList.stream().sorted((b1, b2) -> Integer.compare(b2.getGoodpoint(), b1.getGoodpoint())).limit(3).collect(Collectors.toList());
+		            model.addAttribute("top3Goodpoint", top3Goodpoint);
+		        }
+
+		        return "comboard/BoardList";
+		    }
 		
-		
+
 		
 		//댓글 출력
 		@PostMapping("/reply_list")
@@ -464,45 +583,112 @@ public class BoardController {
 				}
 		}
 		
-		//댓글 수정
-		@PostMapping(value="/reply_update")
-		public String updateReply(@RequestParam("replynum") int replynum,
-				@RequestParam("seq") int seq, HttpSession session) {
-			
-			MemberData loginUser = (MemberData) session.getAttribute("loginUser");
-			Reply reply = Board_DetailService.findReplyByreplynum(replynum);
-			
-			if (loginUser == null) { 
-				return "member/login"; 
-			}else if(!(loginUser.getId()).equals(reply.getMember_data().getId())){
-				return "본인이 작성한 댓글만 수정가능합니다.";
-			}else {
-				
-				Board_DetailService.updateReply(reply);			
-				return "redirect:/com_board_detail?seq=" + seq;
+		//***** 댓글 수정 *****
+		@PostMapping(value = "/reply_update")
+		@ResponseBody
+		public Map<String, Object> updateReply(@RequestBody Map<String, Object> payload, HttpSession session) {
+		    Map<String, Object> response = new HashMap<>();
+		    try {
+		        int replynum = Integer.parseInt(payload.get("replynum").toString());
+		        String content = payload.get("content").toString();
+		        MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+		        Reply reply = Board_DetailService.findReplyByreplynum(replynum);
+		        
+		        System.out.println("Reply Number controller: " + replynum);
+		        System.out.println("Content controller: " + content);
+
+		        if (loginUser == null || !loginUser.getId().equals(reply.getMember_data().getId())) {
+		            response.put("success", false);
+		            response.put("message", "본인이 작성한 댓글만 수정 가능합니다.");
+		            return response;
+		        }
+
+		        reply.setContent(content);
+		        Board_DetailService.updateReply(reply);
+		        response.put("success", true);
+		        response.put("message", "댓글이 수정되었습니다.");
+		    } catch (Exception e) {
+		        // 예외 메시지를 로그에 출력
+		        e.printStackTrace();
+		        response.put("success", false);
+		        response.put("message", "서버 오류가 발생했습니다. 오류 메시지: " + e.getMessage());
+		    }
+		    return response;
 		}
-		}
+
 		
 		//댓글 삭제 
-		@GetMapping("/reply_delete")
-		public String deleteReply(@RequestParam("replynum") int replynum, 
-				@RequestParam("seq") int seq, HttpSession session) {
-			
-			MemberData loginUser = (MemberData) session.getAttribute("loginUser");
-			Reply reply = Board_DetailService.findReplyByreplynum(replynum);
-			
-			if (loginUser == null) { 
-				return "member/login"; 
-			}else if(!(loginUser.getId()).equals(reply.getMember_data().getId())){
-				return "본인이 작성한 댓글만 삭제가능합니다.";
-			}else {
+		@PostMapping("/reply_delete")
+		@ResponseBody
+		public Map<String, Object> deleteReply(@RequestParam("replynum") int replynum, HttpSession session) {
+		    Map<String, Object> response = new HashMap<>();
+		    try {
+		        MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+		        Reply reply = Board_DetailService.findReplyByreplynum(replynum);
 
-				Board_DetailService.deleteReply(reply);			
-				return "redirect:/com_board_detail?seq=" + seq;
-		}
+		        if (loginUser == null) {
+		            response.put("success", false);
+		            response.put("message", "로그인이 필요합니다.");
+		            return response;
+		        }
+
+		        if (!loginUser.getId().equals(reply.getMember_data().getId())) {
+		            response.put("success", false);
+		            response.put("message", "본인이 작성한 댓글만 삭제 가능합니다.");
+		            return response;
+		        }
+
+		        Board_DetailService.deleteReply(reply);
+		        response.put("success", true);
+		        response.put("message", "댓글이 삭제되었습니다.");
+		    } catch (Exception e) {
+		        response.put("success", false);
+		        response.put("message", "서버 오류가 발생했습니다.");
+		    }
+		    return response;
 		}
 		
-
+		//네이버 블로그 api
 		
+  	    @GetMapping("/blogsearch")
+  	    public String list(@RequestParam("text") String text, Model model) {
+  	        URI uri = UriComponentsBuilder
+  	            .fromUriString("https://openapi.naver.com")
+  	            .path("/v1/search/blog.json")
+  	            .queryParam("query", text)
+  	            .queryParam("display", 10)
+  	            .queryParam("start", 1)
+  	            .queryParam("sort", "sim")
+  	            .encode()
+  	            .build()
+  	            .toUri();
 
-}
+  	        RequestEntity<Void> req = RequestEntity
+  	            .get(uri)
+  	            .header("X-Naver-Client-Id", clientId)
+  	            .header("X-Naver-Client-Secret", clientSecret)
+  	            .build();
+
+  	        RestTemplate restTemplate = new RestTemplate();
+  	        ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
+
+  	        ObjectMapper om = new ObjectMapper();
+  	        NaverBlogApi resultVO = null;
+
+  	        try {
+  	            resultVO = om.readValue(resp.getBody(), NaverBlogApi.class);
+  	        } catch (JsonMappingException e) {
+  	            e.printStackTrace();
+  	        } catch (JsonProcessingException e) {
+  	            e.printStackTrace();
+  	        }
+
+  	        List<BlogFood> food = resultVO.getItems();
+  	        model.addAttribute("foods", food);
+  	        model.addAttribute("text", text);
+
+  	        return "comboard/NBlogResult :: #similar-recipes";
+  	    }
+		
+		
+	}

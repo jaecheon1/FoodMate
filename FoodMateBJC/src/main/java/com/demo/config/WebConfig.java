@@ -23,4 +23,5 @@ public class WebConfig implements WebMvcConfigurer {
 	        // Expose the upload path as a resource path
 	        registry.addResourceHandler("/uploads/**").addResourceLocations("file:uploads/");
 	    }
+	 
 }

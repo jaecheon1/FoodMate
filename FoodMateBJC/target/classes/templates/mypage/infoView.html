@@ -4,35 +4,79 @@
     <meta charset="UTF-8">
     <title>Info View</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <style>
+    /* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
+}</style>
     <script th:src="@{/js/mypage.js}" defer></script>
+    <script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
 </head>
 <body>
-<!-- 헤더 -->
-<th:block th:insert="~{/includes/header}"></th:block>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
 
-<!-- 메뉴 -->
-<th:block th:insert="~{mypage/menu}"></th:block>
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container1">
+        
+        <!-- 내 정보 내용 -->
+        <section id="mainInfo">
+            <div id="content">
+            	<div class="my">
+            		<section class="my1">
+            			<h3>가입 정보</h3>
+            			<ul>
+            				<li>이름 : <span>[[${name}]]</span></li>
+            				<li>아이디 : <span>[[${id}]]</span></li>
+            				<li>비밀번호 : <span th:text="'********'"></span></li>
+            				<li>이메일 : <span>[[${email}]]</span></li>
+            				<li>닉네임 : <span>[[${nickname}]]</span></li>
+            				
+            			</ul>
+            		</section>
+            		<section class="my2">
+            			<h3>바디데이터</h3>
+            			<ul>
+            				<li>성별 : <span>[[${gender}]]</span></li>
+            				<li>나이 : <span>[[${age}]]</span></li>
+            				<li>키 : <span>[[${height}]]</span></li>
+            				<li>몸무게 : <span>[[${weight}]]</span></li>
+            				<li>목표 체중: <span>[[${goal}]]</span></li>
+            				<li>BMI : <span>[[${bmi}]]</span></li>
+            			</ul>
+            		</section>
+            	</div>
+            </div>
+        </section>
+    </div>
 
-<!-- 내 정보 내용 -->
-    <main class="container">
-        <div id="infoview">
-            <h3>내 정보</h3>
-            <p>이름 : <span th:text="${memberData?.name} ?: '정보 없음'"></span></p>
-            <p>아이디 : <span th:text="${memberData?.id} ?: '정보 없음'"></span></p>
-            <p>비밀번호 : <span th:text="${'********'}"></span></p>
-            <!-- 비밀번호는 보안상 보여주지 않음 -->
-            <p>이메일 : <span th:text="${memberData?.email} ?: '정보 없음'"></span></p>
-            <p>성별 : <span th:text="${memberData?.gender} ?: '정보 없음'"></span></p>
-            <p>키 : <span th:text="${memberData?.height} ?: '정보 없음'"></span></p>
-            <p>몸무게 : <span th:text="${memberData?.weight} ?: '정보 없음'"></span></p>
-            <p>나이 : <span th:text="${memberData?.age} ?: '정보 없음'"></span></p>
-            <p>BMI : <span th:text="${memberData?.bmi} ?: '정보 없음'"></span></p>
-            <!-- 목표 -->
-            <p>목표 : <span th:text="${memberData?.goal} ?: '정보 없음'"></span></p>
-        </div>
-    </main>
-
-<!-- 푸터 -->
-<th:block th:insert="~{/includes/footer}"></th:block>
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
 </body>
 </html>

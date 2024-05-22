@@ -3,50 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Info Update</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <style>/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
+}</style>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script th:src="@{/js/mypage.js}" defer></script>
+    <script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
 </head>
 <body>
-<!-- 헤더 -->
-<th:block th:insert="~{/includes/header}"></th:block>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
 
-<!-- 메뉴 -->
-<th:block th:insert="~{mypage/menu}"></th:block>
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container1">
+        
+        <!-- 개인정보 수정 내용 -->
+        <section id="infoUpdate">
+            <div id="content">
+                <h3>개인정보 수정하기</h3>
+                <form action="update_info" id="update_info" method="post" name="formm">
+                    <fieldset>
+                        <label>아이디 : </label>
+                        <input type="text" name="id" id="id" th:value="${loginUser.id}" readonly placeholder="수정 불가"><br>
+                        <label>비밀번호 : </label>
+                        <input type="password" name="password" id="password"><br>
+                        <label>비밀번호 확인 : </label>
+                        <input type="password" name="pwdcheck" id="pwdcheck"><br>
+                        <label>이름 : </label>
+                        <input type="text" name="name" id="name" th:value="${loginUser.name}" readonly placeholder="수정 불가"><br>
+                        <label>닉네임 : </label>
+                        <input type="text" name="nickname" id="nickname" th:value="${loginUser.nickname}">
+                        <input type="hidden" name="renickname" id="renickname" th:value="${renickname}">
+                        <input type="button" value="중복 체크" class="dup btn" onclick="nickcheck()"><br>
+                        <label>이메일 : </label>
+                        <input type="email" name="email" id="email" th:value="${loginUser.email}"><br>
+                        <div>
+                            <input type="button" value="수정하기" onclick="change_info()" class="btn">
+                            <input type="button" value="취소" onclick="location.href='/mypage';" class="btn">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </div>
 
-<!-- 개인정보 수정 내용 -->
-    <main class="container">
-        <article id="infoupdate">
-            <h3>개인정보 수정하기</h3>
-            <form action="update_info" id="update_info" method="post" name="formm">
-                <fieldset>
-                    <label>아이디</label>
-                    <input type="text" name="id" id="id" th:value="${loginUser.id}" readonly>
-                    <span class="readonly-text">(※ 수정할 수 없습니다.)</span><br>
-                    <label>비밀번호</label>
-                    <input type="password" name="password" id="password" th:value="${loginUser.password}"><br>
-                    <label>비밀번호 확인</label>
-                    <input type="password" name="pwdcheck" id="pwdcheck" th:value="${loginUser.password}"><br>
-                    <label>이름</label>
-                    <input type="text" name="name" id="name" th:value="${loginUser.name}" readonly>
-                    <span class="readonly-text">(※ 수정할 수 없습니다.)</span><br>
-                    <label>닉네임</label>
-                    <input type="text" name="nickname" id="nickname" th:value="nickname">
-                    <input type="hidden" name="renickname" id="renickname" th:value="${renickname}">
-                    <input type="button" value="중복 체크" class="dup" onclick="nickcheck()"><br>
-                    <label>이메일</label>
-                    <input type="email" name="email" id="email" th:value="${loginUser.email}"><br>
-                
-                    <div>
-                        <input type="button" value="수정하기" onclick="info_save()">
-                        <input type="button" value="취소" onclick="location.href='/mypage';">
-                    </div>
-                </fieldset>
-            </form>
-        </article>
-    </main>
-
-<!-- 푸터 -->
-<th:block th:insert="~{/includes/footer}"></th:block>
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
 </body>
 </html>

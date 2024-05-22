@@ -1,28 +1,101 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodMate - 다이어트 식단 추천</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodMate - 다이어트 식단 추천</title>
+<link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+<style>
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
+}</style>
+<script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+    
+$(function () {
+    // Footer를 외부 파일에서 불러오기
+    $("#footer").load("includes/footer.html");
+});
+</script> 
+	
 </head>
 <body>
-    <!-- 헤더 -->
-    <th:block th:replace="~{includes/header}"></th:block>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	
+	<th:block th:insert="~{includes/header}"></th:block>
+	
+	<div class="m_container">
+		<section class="style1">
+			<div class="major">
+				<h2 th:text="${welcomeMessage}"></h2>
+				<h3>다이어트 식단 추천을 통해 건강한 삶을 시작하세요.</h3>
+				<a th:href="@{/UserChoice}" class="btn">시작하기</a>
+			</div>
 
-    <section class="hero">
-        <div class="container">
-            <h2 th:text="${welcomeMessage}"></h2>
-            <p>다이어트 식단 추천을 통해 건강한 삶을 시작하세요.</p>
-            <a th:href="@{/UserChoice}" class="btn">시작하기</a>
-            <div class='mainPage-images'>
-            	<img th:src="@{/images/mainPage-image3.jpg}" src="images/mainPage-image3.jpg">
-            	
-            </div>
-        </div>
-    </section>
+		</section>
+	</div>
+	<div class="m_container">
+		<section class="style2">
+			<header class="major">
+				<h2>여기는 추천 메뉴 보여주는 곳</h2>
+			</header>
+			<div class="mrow">
 
-    <!-- 푸터 -->
-    <th:block th:replace="~{includes/footer}"></th:block>
+				<!-- Content -->
+				<div class="mu">
+					<article>
+						<ul class="style">
+							<li><span class="fa fa-wrench"></span>
+								<h3>오늘 뭐 먹지?</h3>
+								<span>가장 최근에 올라온 레시피?? 이미지, 타이틀, 작성자, 별점, 댓글</span></li>
+							<li><span class="fa fa-cloud"></span>
+								<h3>냉장고</h3>
+								<span>재료를 입력하면 그 재료가 들어간 레시피?</span></li>
+						</ul>
+					</article>
+				</div>
+				<div class="mu">
+					<article>
+						<ul class="style">
+							<li><span class="fa fa-cogs"></span>
+								<h3>https://m.10000recipe.com/</h3>
+								<span>진짜 잘 만들었다....</span></li>
+							<li><span class="fa fa-leaf"></span>
+								<h3>ㅁㄴㅇ</h3>
+								<span>ㅁㄴㅇ</span></li>
+						</ul>
+					</article>
+				</div>
+
+			</div>
+		</section>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
+	
 </body>
 </html>

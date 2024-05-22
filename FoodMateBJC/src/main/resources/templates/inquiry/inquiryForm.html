@@ -1,82 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inquiry Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+<meta charset="UTF-8">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1:1 문의 접수</title>
+<link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
 
-        h2 {
-            color: #333;
-            text-align: center;
-        }
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
 
-        form {
-            max-width: 500px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+#chatbot-icon {
+    left: 10px;
+}
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+    width: 40px;
+    text-align:center;
+    
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
 
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+h2 {
+    color: #333;
+    text-align: center;
+}
 
-        textarea {
-            resize: vertical;
-        }
 
-        button[type="submit"] {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* 구분선 스타일 */
+.divider {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* 아이콘 스타일 */
+.icon {
+    margin-right: 5px;
+}
+
+/* 비밀번호 입력 칸 스타일 */
+#password {
+    font-size: 0.9em;
+}
+
+/* 안내 문구 스타일 */
+.password-info {
+    font-size: 0.8em;
+    color: #ff0000;
+}
+/* Popup 스타일 */
+.popup {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 1001;
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+}
+
+.popup-content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.popup-close {
+    text-align: right;
+}
+
+.popup-close button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+</style>
 </head>
 <body>
-    <h2>Inquiry Form</h2>
+<a id="chatbot-icon" href="/chat"><i class="fas fa-robot"></i></a>
+<a id="chatbot-icon" href="/cal"><i class="fas fa-calculator"></i></a>
+	<h2>1:1 문의 접수</h2>
     <form action="/saveInquiry" method="post">
+        <!-- 제목 입력 칸 -->
         <div>
-            <label for="subject">Subject:</label><br>
+        <ul style="font-size: 0.8em; color: #999;">
+    <li>1:1 문의건에 대해서는 실시간 답변이 어려울수 있는점 양해 바 랍니다.</li>
+    <li>실시간 답변이 필요한 부분은 고객지원센터 (xxxx-xxxx)나 톡상담을 이용부탁드립니다.</li>
+</ul>
+
+            <label for="subject">제목:</label><br>
             <input type="text" id="subject" name="subject" required><br>
         </div>
+        
+        <!-- 내용 입력 칸 -->
         <div>
-            <label for="message">Message:</label><br>
+            <label for="message">내용:</label><br>
             <textarea id="message" name="message" rows="4" required></textarea><br>
         </div>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- '문의에 대한 답변 등록시 알려드립니다' 문구와 전화번호, 이메일 입력 칸 -->
         <div>
-            <button type="submit">Submit</button>
+            <p >** 문의에 대한 답변 등록시 알려드립니다</p>
+            <label for="phoneNumber">전화번호:</label><br>
+            <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="000-0000-0000" required><br><br>
+            <label for="email">이메일:</label><br>
+            <!-- 사용자의 이메일이 자동으로 입력되도록 설정 -->
+            <input type="email" id="email" name="email" th:value="${loginUser.email}" required><br>
+            <!-- 비밀번호 입력 칸 -->
+            <label for="password">비밀번호:</label><br>
+            <input type="password" id="password" name="password" required><br>
+            <!-- 비밀번호 안내 문구 -->
+            <span class="password-info">* 1:1 문의에 대한 고객정보 보호를 위해 게시글의 비밀번호를 설정해주세요.</span><br><br>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div>
+            <button type="submit"><i class="fas fa-paper-plane icon"></i>제출</button>
+        </div>
+
+        <!-- 개인(신용)정보 수집 및 이용에 동의 여부 -->
+        <p>개인(신용)정보 수집 및 이용에 동의하십니까?</p>
+        <div>
+            <!-- 동의하지 않음 버튼 -->
+            <label>
+                <input type="radio" name="agree" value="disagree" id="disagreeRadio">
+                동의하지 않음
+            </label><br>
+
+            <!-- 동의함 버튼 -->
+            <label>
+                <input type="radio" name="agree" value="agree" id="agreeRadio">
+                동의함
+            </label>
         </div>
     </form>
-    
+    <!-- JavaScript -->
+    <script>
+        // 동의함 버튼 클릭 시 동의 여부 확인
+        document.getElementById("agreeRadio").addEventListener("click", function() {
+            if (confirm("개인(신용)정보 수집 및 이용에 동의하시겠습니까?")) {
+                // 동의한 경우의 처리
+                alert("동의하셨습니다.");
+            } else {
+                // 동의하지 않은 경우의 처리
+                document.getElementById("disagreeRadio").checked = true;
+                alert("동의하지 않으셨습니다.");
+            }
+        });
+
+        // 동의하지 않음 버튼 클릭 시 동의 여부 확인
+        document.getElementById("disagreeRadio").addEventListener("click", function() {
+            if (confirm("동의를 취소하시겠습니까?")) {
+                // 동의를 취소한 경우의 처리
+                document.getElementById("agreeRadio").checked = false;
+                alert("동의를 취소하셨습니다.");
+            } else {
+                // 동의를 취소하지 않은 경우의 처리
+                document.getElementById("disagreeRadio").checked = false;
+                alert("동의를 취소하지 않으셨습니다.");
+            }
+        });
+        
+    </script>
 </body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
 </html>

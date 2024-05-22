@@ -19,6 +19,7 @@ import com.demo.persistence.AdminAskBoardRepository;
 import com.demo.persistence.AdminQnaBoardRepository;
 import com.demo.persistence.AdminRecipeBoardRepository;
 import com.demo.persistence.AdminRecipeDBRepository;
+import com.demo.persistence.MemberRepository;
 
 /*
  * 체크할 사항
@@ -43,6 +44,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private AdminAskBoardRepository adminAskBoardRepo;
+	
+	@Autowired
+	private MemberRepository memberRepo;
 
 	@Override
 	public int adminCheck(MemberData vo) {
@@ -73,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<MemberData> getAllMemberList() {
 		// TODO Auto-generated method stub
-		return adminRecipeBoardRepo.getAllMember();
+		return memberRepo.getAllMember();
 	}
 	
 	@Override

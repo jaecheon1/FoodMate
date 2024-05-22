@@ -3,79 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
+<link rel="stylesheet" th:href="@{/css/member.css}">
 <style>
-    table {
-        width: 280px;
-        height: 250px;
-        margin: auto;
-        font-size: 15px;
-        }
-    input[type="text"], input[type="password"] {
-        width: 250px;
-        height: 32px;
-        font-size: 15px;
-        border: 0;
-        border-radius: 15px;
-        outline: none;
-        padding-left: 10px;
-        background-color: rgb(233,233,233);
-    }
-    .btn {
-        width: 263px;
-        height: 32px;
-        font-size: 15px;
-        border: 0;
-        border-radius: 15px;
-        outline: none;
-        padding-left: 10px;
-        background-color: rgb(164, 199, 255);
-    }
-    .btn:active {
-        width: 263px;
-        height: 32px;
-        font-size: 15px;
-        border: 0;
-        border-radius: 15px;
-        outline: none;
-        padding-left: 10px;
-        background-color: rgb(61, 135, 255);
-    }
-    a {
-        font-size: 12px;
-        color: darkgray;
-        text-decoration-line: none;
-       
-    }
-    .join {
-        text-align: center;
-    }
-</style>
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
 
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+    width: 40px;
+    text-align:center;
+    
+}</style>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/member.js}" defer></script>
+<title>Login</title>
+<script>
+    function openFindIdWindow() {
+        window.open("findId", "_blank", "width=600,height=400");
+    }
+
+    function openFindPasswordWindow() {
+        window.open("findPassword", "_blank", "width=600,height=400");
+    }
+    
+    function openkakao() {
+    	window.open("kakao", "_blank", "width=700,height=500");
+    }
+    function openInPopup(url) {
+            window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+</script>
 </head>
 <body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<!-- 헤더 -->
+	<th:block th:insert="~{includes/header}"></th:block>
 
-<form action="/login" method="post">
-    <table>
-    <tr>
-        <td><h2>로그인</h2></td>
-    </tr>
-    <tr>
-        <td><input type="text" name="id"  placeholder="ID"></td>
-    </tr>
-    <tr>
-        <td><input type="password" name="password" placeholder=Password></td>
-    </tr>
-    <tr>
-        <td><input type="submit" value=" 로그인 " class="btn" ></td>
-    </tr>
-   <tr>
-     <td class="forgot"><a href="findIdAndPassword">아이디/비밀번호 찾기</a></td>
-   </tr>
-    <tr>
-        <td class="join"><a href="contract">회원가입</a></td>
-    </tr>
-    </table>
-</form>
+	<div id="login-container">
+		<h2>로그인</h2>
+		<form id="login-form" action="/login" method="post">
+			<!-- <a href="#" class="kakao-login-button" onclick="openkakao()">
+			<i class="kakao-icon"></i></a> -->
+			<input type="text" name="id" placeholder="ID"> 
+			<input type="password" name="password" placeholder="Password"> 
+			<input type="submit" value="로그인">&nbsp;
+				[ <a href="#" onclick="openFindIdWindow()">아이디 찾기</a> / 
+				<a href="#" onclick="openFindPasswordWindow()">비밀번호 찾기</a> ]&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="contract">회원가입</a> ]
+		</form>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
 </body>
 </html>

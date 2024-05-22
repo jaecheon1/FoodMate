@@ -4,39 +4,54 @@
     <meta charset="UTF-8">
     <title>My Page</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <style>
+    /* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
+}</style>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script th:src="@{/js/mypage.js}" defer></script>
+    <script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
 </head>
 <body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
     <!-- 헤더 -->
-    <th:block th:insert="~{/includes/header}"></th:block>
-
-    <!-- 메뉴 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+    
+	<!-- 메뉴 -->
     <th:block th:insert="~{mypage/menu}"></th:block>
-
-    <!-- 마이페이지 컨텐츠 -->
-    <main class="mypage">
-        <div class="container">
-            <div class="content">
-                <div id="InfoView" class="tabcontent">
-                    <!-- 개인정보 열람 페이지 내용 -->
-                </div>
-                <div id="InfoUpdate" class="tabcontent">
-                    <!-- 개인정보 수정 페이지 내용 -->
-                </div>
-                <div id="Preferences" class="tabcontent">
-                    <!-- 음식 호불호 및 알레르기 페이지 내용 -->
-                </div>
-                <div id="MyRecipeList" class="tabcontent">
-                    <!-- 내가 작성한 레시피 목록 페이지 내용 -->
-                </div>
-                <div id="FoodRecommend" class="tabcontent">
-                    <!-- 추천받은 음식 페이지 내용 -->
-                </div>
-            </div>
-        </div>
-    </main>
+    
+    <!-- 메인 -->
+    <div class="container1">
+        <main>
+            <h3>메뉴에서 선택하면 보여지는 화면은 여기에요.</h3>
+        </main>
+    </div>
 
     <!-- 푸터 -->
-    <th:block th:insert="~{/includes/footer}"></th:block>
+    <th:block th:insert="~{includes/footer}"></th:block>
 </body>
 </html>

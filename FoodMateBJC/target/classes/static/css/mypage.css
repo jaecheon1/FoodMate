@@ -1,203 +1,593 @@
-/* MyPage Styles */
-/* ���������� ��Ÿ�� */
-.mypage {
-    padding: 50px 0;
+/* 전체 스타일 */
+.container1 {
+    width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2em 1em;
+	text-align: center;
+    flex-direction: column; /* 아이템을 세로로 배치 */
+}
+
+/* 오른쪽 컨텐츠 */
+main {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
     text-align: center;
 }
 
-.content {
+main h3 {
+    color: black;
+    text-align: center;
+}
+
+/* 메뉴 스타일 */
+#my_menu {
+    background: #8FBC8F; /* 배경색 변경 */
+    overflow: hidden;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
 }
 
-.tabcontent {
-    display: none;
+#my_menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 메뉴 항목을 가로로 배치하기 위해 추가 */
+}
+
+#my_menu li {
+    /* float: left; */
+    margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+#my_menu li a {
+    display: block;
+    color: #fff; /* 텍스트 색상 변경 */
+    text-align: center;
+    padding: 10px 20px; /* 패딩 조정 */
+    text-decoration: none;
+    transition: background-color 0.3s; /* 호버 효과를 위한 전환 효과 추가 */
+}
+
+#my_menu li a:hover {
+    background-color: #a0d8a0; /* 호버 시 배경색 변경 */
+}
+/* 내 정보 섹션 스타일 */
+
+#mainInfo {
+    margin-top: 20px;
+}
+
+#mainInfo #content {
+    background-color: #f9f9f9;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-top: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Menu Styles */
-/* �޴� ��Ÿ�� */
-#menu {
-    background-color: #007bff;
-    color: #fff;
+.my {
+    display: flex;
+    justify-content: space-between;
+}
+
+.my1,
+.my2 {
+    width: calc(50% - 10px); /* 각 섹션을 반으로 나누고 간격을 줍니다. */
+}
+
+.my1 h3,
+.my2 h3 {
+    text-align: center; /* 가운데 정렬합니다. */
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.my1 ul,
+.my2 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my1 ul li,
+.my2 ul li {
+    margin-bottom: 10px;
+}
+
+#mainInfo #content strong {
+    color: #333;
+}
+
+/* Info Update 페이지 */
+#infoUpdate #content {
+    background-color: #f9f9f9;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar {
+#infoUpdate {
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center; /* 수정된 부분 */
+}
+
+#infoUpdate h3 {
+    color: #4CAF50;
+}
+
+#infoUpdate span {
+    font-weight: bold;
+}
+
+#infoUpdate input[type="text"],
+#infoUpdate input[type="password"],
+#infoUpdate input[type="email"] {
+    width: 30%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Info Update 페이지 */
+#infoUpdate input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#infoUpdate input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+/* Body Update 페이지 */
+#bodyUpdate #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#bodyUpdate {
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center; /* 수정된 부분 */
+}
+
+#bodyUpdate h3 {
+    color: #4CAF50;
+}
+
+#bodyUpdate input[type="text"],
+#bodyUpdate select {
+    width: 30%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    
+}
+
+/* Body Update 페이지 */
+#bodyUpdate input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#bodyUpdate input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+/* 체중변화 */
+#weightChart #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#weightChart #content h3 {
+	color: #4CAF50;
+}
+
+#weightChart input[type="date"],
+#weightChart input[type="number"]{
+	width: 50%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#weightChart {
+    display: flex;
+    justify-content: center; /* 요소를 가운데 정렬합니다. */
+}
+
+.record {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-panel,
+.right-panel {
+    width: 50%; /* 각 섹션을 반으로 나눕니다. */
+    padding: 1em; /* 내부 여백 추가 */
+    box-sizing: border-box; /* 내부 여백을 포함한 크기로 요소를 계산합니다. */
+    background-color: #f0f0f0;
+}
+
+.left-panel {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.right-panel h3 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+    width: 100%; /* h3가 전체 너비를 차지하도록 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.right-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.right-panel .wr_chart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.chart-container {
+    display: flex;
+    flex-direction: column; /* 그래프와 설명문이 세로로 나타나도록 설정 */
+    align-items: center;
+    width: 100%;
+}
+
+.chart-container canvas {
+    width: 400px; /* 그래프의 가로 크기 */
+    height: 250px; /* 그래프의 세로 크기 */
+    margin-bottom: 10px; /* 그래프 아래 여백 추가 */
+}
+
+.chart-description {
+    width: 100%; /* 설명문의 가로 크기를 100%로 설정하여 부모 요소에 맞게 조절 */
+    list-style-type: none;
     padding-left: 0;
+    margin: 0; /* 기본 마진 제거 */
+    text-align: center; /* 설명문을 왼쪽 정렬 */
+    overflow-wrap: break-word; /* 긴 설명문이 줄 바꿈되도록 설정 */
 }
 
-.sidebar li {
-    margin-bottom: 10px;
-}
-
-.sidebar li a {
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar li a:hover {
-    background-color: #0056b3;
-}
-
-/* Info View Styles */
-/* �������� ���� ��Ÿ�� */
-#infoview {
-    text-align: left;
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-#infoview p {
-    margin-bottom: 10px;
-}
-
-/* Info Update Styles */
-/* �������� ���� ��Ÿ�� */
-#infoupdate {
-    text-align: left;
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-#infoupdate form fieldset {
+.left-panel h3,
+.right-panel h3 {
+    text-align: center; /* 가운데 정렬합니다. */
+    color: #4CAF50;
     margin-bottom: 20px;
 }
 
-#infoupdate form label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-#infoupdate form input[type="text"],
-#infoupdate form input[type="password"],
-#infoupdate form input[type="email"],
-#infoupdate form select {
-    width: calc(100% - 10px);
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-
-#infoupdate form input[type="button"] {
+.left-panel input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
     cursor: pointer;
 }
 
-#infoupdate form input[type="button"]:hover {
-    background-color: #0056b3;
+.left-panel input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .right-panel .wr_chart {
+        flex-direction: column; /* 그래프와 설명문을 세로로 나열함 */
+    }
+
+    .chart-container {
+        width: 100%; /* 그래프와 설명문을 가로로 채움 */
+    }
 }
 
-/* Body Update Styles */
-/* �ٵ����� ���� ��Ÿ�� */
-#bodyupdate {
-    text-align: left;
+/* 내 질문,각 리스트 섹션 */
+#main #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#main #content h3{
+	color: #4CAF50;
+}
+
+#main {
+    position: relative;
+    max-width: 800px;
     margin: 20px auto;
-    max-width: 600px;
+}
+.tbl-container {
+    overflow-x: auto; /* 가로 스크롤 추가 */
+    position: relative; /* 상대적 위치 설정 */
 }
 
-#bodyupdate form fieldset {
-    margin-bottom: 20px;
+.tbl-container table {
+    width: 100%;
+    background: linear-gradient(to bottom, #8FBC8F, #a0d8a0);
+    border-collapse: collapse;
 }
 
-#bodyupdate form label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-#bodyupdate form input[type="text"],
-#bodyupdate form input[type="password"],
-#bodyupdate form input[type="email"],
-#bodyupdate form select {
-    width: calc(100% - 10px);
-    margin-bottom: 10px;
+.tbl-container th,
+.tbl-container td {
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    border: 1px solid #ddd;
+    text-align: center;
 }
 
-#bodyupdate form input[type="button"] {
+.tbl-container th {
+	color: white;
+}
+
+.tbl-container td {
+	color: black;
+}
+
+.tbl-container tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 호버 시 배경색 변경 */
+    cursor: pointer; /* 호버 시 마우스 커서를 포인터로 변경 */
+}
+
+.tbl-container th {
+    background-color: #8FBC8F;;
+}
+
+/* 수평 스크롤이 보이지 않도록 테이블 헤더와 셀의 박스 모델을 조정 */
+.tbl-container table {
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+}
+
+.tbl-container th,
+.tbl-container td {
+    white-space: nowrap; /* 넘치는 텍스트를 감추고 줄바꿈을 방지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트가 있을 경우 ...으로 표시 */
+}
+
+.tbl-container {
+    max-height: 300px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+
+/* 스크롤바 스타일 */
+.tbl-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tbl-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙 배경색 */
+}
+
+.tbl-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.tbl-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 스크롤바 호버시 색상 */
+}
+
+#main input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
     cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-#bodyupdate form input[type="button"]:hover {
-    background-color: #0056b3;
+#main input[type="button"]:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
 }
 
-/* My Recipe Styles */
-/* �� ������ ��� ��Ÿ�� */
-#myrecipe {
-    text-align: left;
-    margin: 20px auto;
-    max-width: 800px;
-}
-
-#myrecipe table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-#myrecipe th,
-#myrecipe td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#myrecipe th {
-    background-color: #f2f2f2;
-}
-
-/* Recommend History Styles */
-/* ��õ ��� ��Ÿ�� */
-#recommend {
-    text-align: left;
-    margin: 20px auto;
-    max-width: 800px;
-}
-
-#recommend table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-#recommend th,
-#recommend td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#recommend th {
-    background-color: #f2f2f2;
-}
-
-#recommend img {
-    max-width: 100px;
-    height: auto;
-    vertical-align: middle;
+.readonly-text {
+    color: red;
+    margin-left: 10px; /* 원하는 만큼의 간격을 지정하세요 */
 }
 
 
-/*��ũ��.... ��������
-�̰� �³�...?
-*/ 
-.tbl-content {
-    max-height: 300px; /* �ִ� ���� ���� */
-    overflow-y: auto; /* ���� ��ũ���� Ȱ��ȭ�ϰ� ������ ��ĥ �� ��ũ���� ǥ�õǵ��� ���� */
+/* 테마 */
+body.dark-theme {
+    background-color: black;
+    color: silver;
 }
+
+.dark-theme .container1 {
+    background-color: #1e1e1e;
+    color: silver;
+}
+
+.dark-theme main {
+    color: silver;
+}
+
+.dark-theme main h3,
+.dark-theme #weightChart #content h3 {
+    color: gold;
+}
+
+.dark-theme .left-panel label,
+.dark-theme .left-panel span,
+.dark-theme .right-panel li{
+	color: gold;
+}
+.dark-theme #my_menu {
+    background: black;
+}
+
+.dark-theme #my_menu li a {
+    color: gold;
+}
+
+.dark-theme #my_menu li a:hover {
+    background-color: #555; /* 호버 시 배경색 변경 */
+}
+
+.dark-theme #mainInfo #content,
+.dark-theme #infoUpdate #content,
+.dark-theme #bodyUpdate #content,
+.dark-theme #weightChart #content,
+.dark-theme #main #content {
+    background-color: #333;
+    color: silver;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* 골드색 그림자 */
+}
+
+.dark-theme .my1 h3,
+.dark-theme .my2 h3,
+.dark-theme .right-panel h3,
+.dark-theme .left-panel h3,
+.dark-theme #infoUpdate h3,
+.dark-theme #bodyUpdate h3,
+.dark-theme #weightChart h3,
+.dark-theme #main #content h3 {
+    color: gold;
+}
+
+.dark-theme .tbl-container table {
+    background: linear-gradient(to bottom, #333, #555); /* 다크 그라데이션 배경 */
+    color: silver; /* 실버 텍스트 색상 */
+}
+
+.dark-theme .tbl-container th {
+    background-color: #444; /* 다크 테이블 헤더 배경색 */
+    color: gold; /* 골드 텍스트 색상 */
+}
+
+.dark-theme .tbl-container td {
+    color: silver;
+}
+
+.dark-theme .tbl-container tbody tr:hover {
+    background-color: #555; /* 호버 시 다크 그레이 배경색 */
+}
+
+.dark-theme #main input[type="button"],
+.dark-theme #infoUpdate input[type="button"],
+.dark-theme #bodyUpdate input[type="button"],
+.dark-theme .left-panel input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #main input[type="button"]:hover,
+.dark-theme #infoUpdate input[type="button"]:hover,
+.dark-theme #bodyUpdate input[type="button"]:hover,
+.dark-theme .left-panel input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
+.dark-theme #weightChart input[type="date"],
+.dark-theme #weightChart input[type="number"] {
+    border: 1px solid silver; /* 실버 테두리 */
+}
+
+.dark-theme .readonly-text {
+    color: gold;
+}
+
+.dark-theme .fixed-header {
+    background-color: black;
+}
+
+.dark-theme .nav2 ul li a {
+    color: gold;
+}
+
+.dark-theme #themeToggleButtonLight {
+    color: silver;
+}
+
+.dark-theme #themeToggleButtonDark {
+    color: gold;
+}
+
+.dark-theme .chart-container canvas {
+    background-color: #222; /* 다크모드에서 그래프 배경색 */
+}
+/* 스크롤바 스타일 */
+.dark-theme .tbl-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-track {
+    background: #444; /* 스크롤바 트랙 배경색 */
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* 스크롤바 호버 시 색상 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .dark-theme .right-panel .wr_chart {
+        flex-direction: column; /* 그래프와 설명문을 세로로 나열함 */
+    }
+
+    .dark-theme .chart-container {
+        width: 100%; /* 그래프와 설명문을 가로로 채움 */
+    }
+}
+
+/* 다크 테마 전환 버튼 스타일 */
+.dark-theme #main input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #main input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
+
+.dark-theme .left-panel,
+.dark-theme .right-panel {
+    background-color: black;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
