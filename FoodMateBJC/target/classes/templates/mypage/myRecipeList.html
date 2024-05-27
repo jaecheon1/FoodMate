@@ -4,29 +4,8 @@
     <meta charset="UTF-8">
     <title>My Recipe List</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
-    <style>
-    /* 챗봇 아이콘 스타일 */
-#chatbot-icon,
-#calorie-icon {
-    position: fixed;
-    bottom: 30px;
-    background-color: #28a745;
-    color: #fff;
-    border-radius: 50%;
-    padding: 15px;
-    font-size: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-}
-
-#chatbot-icon {
-    left: 10px;
-}
-
-#calorie-icon {
-    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
-}</style>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
 <script type="text/javascript">
 function openInPopup(url) {
         window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
@@ -64,9 +43,11 @@ function openInPopup(url) {
 						<tbody th:if="${#lists.size(recipeList) != 0}">
 							<tr th:each="myRecipe : ${recipeList}">
 								<td th:text="${myRecipe.seq}"></td>
-								<td th:text="${myRecipe.com_recipe.rcp_nm}"></td>
-								<td
-									th:text="${#dates.format(myRecipe.d_regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+								<td>
+									<a th:text="${myRecipe.com_recipe.rcp_nm}"
+									th:href="'/com_board_detail?seq=' + ${myRecipe.seq}"></a>
+								</td>
+								<td th:text="${#dates.format(myRecipe.d_regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 							</tr>
 						</tbody>
 					</table>

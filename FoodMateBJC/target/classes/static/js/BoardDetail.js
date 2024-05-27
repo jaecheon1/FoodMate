@@ -18,9 +18,15 @@
 
 	function board_delete() {
 		var theForm = document.frm;
+		var confirmCheck = confirm("정말로 삭제하시겠습니까?")
+		
+		if(confirmCheck){
 		theForm.method = "get";
 		theForm.action = "board_delete";
 		theForm.submit();
+		} else {
+			
+		}
 
 	}
 

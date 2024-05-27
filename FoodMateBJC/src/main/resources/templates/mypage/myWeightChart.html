@@ -4,36 +4,24 @@
 <meta charset="utf-8">
 <title>My Weight Chart</title>
 <link rel="stylesheet" th:href="@{/css/mypage.css}">
-<style>
-/* 챗봇 아이콘 스타일 */
-#chatbot-icon,
-#calorie-icon {
-    position: fixed;
-    bottom: 30px;
-    background-color: #28a745;
-    color: #fff;
-    border-radius: 50%;
-    padding: 15px;
-    font-size: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-}
-
-#chatbot-icon {
-    left: 10px;
-}
-
-#calorie-icon {
-    left: 110px; /* 챗봇 아이콘 오른쪽에 위치 */
-}</style>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script th:src="@{/js/mypage.js}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    // JavaScript를 사용하여 현재 날짜를 yyyy-mm-dd 형식으로 변환
-     document.addEventListener("DOMContentLoaded", function() {
+//JavaScript를 사용하여 현재 날짜를 yyyy-mm-dd 형식으로 변환
+document.addEventListener("DOMContentLoaded", function() {
+	// 로컬 스토리지에서 테마 설정을 확인하고 적용합니다.
+    function setTheme() {
+        const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
+        const body = document.body;
+        if (isDarkTheme) {
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+        }
+    }
     function setCurrentDate() {
         const dateInput = document.getElementById('re_date');
         const today = new Date();
@@ -49,11 +37,13 @@
         dateInput.value = formattedToday;
     }
 
-    // 페이지가 로드될 때 현재 날짜를 설정
-    window.onload = setCurrentDate;
+ 	// 페이지가 로드될 때 현재 날짜를 설정하고 테마를 적용합니다.
+    window.onload = function() {
+        setCurrentDate();
+        setTheme();
+    };
 });
 </script>
-
 </head>
 <body>
 <!-- 챗봇 아이콘 -->
@@ -77,7 +67,7 @@
 			<div id="content">
 				<div class="record">
 					<section class="left-panel">
-						<form id="weight_chart" method="post" name="formm" action="weight_record">
+						<form id="weight_chart" method="post" name="formm" action="weight_record" onsubmit="return false;">
 							<h3>체중 입력</h3>
 							<label for="re_date">날짜 : </label>
 							<input type="date" id="re_date" name="re_date" required><br>

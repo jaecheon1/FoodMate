@@ -24,5 +24,7 @@ public interface CommunityBoardService {
 	
 	public Page<CommunityBoard> getCommunityBoardById(int community_seq, int page, int size, String id);
 	
+	public CommunityBoard getCommunityBoardByCommunity_seq(String communitySeq);
+	
 	
 }

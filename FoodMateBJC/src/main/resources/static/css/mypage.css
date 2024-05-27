@@ -1,3 +1,31 @@
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+	width: 40px;
+	text-align: center;
+}
+
+
+
+
 /* 전체 스타일 */
 .container1 {
     width: 100%;
@@ -324,7 +352,7 @@ main h3 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#main #content h3{
+#main #content h3 {
 	color: #4CAF50;
 }
 
@@ -424,6 +452,141 @@ main h3 {
     margin-left: 10px; /* 원하는 만큼의 간격을 지정하세요 */
 }
 
+/* recommendHistory.html */
+.r_container {
+	max-width: 1000px;
+	margin: 20px auto;
+	padding: 20px;
+	text-align: center;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#recommend h3 {
+	color: #4CAF50;
+}
+#recommend input[type="button"] {
+	background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#recommend input[type="button"]:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+/* 테이블 */
+.date-header:hover {
+	background-color: #8FBC8F;
+	cursor: pointer;
+}
+.date-header {
+	width : 40%;
+	color: #4CAF50;
+	text-align: center;
+	padding: 10px;
+	font-weight: bold; /* 글자 굵기 설정 */
+}
+.tbi-content {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	max-height: 600px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+.tbl-header {
+	border: 1px solid #4CAF50; /* 테두리 두께와 색상 설정 */
+    border-radius: 5px; /* 테두리의 모서리를 둥글게 설정 */
+	text-align: center;
+	height: 60px;
+    align-items: center;
+    display: flex;
+    font-weight: bold; /* 글자 굵기 설정 */
+}
+.tbl-header th {
+    width: 20%;
+    display: inline-block;
+    padding: 10px; /* 패딩 설정 */
+    text-align: center; /* 글자 정렬 */
+    color: black; /* 글자 색상 설정 */
+    box-sizing: border-box; /* 박스 크기 계산 방식 설정 */
+}
+#group-container {
+	display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    
+}
+#group-container span{
+	width: 19.2%;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: bold; /* 글자 굵기 설정 */
+}
+#group-container img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+#recommend-box {
+    /* 기본 스타일 설정 */
+    appearance: none; /* 기본 체크박스 스타일 제거 (브라우저마다 다를 수 있음) */
+    width: 20px; /* 체크박스의 너비 설정 */
+    height: 20px; /* 체크박스의 높이 설정 */
+    border: 2px solid #4CAF50; /* 테두리 설정 */
+    border-radius: 3px; /* 테두리 둥글게 설정 */
+    background-color: white; /* 배경색 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+
+    /* 체크박스가 체크되었을 때의 스타일 */
+    position: relative;
+}
+
+#recommend-box:checked {
+    background-color: #4CAF50; /* 체크되었을 때 배경색 설정 */
+}
+
+#recommend-box:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 5px;
+    border: solid white;
+    border-width: 0 0 2px 2px;
+    transform: translate(-50%, -50%) rotate(-45deg); /* 체크 표시 생성 및 위치 조정 */
+}
+/* 삭제 버튼 스타일 */
+#del-button {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px; /* 패딩 설정 */
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px; /* 테두리 둥글게 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+}
+
+#del-button:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+
+
+
+
+
+
+
 
 /* 테마 */
 body.dark-theme {
@@ -435,13 +598,19 @@ body.dark-theme {
     background-color: #1e1e1e;
     color: silver;
 }
+.dark-theme .r_container {
+	background-color: #1e1e1e;
+	color: silver;
+}
 
 .dark-theme main {
     color: silver;
 }
 
 .dark-theme main h3,
-.dark-theme #weightChart #content h3 {
+.dark-theme #weightChart #content h3,
+.dark-theme #recommend h3,
+.dark-theme .date-header td {
     color: gold;
 }
 
@@ -466,7 +635,8 @@ body.dark-theme {
 .dark-theme #infoUpdate #content,
 .dark-theme #bodyUpdate #content,
 .dark-theme #weightChart #content,
-.dark-theme #main #content {
+.dark-theme #main #content,
+.dark-theme #recommend {
     background-color: #333;
     color: silver;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* 골드색 그림자 */
@@ -584,6 +754,16 @@ body.dark-theme {
     background-color: gold;
     color: black;
 }
+.dark-theme #recommend input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #recommend input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
 
 .dark-theme .left-panel,
 .dark-theme .right-panel {
@@ -591,3 +771,44 @@ body.dark-theme {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
+.dark-theme .tbl-header {
+	border: 1px solid gold;
+}
+
+.dark-theme .tbl-header th {
+    color: white; /* 글자 색상 설정 */
+}
+
+/* 테이블 */
+.dark-theme .date-header:hover {
+	background-color: #555;
+}
+.dark-theme #recommend-box {
+    /* 기본 스타일 설정 */
+    appearance: none; /* 기본 체크박스 스타일 제거 (브라우저마다 다를 수 있음) */
+    width: 20px; /* 체크박스의 너비 설정 */
+    height: 20px; /* 체크박스의 높이 설정 */
+    border: 2px solid #cbc974; /* 테두리 설정 */
+    border-radius: 3px; /* 테두리 둥글게 설정 */
+    background-color: #828200; /* 배경색 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+
+    /* 체크박스가 체크되었을 때의 스타일 */
+    position: relative;
+}
+
+.dark-theme #recommend-box:checked {
+    background-color: gold; /* 체크되었을 때 배경색 설정 */
+}
+
+/* 삭제 버튼 스타일 */
+.dark-theme #del-button {
+    background-color: black; /* 기본 배경 색상을 검은색으로 설정 */
+    color: gold; /* 기본 글자색을 금색으로 설정 */
+    border: 1px solid gold; /* 테두리 추가 및 색상 지정 */
+}
+
+.dark-theme #del-button:hover {
+    background-color: gold; /* 호버 시 배경색 변경 */
+    color: black; /* 호버 시 글자색 변경 */
+}

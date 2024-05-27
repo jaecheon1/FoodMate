@@ -1,19 +1,22 @@
 package com.demo.controller;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,7 +31,6 @@ import com.demo.service.WeightRecordService;
 
 import jakarta.servlet.http.HttpSession;
 
-@RequestMapping("/mypage")
 @Controller
 public class MypageController {
 
@@ -49,10 +51,8 @@ public class MypageController {
 		
 		if(loginUser == null) {
 			return "redirect:/login";
-		} else {
-			
+		} 
 			return "mypage/mypageMain";
-		}
 	}
 	
 	// 내 정보 화면
@@ -90,9 +90,13 @@ public class MypageController {
 		if(loginUser == null) {
 			return "redirect:/login";
 		} else {
-			model.addAttribute("loginUser", loginUser);
-			return "mypage/infoUpdate";
+			// 최신 사용자 정보를 데이터베이스에서 가져오기
+	        MemberData userInfo = memberService.getMember(loginUser.getId());
+	        
+			model.addAttribute("loginUser", userInfo);
+			
 		}
+		return "mypage/infoUpdate";
 	}
 	
 	// 개인정보 수정
@@ -105,8 +109,9 @@ public class MypageController {
 		} else {
 			// 로그인한 회원수정
 			memberService.changeInfo(vo);
-			return "redirect:/mypage/infoView";
+			
 		}
+	    return "redirect:/infoView";
 	}
 
 	
@@ -123,14 +128,19 @@ public class MypageController {
 	
 	// 바디데이터 수정 화면
 	@GetMapping("bodyUpdate")
-	public String bodyUpdateView(HttpSession session) {
+	public String bodyUpdateView(HttpSession session, Model model) {
 		MemberData loginUser = (MemberData)session.getAttribute("loginUser");
 		
 		if(loginUser == null) {
 			return "redirect:/login";
 		} else {
-			return "mypage/bodyUpdate";
+			// 최신 사용자 정보를 데이터베이스에서 가져오기
+	        MemberData userInfo = memberService.getMember(loginUser.getId());
+	        
+			model.addAttribute("loginUser", userInfo);
+			
 		}
+		return "mypage/bodyUpdate";
 	}
 	
 	// 바디데이터 수정
@@ -144,9 +154,9 @@ public class MypageController {
 			// 로그인한 회원 바디데이터 수정
 			vo.setId(loginUser.getId());
 			memberService.changeBodyData(vo);
-			return "redirect:/mypage/infoView";
 			
 		}
+		return "redirect:/infoView";
 		
 	}
 	
@@ -180,26 +190,29 @@ public class MypageController {
 		        model.addAttribute("weekly", weeklyAvg);
 		        model.addAttribute("monthly", monthlyAvg);
 		        
-				return "mypage/myWeightChart";
 			}
+			return "mypage/myWeightChart";
 		}
 	
 		// 체중변화 값 저장하기
 		@PostMapping("/weight_record")
 		@ResponseBody
-		public String changeWeight(HttpSession session, @RequestParam("re_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reDate, 
+		public ResponseEntity<String> changeWeight(HttpSession session, @RequestParam("re_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reDate, 
 		                           @RequestParam("re_weight") Double reWeight) {
 		    MemberData loginUser = (MemberData) session.getAttribute("loginUser");
 		    
 		    if (loginUser == null) {
-		        return "redirect:/login";
+		        // 로그인되지 않은 경우 리다이렉트
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
 		    } else {
 		        WeightRecord weightRecord = new WeightRecord();
 		        weightRecord.setRe_date(reDate);
 		        weightRecord.setRe_weight(reWeight);
 		        weightRecord.setMember(loginUser);
 		        recordService.saveWeightRecord(weightRecord);
-		        return "체중 기록이 저장되었습니다.";
+		        
+		        // 마이페이지 내 몸무게 차트로 리다이렉트
+		        return ResponseEntity.ok("/mypage/myWeightChart");
 		    }
 		}
 		
@@ -238,24 +251,30 @@ public class MypageController {
 			
 			model.addAttribute("recipeList", recipeList);
 			
-			return "mypage/myRecipeList";
 		}
+		return "mypage/myRecipeList";
 	}
 	
-	// 추천받은 음식 화면
 	@GetMapping("/foodRecommend")
-	public String foodRecommendView(HttpSession session, Model model) {
-		MemberData loginUser = (MemberData)session.getAttribute("loginUser");
-		
-		if(loginUser == null) {
-			return "redirect:/login";
-		} else {
-			List<Recommend_History> recommend = recommendService.getMyRecommendHistory(loginUser);
-			model.addAttribute("recommend", recommend);
-			
-			return "mypage/recommendHistory";
-		}
-	}
+    public String foodRecommendView(HttpSession session, Model model) {
+        MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+
+        if (loginUser == null) {
+            return "redirect:/login";
+        } else {
+            List<Recommend_History> recommend = recommendService.getMyRecommendHistory(loginUser);
+
+         // Date 타입을 문자열로 변환하여 날짜별로 그룹화
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Map<String, List<Recommend_History>> groupedByDate = recommend.stream()
+                .collect(Collectors.groupingBy(history -> sdf.format(history.getRecommendDate())));
+
+            model.addAttribute("groupedByDate", groupedByDate);
+            model.addAttribute("recommend", recommend);
+
+        }
+        return "mypage/recommendHistory";
+    }
 	
 
 	

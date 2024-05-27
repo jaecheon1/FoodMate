@@ -97,6 +97,7 @@ public class MemberServiceImpl implements MemberService {
 	// 개인정보 수정
 	@Override
 	public void changeInfo(MemberData vo) {
+
 		memberRepo.updateMemberData(vo.getId(), vo.getPassword(), vo.getNickname(), vo.getEmail());
 	}
 	

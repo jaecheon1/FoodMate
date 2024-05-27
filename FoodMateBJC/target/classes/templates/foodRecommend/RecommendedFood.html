@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>식단 추천</title>
     <link rel="stylesheet" th:href="@{/css/recommendedFood.css}" href="/css/recommendedFood.css">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <script>
@@ -67,7 +69,7 @@ function displayFoodList(foodList, page, itemsPerPage) {
         image.on('click', function() {
             var clickedIdx = $(this).data('idx'); // 저장된 idx 값 가져오기
             // 클릭한 이미지의 열량 정보를 가져와서 pie 차트로 표시하는 코드를 작성
-            window.open('chart.html?idx=' + clickedIdx, '_blank', 'width=400, height=600');
+            window.open('mypage/chart.html?idx=' + clickedIdx, '_blank', 'width=600, height=800, resizable=no');
 
             // 클릭한 이미지의 데이터를 서버로 전송하여 저장
             $.ajax({

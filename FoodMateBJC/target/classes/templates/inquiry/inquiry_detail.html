@@ -6,6 +6,8 @@
     <th:block th:insert="~{includes/header.html}"></th:block>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inquiry Detail</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
     <!-- 수정된 Font Awesome CSS 링크 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -113,6 +115,7 @@
 
         .btn-list:hover {
             background-color: #4cae4c; /* Darker green on hover */
+            transition: background-color 0.3s ease; /* 색상 변경에 대한 전환 효과 추가 */
         }
 
         label {
@@ -145,9 +148,11 @@
     <div class="inquiry-detail">
         <p class="author-info">작성자 | <span th:text="관리자"></span></p>
         <div class="subject">
-            <h2 th:text="${inquiryDetail.subject}"></h2>
+        <h2>제목 : </h2>
+            <h3 th:text="${inquiryDetail.subject}"></h3>
             <!-- 질문 아래에 구분선 -->
             <div class="subject-divider"></div>
+            <h2>내용 : </h2>
             <p th:text="${inquiryDetail.message}"></p>
         </div>
         

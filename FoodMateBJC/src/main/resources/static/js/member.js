@@ -68,6 +68,25 @@ function go_save() {
     }
 }
 
+function go_save_naver() {
+    // 아이디가 비어있는 경우
+    if ($("#name").val() == "") {
+        alert("이름을 입력해 주세요");
+        $("#name").focus();
+        return false;
+    } 
+   
+    else if ($("#nickname").val() == "") {
+        alert("닉네임을 입력해 주세요.");
+        $("#nickname").focus();
+        return false;
+    } 
+    // 모든 필수 입력 항목이 채워진 경우
+    else {
+        $("#join").attr("action", "join_naver").submit();
+    }
+}
+
 // id 중복체크
 function idcheck() {
 	if($("#id").val() == ""){
@@ -252,3 +271,5 @@ function validateForm() {
     // 유효한 비밀번호인 경우 폼 제출 가능
     return true;
 }
+
+

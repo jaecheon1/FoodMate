@@ -11273,9 +11273,15 @@ body {
     color: #333;
 }
 
-#datatablesSimple tr {
+#datatablesSimple th {
         width: 20%;
         text-align: left;
         padding-left: 10px;
-    }
+}
+
+#datatablesSimple td {
+        width: 20%;
+        text-align: left;
+        padding-left: 10px;
+}
     

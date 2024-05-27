@@ -33,6 +33,11 @@ public interface MemberRepository extends JpaRepository<MemberData, Long> {
 	@Query(value = "SELECT * FROM member_data WHERE name LIKE %:name%", nativeQuery=true)
 	List<MemberData> findByNameContaining(String name);
 	
+	// 총 회원수
+	@Query(value="SELECT COUNT(*) FROM member_data", nativeQuery = true)
+	int getMemberCount();
+	
+	
 	//마이페이지
 	// 개인정보 수정
 	@Transactional

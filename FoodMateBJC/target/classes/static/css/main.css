@@ -1,3 +1,28 @@
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+	text-align: center;
+}
+
+
 /* main 헤더 */
 .logo {
     display: inline-block; /* 인라인 블록 요소로 설정 */
@@ -378,18 +403,20 @@ body {
 	display: flex;
 	gap: 2em;
 	justify-content: center;
+    padding: 0 1em; /* 섹션 내부 여백 추가 */
 }
 
 /* Flexbox Item Styles */
 .mu {
 	flex: 0 0 48%;
-	max-width: 48%;
+	max-width: 40%;
 	padding: 1em;
 	background: #fff;
 	border: 1px solid #ddd;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 .mu .style {
 	list-style: none;
@@ -685,4 +712,95 @@ ul.style li span {
 }
 .dark-theme #nav2 > ul > li > ul > li:nth-child(7) > a:hover {
     background-image: linear-gradient(to right, silver, white); 
+}
+
+.dark-theme .fixed-header {	/* 고정되는 헤더 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: black; /* 배경색 변경 */
+	box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+	z-index: 1000;
+	display: none;
+}
+.dark-theme #header h1 {
+    font-size: 3em; /* 폰트 크기 설정 */
+    margin: 0; /* 기본 마진 제거 */
+    color: gold; /* 텍스트 색상 */
+    margin-bottom: 1em; /* 아래쪽 여백 */
+}
+
+/* 주요 섹션 스타일 */
+.dark-theme .style1 .major h2,
+.dark-theme .style1 .major h3 {
+    font-size: 2.5em;
+    color: #fff; /* 흰색 텍스트 */
+    margin-bottom: 1.5em;
+    background-color: rgba(255, 215, 0, 0.7); /* 반투명 골드 배경 */
+    padding: 0.5em; /* 패딩 추가 */
+    display: block; /* 줄바꿈을 위한 블록 요소 */
+    width: fit-content; /* 텍스트 너비에 맞춤 */
+    border-radius: 5px; /* 둥근 모서리 */
+    margin: 0 auto; /* 수평 가운데 정렬 */
+}
+
+.dark-theme .major .byline {
+    font-size: 1.2em;
+    color: #c0c0c0; /* 은색 텍스트 */
+    margin-bottom: 1.5em;
+    display: block; /* 줄바꿈을 위한 블록 요소 */
+    width: fit-content; /* 텍스트 너비에 맞춤 */
+    margin: 0 auto; /* 수평 가운데 정렬 */
+}
+
+.dark-theme .mu {
+    flex: 0 0 48%;
+    max-width: 40%;
+    padding: 1em;
+    background: #333; /* 검은색 배경 */
+    border: 1px solid #c0c0c0; /* 은색 테두리 */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* 흰색 그림자 */
+}
+
+/* 버튼 스타일 */
+.dark-theme .btn {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme .btn:hover {
+    background-color: gold;
+    color: black;
+}
+
+.dark-theme .mu .style h3 {
+    font-size: 1.3em;
+    color: gold;
+    margin: 0.5em 0;
+}
+
+.dark-theme .mu .style span {
+    font-size: 1em;
+    color: gold;
+}
+body.dark-theme {
+    background-color: black;
+    color: silver;
+}
+
+.dark-theme .m_container {
+    background-color: #1e1e1e;
+    color: silver;
+}
+
+.dark-theme a {
+	color: gold;
+}
+
+.dark-theme .m_container h2,
+.dark-theme .m_container h3 {
+	color: gold;
 }

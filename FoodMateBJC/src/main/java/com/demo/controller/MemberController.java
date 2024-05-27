@@ -86,6 +86,7 @@ public class MemberController {
  		if (member != null) { // 사용자 조회 성공
  			model.addAttribute("message", 1);
  			model.addAttribute("id", member.getId());
+ 			model.addAttribute("password", member.getPassword());
  		} else {
  			model.addAttribute("message", -1);
  		}

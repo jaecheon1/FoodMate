@@ -74,12 +74,14 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 		return communityRepo.findCommunityBoardByIdContainingOrderById(id, community_seq, pageable);
 	}
 	
+	
+	//pdf
+	 public CommunityBoard getCommunityBoardByCommunity_seq(String communitySeq) {
+		 
+	        CommunityBoard communityBoard = communityRepo.findCommunityBoardByCommunity_seq(communitySeq); 
 
-//	// 마이페이지용
-//    @Override
-//    public List<CommunityBoard> getMyRecipe(String id) {
-//       return communityRepo.getMyRecipeListById(id);
-//    }
+	        return communityBoard;
+	    }
 
 
 	

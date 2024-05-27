@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.domain.AdminQnaBoard;
+import com.demo.domain.MemberData;
 import com.demo.domain.askBoard;
 import com.demo.persistence.AdminQnaBoardRepository;
 import com.demo.persistence.CustomerServiceRepository;
@@ -75,6 +76,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public askBoard findById(askBoard inquiry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<askBoard> getInquiryList(MemberData loginUser) {
 		// TODO Auto-generated method stub
 		return null;
 	}

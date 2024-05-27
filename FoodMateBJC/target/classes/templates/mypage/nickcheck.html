@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
 <title>닉네임 중복 체크</title>
 <style>
 body {
@@ -78,13 +80,19 @@ function idok(){
 			<div style="margin-top: 20px">
 				<th:block th:if="${message == 1}">
 					<script type="text/javascript">
-          opener.document.formm.nickname.value="";
+          opener.document.formm.nickname.value=nickname;
         </script>
         [[${nickname}]]은(는) 이미 사용중인 닉네임입니다.
       </th:block>
 				<th:block th:if="${message == -1}">
+					<th:block th:if="${nickname}">
         [[${nickname}]]은(는) 사용 가능한 닉네임입니다.
-        <input type="button" value="사용" class="cancel" onclick="idok()">
+         <input type="button" value="사용" class="cancel" onclick="idok()">
+        </th:block>
+        <th:block th:unless="${nickname}">
+         			수정하실 닉네임을 입력해주세요.
+         		</th:block>
+       
 				</th:block>
 			</div>
 		</form>

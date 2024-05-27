@@ -5,46 +5,67 @@
 /**
  * 개인정보 수정 (닉네임, 비밀번호, 이메일) 
  */
-function change_info() {
-	if ($("#password").val() == "") {
-		alert("변경할 비밀번호를 입력하세요.");
-		$("#password").focus();
-		return false;
-	} else if ($("#password").val() != $("#pwdcheck").val()) {
-		alert("비밀번호가 일치하지 않습니다.");
-		$("#password").focus();
-		return false;
-	} else if ($("#nickname").val() == "") {
-		alert("변경할 닉네임을 입력하세요.");
-		$("#nickname").focus();
-		return false;
-	} else if ($("#nickname").val() != $("#renickname").val()) {
-		alert("닉네임 중복 체크를 해주세요.");
-		$("#nickname").focus();
-		return false;
-	} else if ($("#email").val() == "") {
-		alert("변경할 이메일을 입력하세요.");
-		$("#email").focus();
-		return false;
-	} else {
-		$("#update_info").attr("action", "update_info").submit();
-	}
-	
-}
-/*
-** 닉네임 중복확인 화면 출력요청
-*/
-function nickcheck() {
-	if ($("#nickname").val() == "") {
-		alert("닉네임을 입력해 주세요!");
-		$("#nickname").focus();
-		return false;
-	}
+var originalNickname = $("#nickname").val();
 
-	// 닉네임 중복확인 창 오픈
-	var url = "nickname_check_form?nickname=" + $("#nickname").val();
-	window.open(url, "_blank_", "toolbar=no, menubar=no, scrollbars=no, " +
-		"resizable=yes, width=600, height=400");
+function change_info() {
+    if ($("#password").val() == "") {
+        alert("변경할 비밀번호를 입력하세요.");
+        $("#password").focus();
+        return false;
+    } else if ($("#password").val() != $("#pwdcheck").val()) {
+        alert("비밀번호가 일치하지 않습니다.");
+        $("#password").focus();
+        return false;
+    } else if ($("#nickname").val() == "") {
+        alert("변경할 닉네임을 입력하세요.");
+        $("#nickname").focus();
+        return false;
+    } else if ($("#email").val() == "") {
+        alert("변경할 이메일을 입력하세요.");
+        $("#email").focus();
+        return false;
+    } else {
+        // 기존 닉네임이 없는 경우에만 중복 확인
+        if (originalNickname == "") {
+            // 닉네임 중복 확인이 필요한 경우
+            if (!isNicknameChecked) {
+                alert("닉네임 중복 체크를 해주세요.");
+                $("#nickname").focus();
+                return false;
+            }
+        }
+
+        // 폼 제출
+        $("#update_info").attr("action", "update_info").submit();
+    }
+}
+
+/**
+ * 닉네임 중복확인 화면 출력요청
+ */
+function nickcheck() {
+    if ($("#nickname").val() == "") {
+        alert("닉네임을 입력해 주세요!");
+        $("#nickname").focus();
+        return false;
+    }
+
+    // 닉네임 중복 확인 팝업 열기
+    var url = "nickname_check_form?nickname=" + $("#nickname").val();
+    window.open(url, "_blank_", "toolbar=no, menubar=no, scrollbars=no, " +
+        "resizable=yes, width=600, height=400");
+}
+
+// 닉네임 입력 필드의 값이 변경될 때 중복 체크 상태를 초기화합니다.
+$("#nickname").on('input', function() {
+	isNicknameChecked = false;
+	$("#renickname").val('');
+});
+
+// 중복 체크 완료 후 닉네임을 설정하는 함수
+function setNicknameChecked() {
+	isNicknameChecked = true;
+	$("#renickname").val($("#nickname").val());
 }
 /**
  * 바디데이터 수정
@@ -117,7 +138,7 @@ function weight_record() {
         return false;
     } else {
         // 폼 데이터를 직렬화하여 전송
-        $.post("/mypage/weight_record", $("#weight_chart").serialize())
+        $.post("/weight_record", $("#weight_chart").serialize())
             .done(function(response) {
                 alert("저장 성공!!");
                 // 그래프 업데이트
@@ -147,7 +168,7 @@ $(document).ready(function() {
             if ($('#weeklyChartCanvas').length && $('#monthlyChartCanvas').length) {
                 // 서버에서 데이터 가져오기
                 $.ajax({
-                    url: '/mypage/getRecordChart', // 데이터를 가져올 서버 URL
+                    url: '/getRecordChart', // 데이터를 가져올 서버 URL
                     method: 'GET', // HTTP GET 메서드 사용
                     headers: {
                         Accept: 'application/json' // 서버 응답을 JSON으로 기대
@@ -229,8 +250,53 @@ $(document).ready(function() {
                 options: options
             });
         }
+
+
+   
         
-        
+
+function delHistory() {
+	var checkboxes = document
+		.querySelectorAll('input[name="delete"]:checked');
+	if (checkboxes.length === 0) {
+		alert("삭제할 항목을 선택하세요.");
+		return;
+	}
+
+	var confirmation = confirm("정말로 삭제하시겠습니까?");
+	if (confirmation) {
+		var deleteIdxArray = [];
+		checkboxes.forEach(function(checkbox) {
+			deleteIdxArray.push(Number(checkbox.value));
+		});
+
+		$.ajax({
+			type: "POST",
+			url: "/deleteHistory",
+			data: JSON.stringify(deleteIdxArray),
+			contentType: "application/json; charset=utf-8",
+			success: function(response) {
+				if (response === "success") {
+					location.reload();
+				} else {
+					console.error("로그인이 필요합니다.");
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error("오류가 발생했습니다:", error);
+			}
+		});
+	}
+}
+
+function openChart(idx) {
+	window.open('chart.html?idx=' + idx, '_blank', 'width=400, height=600');
+}
+
+
+
+
+
         
 $(document).ready(function() {
     $('.menu-link').on('click', function(event) {

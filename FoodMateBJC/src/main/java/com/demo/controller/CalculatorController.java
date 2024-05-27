@@ -54,7 +54,7 @@ public class CalculatorController {
             // 사용자 정보가 존재할 경우
         	MemberData member = memberRepository.findByLoginId(loggedInUser.getId());
         	if(member.getGender() == null || member.getGender().isEmpty() || member.getAge() == 0 || member.getWeight() == 0 || member.getHeight() == 0) {
-        		return "redirect:/bodyUpdate";
+        		return "redirect:/mypage/bodyUpdate";
         	} else {
         	
         	CalculationResult result = calculatorServiceImpl.calculate(member);

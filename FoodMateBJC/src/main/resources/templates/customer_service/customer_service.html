@@ -5,22 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>고객센터</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
 <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
 <style>
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f6f7f9;
+    background-image: url('https://www.example.com/background-image.jpg'); /* 배경 이미지 추가 */
+    background-size: cover; /* 배경 이미지가 전체 화면을 덮도록 설정 */
+    background-position: center; /* 배경 이미지의 위치를 중앙으로 설정 */
+    background-attachment: fixed; /* 배경 이미지 고정 */
     color: #666; /* 모든 텍스트의 색상을 #666으로 설정 */
 }
-
-/* 다른 요소들의 스타일 유지 */
 
 .container1 {
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9); /* 반투명 배경 설정 */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -32,10 +37,12 @@ body {
 }
 
 h1 {
-    color: #333;
-    text-align: center;
-    margin-top: 100px;
+    color: #333; /* 제목의 글자색 */
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin-top: 100px; /* 제목 위쪽 여백 설정 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 효과 추가 */
 }
+
 
 .link {
     position: relative; /* 상대 위치 설정 */
@@ -58,11 +65,16 @@ h1 {
     left: 50%; /* 링크 가운데 정렬 */
     transform: translateX(-50%); /* 가운데 정렬을 위한 변환 */
     font-size: 80px; /* 아이콘 크기 조정 */
+    transition: color 0.3s ease; /* 아이콘 색상 변경 효과 */
 }
 
+.link:hover i {
+    color: #fff; /* 호버 시 아이콘 색상 변경 */
+}
 .link:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     background-color: #28a745;
+    color: #fff; /* 호버 시 텍스트 색상 변경 */
 }
 
 .link+.link {
@@ -92,11 +104,7 @@ h1 {
     left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
     width: 40px;
     text-align:center;
-    
 }
-
-
-
 
 /* 아이콘 색상 클래스 */
 .blue-icon {
@@ -111,6 +119,11 @@ h1 {
     color: #28a745; /* 초록색 */
 }
 </style>
+<script>
+function openInPopup(url) {
+    window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+}
+</script>
 <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -128,20 +141,12 @@ h1 {
         <!-- 1:1 문의 내역 링크 -->
         <a class="link" href="/inquiry/inquiryList"> <i class="fas fa-list green-icon"></i> 1:1 문의 내역</a>
 
-        <!-- 챗봇 아이콘 -->
-        <div id="chatbot-icon" onclick="toggleChatbotPopup()">
-            <i class="fas fa-robot"></i>
-        </div>
-        
-        <!-- 칼로리 계산기 아이콘 -->
-        <div id="calorie-icon" onclick="toggleCaloriePopup()">
-            <i class="fas fa-calculator"></i>
-        </div>
+        <a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+		<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
 
         
     </div>
 
-    </script>
 </body>
 <th:block th:insert="~{includes/footer.html}"></th:block>
 </html>
