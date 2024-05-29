@@ -2,11 +2,12 @@ package com.demo.controller;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -195,26 +196,31 @@ public class MypageController {
 		}
 	
 		// 체중변화 값 저장하기
-		@PostMapping("/weight_record")
-		@ResponseBody
-		public ResponseEntity<String> changeWeight(HttpSession session, @RequestParam("re_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reDate, 
-		                           @RequestParam("re_weight") Double reWeight) {
-		    MemberData loginUser = (MemberData) session.getAttribute("loginUser");
-		    
-		    if (loginUser == null) {
-		        // 로그인되지 않은 경우 리다이렉트
-		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-		    } else {
-		        WeightRecord weightRecord = new WeightRecord();
-		        weightRecord.setRe_date(reDate);
-		        weightRecord.setRe_weight(reWeight);
-		        weightRecord.setMember(loginUser);
-		        recordService.saveWeightRecord(weightRecord);
-		        
-		        // 마이페이지 내 몸무게 차트로 리다이렉트
-		        return ResponseEntity.ok("/mypage/myWeightChart");
-		    }
-		}
+				@PostMapping("/weight_record")
+				@ResponseBody
+				public ResponseEntity<String> changeWeight(HttpSession session, @RequestParam("re_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reDate, 
+				                           @RequestParam("re_weight") Double reWeight) {
+				    MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+				    Long weightLong = reWeight.longValue();
+				    
+				    if (loginUser == null) {
+				        // 로그인되지 않은 경우 리다이렉트
+				        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+				    } else {
+				        WeightRecord weightRecord = new WeightRecord();
+				        weightRecord.setRe_date(reDate);
+				        weightRecord.setRe_weight(reWeight);
+				        weightRecord.setMember(loginUser);
+				        
+				        recordService.saveWeightRecord(weightRecord);
+				        
+				        loginUser.setWeight(weightLong);
+				        memberService.changeBodyData(loginUser);
+				        
+				        // 마이페이지 내 몸무게 차트로 리다이렉트
+				        return ResponseEntity.ok("/mypage/myWeightChart");
+				    }
+				}
 		
 		// 저장된 값들로 체중변화 차트 그리기
 		@GetMapping("/getRecordChart")
@@ -256,25 +262,31 @@ public class MypageController {
 	}
 	
 	@GetMapping("/foodRecommend")
-    public String foodRecommendView(HttpSession session, Model model) {
-        MemberData loginUser = (MemberData) session.getAttribute("loginUser");
+	public String foodRecommendView(HttpSession session, Model model) {
+	    MemberData loginUser = (MemberData) session.getAttribute("loginUser");
 
-        if (loginUser == null) {
-            return "redirect:/login";
-        } else {
-            List<Recommend_History> recommend = recommendService.getMyRecommendHistory(loginUser);
+	    if (loginUser == null) {
+	        return "redirect:/login";
+	    } else {
+	        List<Recommend_History> recommend = recommendService.getMyRecommendHistory(loginUser);
 
-         // Date 타입을 문자열로 변환하여 날짜별로 그룹화
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Map<String, List<Recommend_History>> groupedByDate = recommend.stream()
-                .collect(Collectors.groupingBy(history -> sdf.format(history.getRecommendDate())));
+	        // Date 타입을 문자열로 변환하여 날짜별로 그룹화
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	        
+	        // TreeMap을 사용하여 날짜순으로 그룹화
+	        Map<String, List<Recommend_History>> groupedByDate = new TreeMap<>();
+	        for (Recommend_History history : recommend) {
+	            String dateKey = sdf.format(history.getRecommendDate());
+	            groupedByDate.computeIfAbsent(dateKey, k -> new ArrayList<>()).add(history);
+	        }
 
-            model.addAttribute("groupedByDate", groupedByDate);
-            model.addAttribute("recommend", recommend);
+	        model.addAttribute("groupedByDate", groupedByDate);
+	        model.addAttribute("recommend", recommend);
 
-        }
-        return "mypage/recommendHistory";
-    }
+	    }
+	    return "mypage/recommendHistory";
+	}
+
 	
 
 	

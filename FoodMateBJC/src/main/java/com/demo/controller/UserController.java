@@ -32,7 +32,7 @@ public class UserController {
     
     @PostMapping("/oauth/join_naver")
     public String joinNaverAction(MemberData vo) {
-        memberService.insertMember(vo);
+        memberService.insertMemberNaver(vo);
         
         return "member/resultEnd";
     }

@@ -48,6 +48,10 @@ function nickcheck() {
         alert("닉네임을 입력해 주세요!");
         $("#nickname").focus();
         return false;
+    } else if ($("#nickname").val() == " ") {
+        alert("닉네임을 입력해 주세요!");
+        $("#nickname").focus();
+        return false;
     }
 
     // 닉네임 중복 확인 팝업 열기
@@ -128,6 +132,17 @@ function my_bmi() {
 
 // 체중변화 입력값 받기
 function weight_record() {
+	
+	 var weight = parseFloat($("#re_weight").val());
+
+    // 체중이 0 또는 0.0이면 입력하지 않도록 검증
+    if (weight === 0 || weight === 0.0) {
+        alert("체중은 0이나 0.0을 입력할 수 없습니다.");
+        $("#re_weight").focus();
+        return false;
+    }
+
+	
     if ($("#re_date").val() === "") {
         alert("날짜를 제대로 입력해 주세요.");
         $("#re_date").focus();
@@ -211,6 +226,12 @@ $(document).ready(function() {
             // 데이터 레이블(날짜)과 데이터 값(체중) 추출
             var labels = data.map(record => new Date(record.re_date).toLocaleDateString('ko-KR'));
             var values = data.map(record => record.re_weight);
+            
+            // values 배열의 최소값을 찾음
+   			var minValue = Math.min(...values);
+
+    		// 최소값을 10의 배수로 조정
+    		var yAxisMin = Math.floor(minValue / 10) * 10;
 
             // 차트 데이터 및 옵션 설정
             var chartData = {
@@ -231,7 +252,8 @@ $(document).ready(function() {
                         beginAtZero: true
                     },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: false,
+                        min: yAxisMin  // Y축 최소값
                     }
                 },
                 plugins: {

@@ -85,15 +85,17 @@ function idok(){
         [[${nickname}]]은(는) 이미 사용중인 닉네임입니다.
       </th:block>
 				<th:block th:if="${message == -1}">
-					<th:block th:if="${nickname}">
+					<th:block th:if="${nickname == null}">
+						수정하실 닉네임을 입력해주세요
+					</th:block>
+					<th:block th:if="${nickname != null}">
         [[${nickname}]]은(는) 사용 가능한 닉네임입니다.
-         <input type="button" value="사용" class="cancel" onclick="idok()">
+        <input type="button" value="사용" class="cancel" onclick="idok()">
         </th:block>
-        <th:block th:unless="${nickname}">
-         			수정하실 닉네임을 입력해주세요.
-         		</th:block>
-       
-				</th:block>
+         
+        </th:block>
+        
+				
 			</div>
 		</form>
 	</div>

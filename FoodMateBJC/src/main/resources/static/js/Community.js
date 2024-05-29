@@ -36,11 +36,6 @@ $(document).ready(function() {
 		theForm.submit();
 	}
 
-	
-	function submitSearch() {
-	    document.getElementById('searchForm').submit();
-	}
-	
     
 /**
  * 
@@ -87,7 +82,6 @@ $(document).ready(function() {
 		theForm.method = "post";
 		theForm.action = "community_goodpoint";
 		theForm.submit();
-
 	}
 
 
@@ -111,29 +105,6 @@ function go_mov() {
 		theForm.submit();
 	}
 	
-	//BoardWrite
-	
-	function go_save() {	
-	if ($("#title").val() == "") {
-		alert("요리명을 입력하세요.");
-		$("#title").focus();
-		return false;
-	} else if ($("#gredient").val() == "") {
-		alert("재료를 입력하세요.");
-		$("#gredient").focus();
-		return false;
-	} else if ($("#manual01").val() == "") {
-		alert("조리법을 입력하세요.");
-		$("#manual01").focus();
-		return false;
-	} else{
-		var theform = $("#write_form");
-		theform.attr("method", "post");
-		theform.attr("enctype", "multipart/form-data");
-		theform.attr("action", "/communityboard_write_t");
-		theform.submit();
-	}
-		}
 	
 		
 function go_list()
@@ -150,6 +121,8 @@ function openInPopup(url) {
 
 
 function go_save() {	
+	 event.preventDefault();
+	 
 	if ($("#title").val() == "") {
 		alert("제목을 입력하세요.");
 		$("#title").focus();
@@ -166,3 +139,16 @@ function go_save() {
 	}
 		}
       
+   //검색
+    	function submitSearch() {	
+	if ($("#searchKeyword").val() == "") {
+		alert("검색어를 입력하세요");
+		$("#searchKeyword").focus();
+		return false;
+	}  else{
+		var theform = $("#searchForm");
+		theform.attr("method", "get");
+		theform.attr("action", "/communityboard_search");
+		theform.submit();
+	}
+		}      

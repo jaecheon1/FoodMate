@@ -2,7 +2,10 @@ package com.demo.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +42,22 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         cal.add(Calendar.DATE, -7);
         Date startDate = cal.getTime();
 
-        return weightRecordRepo.getRecord7ById(id, startDate);
+     // 최근 7일의 기록을 가져옵니다.
+	    List<WeightRecord> records = weightRecordRepo.getRecord7ById(id, startDate);
+
+	    // 날짜를 키로 가지는 LinkedHashMap을 생성하여 중복된 날짜를 하나로.
+	    // 중복된 날짜는 WeightRecord의 re_date가 같은 날짜중 updatedAt가 가장 늦은 시간의 값을 기준으로 함
+	    Map<Date, WeightRecord> dateMap = new LinkedHashMap<>();
+        for (WeightRecord record : records) {
+            if (!dateMap.containsKey(record.getRe_date()) || record.getUpdatedAt().after(dateMap.get(record.getRe_date()).getUpdatedAt())) {
+                dateMap.put(record.getRe_date(), record);
+            }
+        }
+
+	    // 최대 7개의 데이터만 선택합니다.
+	    List<WeightRecord> result = dateMap.values().stream().limit(7).collect(Collectors.toList());
+
+	    return result;
 	}
 
 	// 최근 30일의 체중 기록을 반환하는 메서드
@@ -50,8 +68,24 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         cal.add(Calendar.DATE, -30);
         Date startDate = cal.getTime();
 
-        return weightRecordRepo.getRecord30ById(id, startDate);
+        // 최근 30일의 기록을 가져옵니다.
+	    List<WeightRecord> records = weightRecordRepo.getRecord30ById(id, startDate);
+
+	    // 날짜를 키로 가지는 LinkedHashMap을 생성하여 중복된 날짜를 하나로 합칩니다.
+	    // 중복된 날짜는 WeightRecord의 re_date가 같은 날짜중 updatedAt가 가장 늦은 시간의 값을 기준으로 함
+	    Map<Date, WeightRecord> dateMap = new LinkedHashMap<>();
+        for (WeightRecord record : records) {
+            if (!dateMap.containsKey(record.getRe_date()) || record.getUpdatedAt().after(dateMap.get(record.getRe_date()).getUpdatedAt())) {
+                dateMap.put(record.getRe_date(), record);
+            } 
+        }
+        
+        // 최대 30개의 데이터만 선택합니다.
+	    List<WeightRecord> result = dateMap.values().stream().limit(30).collect(Collectors.toList());
+
+	    return result;
 	}
+	
 
 	// 주간/월간 변화 평균값 계산 메서드
 	@Override

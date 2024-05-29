@@ -14,10 +14,10 @@
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
 	rel="stylesheet" />
 <link href="/css/admin_styles.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 	crossorigin="anonymous"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 function go_register() {
     window.location.href = "foodRegister.do";
@@ -61,6 +61,45 @@ function go_update(button) {
 
 </script>
 
+<style>
+    .btn-custom {
+        margin-right: 5px;
+    }
+    .sb-sidenav-menu-heading {
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    .navbar-brand {
+        font-size: 1.5em;
+    }
+    .card-header {
+        background-color: #343a40;
+        color: white;
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+    .pagination .active {
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+    }
+    .pagination a {
+        margin: 0 2px;
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        border-radius: 3px;
+        color: #007bff;
+    }
+    .pagination a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -93,14 +132,15 @@ function go_update(button) {
 						<div class="collapse" id="collapseLayouts"
 							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
-								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> <a
-									class="nav-link" href="admin_QnA.do">Q&A 게시판</a> <a
-									class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
-									<a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
+								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> 
+								<a class="nav-link" href="admin_QnA.do">Q&A 게시판</a> 
+								<a class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+								<a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
 							</nav>
 						</div>
-						<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+							<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
 						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
 					</div>
 				</div>
 				<div class="sb-sidenav-footer">
@@ -120,14 +160,14 @@ function go_update(button) {
 						</div>
 						<div class="card-body">
 							<form method="post" id="edit_form" action="foodEdit.do">
-								<table id="datatablesSimple" width="100%" style="text-align: left">
+								<table id="datatablesSimple" class="table table-bordered" width="100%" style="text-align: left">
 									<thead>
 										<tr>
 											<th>게시물ID</th>
 											<th>제 목</th>
 											<th>최근 수정시간</th>
 											<th>조회수</th>
-											<th>삭제/수정</th>
+											<th>삭제/수정/DB 등록</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -136,11 +176,17 @@ function go_update(button) {
 											<td th:text="${food.title}"></td>
 											<td th:text="${food.editdate}"></td>
 											<td th:text="${food.count}"></td>
-											<td><input type="hidden" class="foodBoard"
-												th:value="${food.recipe_boardnum}"> <input
-												type="button" value="삭제" onclick="go_del(this)"> <input
-												type="button" value="게시물 수정" onclick="go_edit(this)">
-												<input type="button" value="DB 등록" onclick="go_update(this)">
+											<td>
+												<input type="hidden" class="foodBoard" th:value="${food.recipe_boardnum}">
+												<button type="button" class="btn btn-danger btn-sm btn-custom" onclick="go_del(this)">
+													<i class="fas fa-trash-alt"></i> 삭제
+												</button>
+												<button type="button" class="btn btn-warning btn-sm btn-custom" onclick="go_edit(this)">
+													<i class="fas fa-edit"></i> 게시물 수정
+												</button>
+												<button type="button" class="btn btn-primary btn-sm btn-custom" onclick="go_update(this)">
+													<i class="fas fa-database"></i> DB 등록
+												</button>
 											</td>
 										</tr>
 									</tbody>
@@ -149,20 +195,21 @@ function go_update(button) {
 						</div>
 						<!-- 페이징 처리 -->
 						<div>
-							<ul class="pagination">
-								<li
-									th:each="i : ${#numbers.sequence(foodBoardPage.number - 5, foodBoardPage.number + 5)}"
-									th:if="${i >= 0 and i < foodBoardPage.totalPages}"><a
-									th:href="@{/admin_food.do(page=${i})}" th:text="${i + 1}"
-									th:classappend="${i == foodBoardPage.number ? 'active' : ''}"></a>
+							<ul class="pagination justify-content-center">
+								<li th:each="i : ${#numbers.sequence(foodBoardPage.number - 5, foodBoardPage.number + 5)}"
+									th:if="${i >= 0 and i < foodBoardPage.totalPages}">
+									<a th:href="@{/admin_food.do(page=${i})}" th:text="${i + 1}" 
+										class="page-link" th:classappend="${i == foodBoardPage.number ? 'active' : ''}"></a>
 								</li>
 							</ul>
 						</div>
 					</div>
 						
-						<div>
-							<input type="button" value="게시물 등록" onclick="go_register()" style="margin-bottom:20px">
-						</div>
+					<div class="text-end mb-4">
+						<button type="button" class="btn btn-success" onclick="go_register()">
+							<i class="fas fa-plus"></i> 게시물 등록
+						</button>
+					</div>
 				</div>
 		</main>
 		
@@ -175,8 +222,6 @@ function go_update(button) {
 		</footer>
 	</div>
 	</div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

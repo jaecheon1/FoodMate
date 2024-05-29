@@ -58,14 +58,71 @@ function go_update(button) {
     }, 200); // 매 초마다 체크
 }
 
-//만족도 조사 결과를 보여주는 함수
-function showSurveyResults() {
-    // 만족도 조사 결과를 보여주는 요소 표시
-    document.getElementById('surveyResults').style.display = 'block';
-}
 
 </script>
-
+<style>
+    .btn-custom {
+        margin-right: 5px;
+    }
+    .sb-sidenav-menu-heading {
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    .navbar-brand {
+        font-size: 1.5em;
+    }
+    .card-header {
+        background-color: #343a40;
+        color: white;
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+    .pagination .active {
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+    }
+    .pagination a {
+        margin: 0 2px;
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        border-radius: 3px;
+        color: #007bff;
+    }
+    .pagination a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+    }
+    .search-container select,
+    .search-container input[type="text"],
+    .search-container input[type="submit"] {
+        margin-right: 5px;
+    }
+    .search-container input[type="submit"] {
+        margin-left: 10px;
+    }
+    .search-container input[type="text"] {
+        width: 200px;
+    }
+    #surveyResults {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+</style>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -104,8 +161,9 @@ function showSurveyResults() {
 									<a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
 							</nav>
 						</div>
-						<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+							<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
 						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
 					</div>
 				</div>
 				<div class="sb-sidenav-footer">

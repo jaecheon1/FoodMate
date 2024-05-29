@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" th:href="@{/css/member.css}">
+
 <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
 <link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
 <style>
@@ -17,20 +17,79 @@
 function openInPopup(url) {
         window.location.href(url);
     }
-</script>  
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #join-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+
+    #join-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    #join-container p {
+        font-weight: bold;
+        margin: 10px 0 5px;
+        color: #333;
+    }
+
+    #join-container input[type="text"],
+    #join-container input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    #join-container input[type="text"] {
+        background-color: #f9f9f9;
+    }
+
+    #join-container input[type="button"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #join-container input[type="button"]:hover {
+        background-color: #45a049;
+    }
+</style>
 <title>Join</title>
 </head>
 <body>
 
 	<div id="join-container">
 		<form method="post" action="join_naver" id="join" name="formm">
-			<h2>회원가입</h2>
+			<h2>회원가입</h2><br>
 			
 			<input type="hidden" id="id" class="text id_input" name="id">
+			<p>사용자명(*필수입력)</p>
 			<input type="text" name="name" id="name" class="text" placeholder="사용자 이름을 입력해주세요">
-			<input type="hidden" id="password" class="text" name="password">
+			<p>이메일(네이버)</p>
 			<input type="text" id="email" class="email" name="email" placeholder="Email" readonly="readonly">
-			<input type="text" id="nickname" class="text" name="nickname">
+			<p>닉네임</p>
+			<input type="text" id="nickname" class="text" name="nickname"><br><br>
 			<input type="button" value="가입하기" onclick="go_save_naver()">
 		</form>
 	</div>
@@ -63,7 +122,6 @@ function openInPopup(url) {
                      document.getElementById('email').value = email;
                      document.getElementById('nickname').value = nickname;
                      document.getElementById('id').value = id;
-                     document.getElementById('password').value = 'chncjs＠#521das2$@';
                 }
             }
         });

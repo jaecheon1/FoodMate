@@ -21,6 +21,6 @@ public class SatisfactionServiceImpl implements SatisfactionService {
     
     @Override
     public List<SatisfactionSurvey> getAllSatisfactionSurveys() {
-        return satisfactionRepository.findAll();
+        return satisfactionRepository.getAllSatisfactionSurveys();
     }
 }

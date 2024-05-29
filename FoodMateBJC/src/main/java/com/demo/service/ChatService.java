@@ -58,7 +58,7 @@ public class ChatService {
         Optional<Foodcal> foodcal = foodcalRepository.findByFoodname(userMessage);
         if (foodcal.isPresent()) {
             Foodcal food = foodcal.get();
-            return String.format("%s\\n: %sg당 \\n칼로리: %s,\\n탄수화물: %s,\\n단백질: %s,\\n지방: %s,\\n당류: %s,\\n나트륨: %s,\\n콜레스테롤: %s",
+            return String.format("%s\n: %sg당 \n칼로리: %s,\n탄수화물: %s,\n단백질: %s,\n지방: %s,\n당류: %s,\n나트륨: %s,\n콜레스테롤: %s",
                     food.getFoodname(), food.getG(), food.getKcal(), food.getCarbohydrate(), food.getProtein(), food.getProvince(), food.getSugars(), food.getSalt(), food.getCholesterol());
         }
 

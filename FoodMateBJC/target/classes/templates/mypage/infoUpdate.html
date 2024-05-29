@@ -57,7 +57,13 @@ function setNicknameChecked() {
                         <label>이름 : </label>
                         <input type="text" name="name" id="name" th:value="${loginUser.name}" readonly placeholder="수정 불가"><br>
                         <label>닉네임 : </label>
-		                <input type="text" name="nickname" id="nickname" th:value="${loginUser.nickname}">
+                        <th:block th:if="${loginUser.nickname} != null">
+                        <input type="text" name="nickname" id="nickname" th:value="${loginUser.nickname}">
+                        </th:block>
+                        <th:block th:if="${loginUser.nickname} == null">
+                        <input type="text" name="nickname" id="nickname" value=" ">
+                        </th:block>
+		               
 		                <input type="hidden" name="renickname" id="renickname" th:value="${renickname}">
 		                <th:block th:if="${loginUser.nickname == null}">
 		                <input type="button" value="중복 체크" class="dup btn" onclick="nickcheck()"><br>

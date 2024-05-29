@@ -36,16 +36,17 @@
             <!-- 사용자의 이메일이 자동으로 입력되도록 설정 -->
             <input type="email" id="email" name="email" th:value="${loginUser.email}" required><br>
             <!-- 비밀번호 입력 칸 -->
-            <label for="password">비밀번호:</label>
-            <input type="password" id="password" name="password" required><br>
-            <!-- 비밀번호 안내 문구 -->
-            <span class="password-info">* 1:1 문의에 대한 고객정보 보호를 위해 게시글의 비밀번호를 설정해주세요.</span>
+            
         </div>
         <div class="inquiry4">
             <h3>개인(신용)정보 수집 및 이용에 동의하십니까?</h3>
-            <input type="radio" name="agree" value="disagree" id="disagreeRadio"><span id="agree">동의안함</span>
-            <input type="radio" name="agree" value="agree" id="agreeRadio"><span id="agree">동의함</span>
-            <button type="submit"><i class="fas fa-paper-plane icon"></i>제출</button>
+            <label>
+        <input type="radio" id="disagreeRadio" name="agree" value="false"> 동의하지 않음
+    </label>
+            <label>
+        <input type="radio" id="agreeRadio" name="agree" value="true"> 동의함
+    </label>
+            <button type="submit" id="submitButton" disabled><i class="fas fa-paper-plane icon"></i>제출</button>
         </div>
 	</form>
 </div>
@@ -53,29 +54,32 @@
     <!-- JavaScript -->
     <script>
         // 동의함 버튼 클릭 시 동의 여부 확인
-        document.getElementById("agreeRadio").addEventListener("click", function() {
-            if (confirm("개인(신용)정보 수집 및 이용에 동의하시겠습니까?")) {
-                // 동의한 경우의 처리
-                alert("동의하셨습니다.");
-            } else {
-                // 동의하지 않은 경우의 처리
-                document.getElementById("disagreeRadio").checked = true;
-                alert("동의하지 않으셨습니다.");
-            }
-        });
+    document.getElementById("agreeRadio").addEventListener("click", function () {
+    if (confirm("개인(신용)정보 수집 및 이용에 동의하시겠습니까?")) {
+        // 동의한 경우의 처리
+        alert("동의하셨습니다.");
+        document.getElementById("submitButton").disabled = false; // 제출 버튼 활성화
+        document.getElementById("agreeRadio").checked = true; // 동의함 라디오 버튼 체크
+    } else {
+        // 동의하지 않은 경우의 처리
+        document.getElementById("disagreeRadio").checked = true; // 동의하지 않음 라디오 버튼 체크
+        alert("동의하지 않으셨습니다.");
+        document.getElementById("submitButton").disabled = true; // 제출 버튼 비활성화
+    }
+});
 
-        // 동의하지 않음 버튼 클릭 시 동의 여부 확인
-        document.getElementById("disagreeRadio").addEventListener("click", function() {
-            if (confirm("동의를 취소하시겠습니까?")) {
-                // 동의를 취소한 경우의 처리
-                document.getElementById("agreeRadio").checked = false;
-                alert("동의를 취소하셨습니다.");
-            } else {
-                // 동의를 취소하지 않은 경우의 처리
-                document.getElementById("disagreeRadio").checked = false;
-                alert("동의를 취소하지 않으셨습니다.");
-            }
-        });
+document.getElementById("disagreeRadio").addEventListener("click", function () {
+    alert("개인(신용)정보 수집 및 이용에 동의하지 않으면 제출이 불가능합니다.");
+    document.getElementById("submitButton").disabled = true; // 제출 버튼 비활성화
+});
+
+document.getElementById("inquiryForm").addEventListener("submit", function (event) {
+    if (document.getElementById("disagreeRadio").checked) {
+        // If "동의하지 않음" is selected, prevent form submission
+        alert("개인(신용)정보 수집 및 이용에 동의하지 않으면 제출이 불가능합니다.");
+        event.preventDefault();
+    }
+});
         function openInPopup(url) {
             window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
         }

@@ -65,10 +65,6 @@ function truncateText(selector, maxLength) {
 		window.location.href = url;
 	}
 	
-	function submitSearch() {
-	    document.getElementById('searchForm').submit();
-	}
-	
 	
 	
 // 그래프
@@ -216,3 +212,19 @@ function drawCharts() {
 function openInPopup(url) {
         window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
     }
+    
+    
+    
+    //검색
+    	function submitSearch() {	
+	if ($("#searchKeyword").val() == "") {
+		alert("검색어를 입력하세요");
+		$("#searchKeyword").focus();
+		return false;
+	}  else{
+		var theform = $("#searchForm");
+		theform.attr("method", "get");
+		theform.attr("action", "/board_search");
+		theform.submit();
+	}
+		}

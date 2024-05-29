@@ -1,11 +1,8 @@
 package com.demo.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.demo.domain.CommunityBoard;
 import com.demo.domain.MemberData;
 import com.demo.service.CommunityBoardService;
-import com.lowagie.text.DocumentException;
 
 import jakarta.persistence.EntityManager;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
@@ -214,5 +207,34 @@ public class CommunityController {
 	}
 	}
 	
+	
+	@PostMapping("/community_goodpoint")
+	public String goodPoint_Action(@RequestParam("community_seq") int community_seq, HttpSession session) {
+		CommunityBoard com_board = communityse.getCommunityBoard(community_seq);
+	    HashMap<Integer, String> goodPointcommunityStatusMap = (HashMap<Integer, String>) session.getAttribute("goodPointcommunityStatusMap");
+
+	    if (goodPointcommunityStatusMap == null) {
+	        goodPointcommunityStatusMap = new HashMap<>();
+	        session.setAttribute("goodPointcommunityStatusMap", goodPointcommunityStatusMap);
+	    }
+
+	    String goodPointStatus = goodPointcommunityStatusMap.get(community_seq);
+
+	    if (goodPointStatus == null || goodPointStatus.equals("off")) {
+	        if (com_board != null) {
+	            com_board.setCommunity_goodpoint(com_board.getCommunity_goodpoint() + 1);
+	            communityse.updateBoard(com_board);
+	            goodPointcommunityStatusMap.put(community_seq, "on");
+	        }
+	    } else if (goodPointStatus.equals("on")) {
+	        if (com_board != null) {
+	        	com_board.setCommunity_goodpoint(com_board.getCommunity_goodpoint() - 1);
+	            communityse.updateBoard(com_board);
+	            goodPointcommunityStatusMap.put(community_seq, "off");
+	        }
+		    }
+		    
+		return "redirect:/community_detail?community_seq=" + community_seq;
+	}
 }
 

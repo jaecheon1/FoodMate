@@ -12,7 +12,7 @@ import com.demo.domain.MemberData;
 
 public interface MemberRepository extends JpaRepository<MemberData, Long> {
 
-	@Query(value="SELECT * FROM member_data ORDER BY no_data DESC", nativeQuery = true)
+	@Query(value="SELECT * FROM member_data ORDER BY no_data ASC", nativeQuery = true)
 	List<MemberData> getAllMember();
 	
 	@Query(value = "SELECT * FROM member_data WHERE name =:name AND email =:email", nativeQuery=true)

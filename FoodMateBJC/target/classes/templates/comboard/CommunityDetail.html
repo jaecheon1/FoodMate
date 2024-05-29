@@ -42,7 +42,12 @@
                     </div>
                     </header>
                     <div class="newMeta">
-                            <span class="byline">작성자: [[${CommunityBoard.member_data.id}]]</span>
+                    		<th:block th:if="${CommunityBoard.member_data.id.length() > 15}">
+                            	<span class="byline">작성자: [[${#strings.substringBefore(CommunityBoard.member_data.email, '@')}]]</span>
+                            </th:block>
+                            <th:block th:if="${CommunityBoard.member_data.id.length() < 15}">
+                            	<span class="byline">작성자: [[${CommunityBoard.member_data.id}]]</span>
+                            </th:block>
                             <span class="byline">작성일: [[${#dates.format(CommunityBoard.community_d_regdate, "yyyy-MM-dd") }]]</span>
                             <span class="byline">조회수: [[${CommunityBoard.community_cnt}]]</span></div><br>
                                    </form>

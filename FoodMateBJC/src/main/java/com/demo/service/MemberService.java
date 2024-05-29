@@ -22,6 +22,8 @@ public interface MemberService {
 
 	public void insertMember(MemberData vo);
 	
+	public void insertMemberNaver(MemberData vo);
+	
 	// 아이디 중복 확인
 	public int confirmID(String id);
 	

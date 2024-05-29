@@ -135,15 +135,8 @@
 </head>
 
 <body>
-<!-- 챗봇 아이콘 -->
-        <div id="chatbot-icon" onclick="toggleChatbotPopup()">
-            <i class="fas fa-robot"></i>
-        </div>
-        
-        <!-- 칼로리 계산기 아이콘 -->
-        <div id="calorie-icon" onclick="toggleCaloriePopup()">
-            <i class="fas fa-calculator"></i>
-        </div>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
 
     <div class="inquiry-detail">
         <p class="author-info">작성자 | <span th:text="관리자"></span></p>
@@ -171,6 +164,10 @@
         <a href="/inquiry/inquiryList" class="btn-list"><i
             class="fas fa-home home-icon"></i>목록보기</a>
     </div>
+    <script>
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }</script>
 </body>
 <th:block th:insert="~{includes/footer.html}"></th:block>
 </html>

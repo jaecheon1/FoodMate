@@ -27,4 +27,7 @@ public interface AdminRecipeDBRepository extends JpaRepository<foodRecipe, Long>
 	
 	@Query(value = "SELECT * FROM food_recipe WHERE idx = :idx", nativeQuery = true)
 	foodRecipe getFoodByIndex(int idx);
+	
+	@Query(value = "SELECT count(*) FROM food_recipe", nativeQuery = true)
+	int getRecipeCount();
 }

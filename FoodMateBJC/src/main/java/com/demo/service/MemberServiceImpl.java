@@ -20,6 +20,13 @@ public class MemberServiceImpl implements MemberService {
     public void insertMember(MemberData member) {
         memberRepo.save(member);
     }
+    
+    @Override
+    public void insertMemberNaver(MemberData member) {
+    	String randomPassword = NaverPasswordGenerator.generateRandomPassword();
+    	member.setPassword(randomPassword);
+        memberRepo.save(member);
+    }
 
     @Override
     public MemberData getMember(String id) {

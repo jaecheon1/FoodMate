@@ -34,8 +34,7 @@
 				접기
 				<div id="main_head">
 					<div class="search-and-write-container">
-						<form id="searchForm" name="searchForm"
-							th:action="@{/communityboard_search}" method="get">
+						<form id="searchForm" name="searchForm" method="get">
 							<select name="searchType" id="searchType">
 								<option value="title">▼ 제목</option>
 								<option value="id">▼ ID</option>
@@ -59,7 +58,12 @@
 									th:onclick="'go_view(' + ${com_boardVO.community_seq} + ');'"
 									th:text="${com_boardVO.community_title}" class="truncate">
 									[[${com_boardVO.community_title}]]</a></td>
-									<td>작성자 : [[${com_boardVO.member_data.id}]]</td>
+									<td th:if="${com_boardVO.member_data.id.length() > 15}">
+										작성자 : [[${#strings.substringBefore(com_boardVO.member_data.email, '@')}]]
+									</td>
+									<td th:if="${com_boardVO.member_data.id.length() < 15}">
+										작성자 : [[${com_boardVO.member_data.id}]]
+									</td>
 									<td>조회수 : [[${com_boardVO.community_cnt}]]</td>
 									<td>추천수 : [[${com_boardVO.community_goodpoint}]]</td>
 									</tr>

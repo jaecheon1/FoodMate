@@ -30,7 +30,7 @@
                             <i class="fa fa-share"></i> 공유하기
                         </a>
                         <th:block th:if="${session.goodPointStatusMap != null and session.goodPointStatusMap[Com_Board_DetailVO.seq] == 'on'}">
-                            <a style="color: red;" th:attr="data-seq=${Com_Board_DetailVO.seq}" onclick="goodpoint_plus(this)" class="icon-text">
+                            <a style="color: red;" th:attr="data-seq=${Com_Board_DetailVO.seq}" onclick="goodpoint_plus(this)" class="icon-text red">
                                 <i class="fa fa-thumbs-up"></i> 추천해제
                             </a>
                         </th:block>
@@ -38,7 +38,7 @@
                             <a th:attr="data-seq=${Com_Board_DetailVO.seq}" onclick="goodpoint_plus(this)" class="icon-text">
                                 <i class="fa fa-thumbs-up"></i> 추천하기
                             </a>
-					</th:block>
+						</th:block>
 				</tr>
 				<tr>
 					<th width="20%">요리명</th>
@@ -51,7 +51,12 @@
 				</tr>
 				<tr>
 					<th>작성자</th>
-					<td>[[${Com_Board_DetailVO.member_data.id}]]</td>
+					<td th:if="${Com_Board_DetailVO.member_data.id.length() > 15}">
+						[[${#strings.substringBefore(Com_Board_DetailVO.member_data.email, '@')}]]
+					</td>
+					<td th:if="${Com_Board_DetailVO.member_data.id.length() < 15}">
+						[[${Com_Board_DetailVO.member_data.id}]]
+					</td>
 				</tr>
 				<tr>
 					<th>조회수</th>
@@ -151,7 +156,12 @@
 				</tr>
 				<th:block th:each="replyVO : ${ReplyList}">
 					<tr th:attr="data-replynum=${replyVO.replynum}">
-						<td th:text="${replyVO.member_data.id}">User ID</td>
+						<td th:if="${replyVO.member_data.id.length() > 15}">
+							[[${#strings.substringBefore(replyVO.member_data.email, '@')}]]
+						</td>
+						<td th:if="${replyVO.member_data.id.length() < 15}">
+							[[${replyVO.member_data.id}]]
+						</td>
 						<td><span th:text="${replyVO.content}"
 							th:attr="data-content-view=${replyVO.replynum}">Reply
 								Content</span> <textarea

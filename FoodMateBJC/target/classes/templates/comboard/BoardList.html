@@ -34,7 +34,7 @@
                 <a href="#" id="toggleButton" class="material-symbols-outlined">top_panel_close</a> 접기
                 <div id="main_head">
                     <div class="search-and-write-container">
-                        <form id="searchForm" name="searchForm" th:action="@{/board_search}" method="get">
+                        <form id="searchForm" name="searchForm" method="get">
                             <select name="searchType" id="searchType">
                                 <option value="title">▼ 제목</option>
                                 <option value="id">▼ ID</option>
@@ -68,7 +68,12 @@
                                 <div class="inner">
                                     <span th:if="${top3Cnt != null and #lists.contains(top3Cnt, com_boardVO) or top3Goodpoint != null and #lists.contains(top3Goodpoint, com_boardVO)}" class="material-symbols-outlined" style="color:red" th:text="Best"></span>
                                     <h3 th:text="${com_boardVO.com_recipe.rcp_nm}" class="truncate">[[${com_boardVO.com_recipe.rcp_nm}]]</h3>
+                                     <th:block th:if="${com_boardVO.member_data.id.length() > 15}">
+                                    	<p>작성자 : <span th:text="${#strings.substringBefore(com_boardVO.member_data.email, '@')}"></span>
+                                    </th:block>
+                                    <th:block th:if="${com_boardVO.member_data.id.length() < 15}">
                                     <p>작성자 : [[${com_boardVO.member_data.id}]]</p>
+                                    </th:block>
                                     <p>조회수 : [[${com_boardVO.cnt}]]</p>
                                     <p>추천수 : [[${com_boardVO.goodpoint}]]</p>
                                     <br>

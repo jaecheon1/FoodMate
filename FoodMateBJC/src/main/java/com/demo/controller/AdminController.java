@@ -324,6 +324,7 @@ public class AdminController {
 		vo.setEmail(ask.getEmail());
 		vo.setName(ask.getName());
 		vo.setStatus("답변 완료");
+		vo.setMember_data(loginUser);
 		
 		adminService.adminCheck(loginUser);
 		adminService.updateAdminInquiry(vo);

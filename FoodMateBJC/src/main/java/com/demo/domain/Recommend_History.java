@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -34,8 +35,10 @@ import lombok.ToString;
 @DynamicUpdate
 public class Recommend_History {
 
-	 	@Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY) // 문자열 타입인 경우 IDENTITY가 아닌 AUTO 사용
+		@Id
+	 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "histroy_seq")
+	    @SequenceGenerator(name = "histroy_seq", sequenceName = "histroy_seq", allocationSize = 1)
+	//  @GeneratedValue(strategy = GenerationType.IDENTITY) // 문자열 타입인 경우 IDENTITY가 아닌 AUTO 사용
 	    private int historyId;
 	
 	 	@ManyToOne

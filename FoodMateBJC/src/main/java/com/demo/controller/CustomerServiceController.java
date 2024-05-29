@@ -47,8 +47,13 @@ public class CustomerServiceController {
     
  // 1:1 문의 저장
     @PostMapping("/saveInquiry")
-    public String saveInquiry(@ModelAttribute("loginUser") MemberData loginUser, askBoard vo) {
-        // 현재 사용자의 이름 가져오기
+    public String saveInquiry(@ModelAttribute("loginUser") MemberData loginUser, askBoard vo, @RequestParam("agree") boolean agree) {
+    	if (!agree) {
+            // 개인정보 동의하지 않은 경우
+            return "redirect:/inquiry/inquiryList?error=agreeRequired";
+        }
+    	
+    	// 현재 사용자의 이름 가져오기
         String username = loginUser.getName();
         
         // 사용자 정보를 이용하여 작업 수행
